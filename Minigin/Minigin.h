@@ -18,6 +18,7 @@ namespace dae
 
 	private:
 		const float fixedTimeStep{ 0.20f };
-		const int msPerFrame{ 0.20f };
+		const int desiredFrameRate{ 60 };
+		const int msPerFrame{ static_cast<int>(1000 / desiredFrameRate) };
 	};
 }
