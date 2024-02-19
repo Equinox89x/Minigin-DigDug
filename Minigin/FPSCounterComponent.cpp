@@ -7,7 +7,7 @@
 #include <memory>
 
 dae::FPSCounterComponent::FPSCounterComponent(const std::string& text, std::shared_ptr<Font> font) :
-	m_prevFPS{ 0 },
+	m_FPS{ 0 },
 	TextObjectComponent(text, font)
 { }
 
@@ -17,11 +17,17 @@ void dae::FPSCounterComponent::Update()
 
 	//uint32_t fps{ Timer::GetInstance().GetFPS() };
 
-	uint32_t fps{ 60 };
-	if (m_prevFPS != fps) {
-		TextObjectComponent::SetText(std::to_string(fps) + " FPS");
-		m_prevFPS = fps;
-	}
+	m_EndTime = std::chrono::steady_clock::now();
+	m_ElapsedTime = std::chrono::duration<float>(m_EndTime - m_StartTime).count();
+	m_FPS = static_cast<int>(1.0f / m_ElapsedTime);
+
+	TextObjectComponent::SetText(std::to_string(m_FPS) + " FPS");
+	m_StartTime = m_EndTime;
+}
+
+void dae::FPSCounterComponent::Init()
+{
+	m_StartTime = std::chrono::steady_clock::now();
 }
 
 void dae::FPSCounterComponent::FixedUpdate()

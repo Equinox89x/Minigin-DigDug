@@ -2,6 +2,7 @@
 #include <string>
 #include <memory>
 #include "TextObjectComponent.h"
+#include <chrono>
 
 namespace dae
 {
@@ -18,6 +19,7 @@ namespace dae
 		FPSCounterComponent& operator=(FPSCounterComponent&& other) = delete;
 
 		void Update() override;
+		void Init() override;
 		virtual void FixedUpdate() override;
 		void Render() const override;
 
@@ -25,7 +27,9 @@ namespace dae
 
 
 	private:
-		uint32_t m_prevFPS;
-
+		std::chrono::steady_clock::time_point m_EndTime;
+		std::chrono::steady_clock::time_point m_StartTime;
+		float m_ElapsedTime{ 0 };
+		int m_FPS{ 0 };
 	};
 }
