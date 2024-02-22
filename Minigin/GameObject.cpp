@@ -26,13 +26,6 @@ void dae::GameObject::Init()
 }
 
 void dae::GameObject::Update() {
-		for (const std::unique_ptr<Component>& comp : m_pComponents) {
-			if (comp->IsMarkedForDestroy()) {
-				RemoveComponent(comp);
-				break;
-			}
-		}
-
 		for (size_t i = 0; i < m_pChildren.size(); i++)
 		{
 			if (m_pChildren[i]->IsMarkedForDestroy()) {
@@ -52,8 +45,13 @@ void dae::GameObject::Update() {
 
 void dae::GameObject::LateUpdate()
 {
+	for (const std::unique_ptr<Component>& comp : m_pComponents) {
+		if (comp->IsMarkedForDestroy()) {
+			RemoveComponent(comp);
+			break;
+		}
+	}
 }
-
 
 void dae::GameObject::Render() const
 {
@@ -75,7 +73,6 @@ void dae::GameObject::RemoveComponent(const std::unique_ptr<Component>& comp)
 		m_pComponents.erase(std::remove(m_pComponents.begin(), m_pComponents.end(), comp));
 	}
 }
-
 
 void dae::GameObject::SetParent(GameObject* const parent)
 {

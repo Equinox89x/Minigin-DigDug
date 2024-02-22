@@ -48,7 +48,7 @@ namespace dae
 					return static_cast<Comp*>(component.get());
 			}
 			return nullptr;
-		}
+		}		
 
 		template<typename Comp>
 		Comp* GetComponent(std::string name) {
@@ -59,8 +59,18 @@ namespace dae
 					return static_cast<Comp*>(component.get());
 			}
 			return nullptr;
-		}
+		}		
 
+		template<typename Comp>
+		void RemoveComponent(Comp* componentPtr) {
+			const std::type_info& ti = typeid(Comp);
+			for (auto it = m_pComponents.begin(); it != m_pComponents.end(); ++it) {
+				if (*it && typeid(**it) == ti && it->get() == componentPtr) {
+					it = m_pComponents.erase(it); // Remove the component from the vector
+					return;
+				}
+			}
+		}
 		void RemoveComponent(const std::unique_ptr<Component>& comp);
 
 		void SetParent(GameObject* const parent);
