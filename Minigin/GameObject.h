@@ -23,7 +23,7 @@ namespace dae
 
 		virtual void Init();
 		virtual void LateUpdate();
-		virtual void Update();
+		virtual void Update(float deltaTime);
 		virtual void Render() const;
 
 		void MarkForDestroy() { MarkedForDelete = true; };
@@ -76,7 +76,7 @@ namespace dae
 		void SetParent(GameObject* const parent);
 		GameObject* GetParent() const;
 		void RemoveChild(GameObject* pObject);
-		void AddChild(GameObject* const go);
+		dae::GameObject* AddChild(GameObject* go);
 		void SetName(std::string name) { m_ObjectName = name; };
 		std::string GetName() { return m_ObjectName; };
 

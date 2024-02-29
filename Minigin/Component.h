@@ -17,7 +17,7 @@ namespace dae
 		virtual void Init() {};
 		virtual void LateUpdate() {};
 		virtual void FixedUpdate() {};
-		virtual void Update() {};
+		virtual void Update(float /*deltaTime*/) {};
 		virtual void Render() const {};
 
 		GameObject* GetGameObject() const { return m_pGameObject; };
@@ -36,3 +36,4 @@ namespace dae
 		bool MarkedForDelete{ false };
 	};
 }
+

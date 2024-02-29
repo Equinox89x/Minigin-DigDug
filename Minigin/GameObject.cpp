@@ -25,7 +25,7 @@ void dae::GameObject::Init()
 	}
 }
 
-void dae::GameObject::Update() {
+void dae::GameObject::Update(float deltaTime) {
 		for (size_t i = 0; i < m_pChildren.size(); i++)
 		{
 			if (m_pChildren[i]->IsMarkedForDestroy()) {
@@ -35,11 +35,11 @@ void dae::GameObject::Update() {
 		}
 
 		for (const std::unique_ptr<Component>& comp : m_pComponents) {
-			comp->Update();
+			comp->Update(deltaTime);
 		}
 
 		for (GameObject* child : m_pChildren) {
-			child->Update();
+			child->Update(deltaTime);
 		}
 }
 
@@ -109,7 +109,7 @@ void dae::GameObject::RemoveChild(GameObject* pObject)
 	//m_pTransform->UpdateTransforms();
 }
 
-void dae::GameObject::AddChild(GameObject* const go)
+dae::GameObject* dae::GameObject::AddChild(GameObject* go)
 {
 	// Remove the given child from the child's previous parent
 	//go->m_pParent
@@ -121,6 +121,8 @@ void dae::GameObject::AddChild(GameObject* const go)
 	go->GetTransform()->UpdateTransforms();
 
 	go->Init();
+
+	return go;
 }
 
 dae::GameObject* dae::GameObject::GetChild(std::string name) {

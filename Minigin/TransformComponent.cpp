@@ -16,12 +16,14 @@ void dae::TransformComponent::UpdateTransforms()
 			auto rot{ parent->GetTransform()->GetRotation() };
 			m_WorldRotation = rot + GetRotation();
 			m_WorldPosition = pos + GetPosition();
-			//m_Rotation += m_WorldRotation;
-			//m_Position += m_WorldPosition;
+/*			m_Rotation += m_WorldRotation;
+			m_Position += m_WorldPosition;		*/	
+			m_WorldRotation += m_Rotation;
+			m_WorldPosition += m_Position;
 		}
 		else {
-			m_Rotation += m_WorldRotation;
-			m_Position += m_WorldPosition;
+			//m_Rotation += m_WorldRotation;
+			//m_Position += m_WorldPosition;
 		}
 		for (auto child : GetGameObject()->GetChildren()) {
 			child->GetTransform()->UpdateTransforms();
@@ -57,7 +59,7 @@ bool dae::TransformComponent::CheckIfDirty()
 	return false;
 }
 
-void dae::TransformComponent::Update()
+void dae::TransformComponent::Update(float /*deltaTime*/)
 {
 	m_IsDirty = CheckIfDirty();
 
@@ -125,20 +127,59 @@ void dae::TransformComponent::AddTranslateWorld(float x, float y, float z)
 void dae::TransformComponent::Rotate(const float angle) { Rotate(0, angle, 0); };
 void dae::TransformComponent::Rotate(float x, float y, float z)
 {
+	//auto rotationCenter{ GetGameObject()->GetTransform()->GetWorldPosition() };
+	//auto rotationCenterOffset{ GetGameObject()->GetTransform()->GetPosition() };
+
+	//m_Rotation.x = x;
+	//m_Rotation.y = y;
+	//m_Rotation.z = z;
+
+	//// Define the rotation angle in radians
+	//float angle = glm::radians(y);
+
+	//// Create a rotation matrix using glm::rotate
+	//glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), angle, glm::vec3(0, 1.f, 0));
+
+	//// Apply the rotation to the initial vector
+	//glm::vec3 rotatedVector = rotationMatrix * glm::vec4(1, 1, 1, 1);
+	//m_Position += rotatedVector;
+	//UpdateTransforms();
+
+
 	m_Rotation.x = x;
 	m_Rotation.y = y;
 	m_Rotation.z = z;
 
-	// Define the rotation angle in radians
-	float angle = glm::radians(y);
+	//float angle = glm::radians(y); 
 
-	// Create a rotation matrix using glm::rotate
-	glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), angle, glm::vec3(0, 1.f, 0));
+	//// Create a rotation matrix using GLM
+	//glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), angle, glm::vec3(0.0f, 1, 0));
 
-	// Apply the rotation to the initial vector
-	glm::vec3 rotatedVector = rotationMatrix * glm::vec4(1, 1, 1, 1);
-	m_Position += rotatedVector;
-	UpdateTransforms();
+	//// Translate the object so that the center becomes the origin
+	//glm::vec3 translatedObject = m_Position - m_WorldPosition;
+
+	//// Apply rotation to the translated object
+	//glm::vec4 rotatedObject = rotationMatrix * glm::vec4(translatedObject, 1.0f);
+
+	//// Translate the rotated object back
+	//glm::vec3 finalObject = glm::vec3(rotatedObject) + m_WorldPosition;
+
+
+	//m_RotPosition = 
+	if (GetGameObject()->GetParent()) {
+		m_Position = GetGameObject()->GetParent()->GetTransform()->GetFullPosition() + Rotate(0, 0, y, m_Offset, true);
+		
+	}
+	else {	
+		m_Position = Rotate(0, 0, y, m_Offset, true);
+	}
+	// Update transforms
+	//UpdateTransforms();
+}
+
+const glm::vec3 dae::TransformComponent::GetFullPosition() const
+{
+	return m_WorldPosition + m_Position;
 }
 
 const glm::vec3 dae::TransformComponent::GetWorldPosition()
@@ -162,7 +203,7 @@ const glm::vec3 dae::TransformComponent::GetWorldRotation() const
 }
 
 
-glm::vec3 dae::TransformComponent::Rotate(const float cx, const float cy, float angle, glm::vec3 point, bool isDegrees)
+glm::vec3 dae::TransformComponent::Rotate(const float cx, const float cy, float angle, glm::vec3 offset, bool isDegrees)
 {
 	if (isDegrees) {
 		angle = glm::radians(angle);
@@ -171,15 +212,15 @@ glm::vec3 dae::TransformComponent::Rotate(const float cx, const float cy, float 
 	float c = cosf(angle);
 
 	// translate point back to origin:
-	point.x -= cx;
-	point.y -= cy;
+	offset.x -= cx;
+	offset.y -= cy;
 
 	// rotate point
-	float xnew = point.x * c - point.y * s;
-	float ynew = point.x * s + point.y * c;
+	float xnew = offset.x * c - offset.y * s;
+	float ynew = offset.x * s + offset.y * c;
 
 	// translate point back:
-	point.x = xnew + cx;
-	point.y = ynew + cy;
-	return point;
+	offset.x = xnew + cx;
+	offset.y = ynew + cy;
+	return offset;
 }

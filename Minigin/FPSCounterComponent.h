@@ -18,7 +18,7 @@ namespace dae
 		FPSCounterComponent& operator=(const FPSCounterComponent& other) = delete;
 		FPSCounterComponent& operator=(FPSCounterComponent&& other) = delete;
 
-		void Update() override;
+		virtual void Update(float deltaTime) override;
 		void Init() override;
 		virtual void FixedUpdate() override;
 		void Render() const override;

@@ -25,7 +25,7 @@ namespace dae {
 		TextureComponent& operator=(const TextureComponent& other) = delete;
 		TextureComponent& operator=(TextureComponent&& other) = delete;
 
-		void Update();
+		void Update(float deltaTime) override;
 		void Render() const;
 
 		void SetTexture(const std::string& filename, float animSpeed = 0.1f, int nrOfFrames = 1, bool resetAnim = true);
@@ -40,6 +40,10 @@ namespace dae {
 		void SetOffset(glm::vec2 offset) { Offset = offset; };
 
 		void SetFrame(int frameNr) { CurrentFrame = frameNr; HandleAnimation(); };
+
+		void SetDirty() { m_needsUpdate = true; };
+		void SetCanRotate( bool canRotate) { m_CanRotate = canRotate; };
+		void SetRotationSpeed( float speed) { m_RotationSpeed = speed; };
 
 	private:
 		std::string FileName{""};
@@ -58,7 +62,13 @@ namespace dae {
 
 		glm::vec2 Offset;
 
+		bool m_CanRotate{ false };
+		float m_RotationSpeed{ 10 };
+
+		
 		void HandleAnimation();
+
+
 
 	};
 }

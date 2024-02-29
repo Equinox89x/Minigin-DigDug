@@ -11,9 +11,9 @@ dae::FPSCounterComponent::FPSCounterComponent(const std::string& text, std::shar
 	TextObjectComponent(text, font)
 { }
 
-void dae::FPSCounterComponent::Update()
+void dae::FPSCounterComponent::Update(float deltaTime)
 {
-	TextObjectComponent::Update();
+	TextObjectComponent::Update(deltaTime);
 
 	//uint32_t fps{ Timer::GetInstance().GetFPS() };
 

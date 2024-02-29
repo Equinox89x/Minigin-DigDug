@@ -16,7 +16,7 @@ namespace dae {
 		TransformComponent& operator=(const TransformComponent& other) = delete;
 		TransformComponent& operator=(TransformComponent&& other) = delete;
 
-		void Update();
+		void Update(float deltaTime) override;
 		//virtual void FixedUpdate() override;
 		//void Render() const;
 
@@ -47,12 +47,15 @@ namespace dae {
 		void Rotate(float x, float y, float z);
 		void Rotate(const float angle);
 		const glm::vec3& GetPosition() const { return m_Position; };
+		const glm::vec3 GetFullPosition() const;
 		const glm::vec3 GetWorldPosition();
 		const glm::vec3& GetRotation() const { return m_Rotation; };
 		const glm::vec3 GetWorldRotation() const;
 		const glm::vec3 GetScale() const { return m_Scale; };
 
 		glm::vec3 Rotate(const float cx, const float cy, float angle, glm::vec3 point, bool isDegrees);
+
+		void SetRotationOffset(glm::vec3 offset) { m_Offset = offset; };
 
 		void UpdateTransforms();
 		bool IsDirty() const { return m_IsDirty; }
@@ -61,7 +64,7 @@ namespace dae {
 		bool CheckIfDirty();
 
 	private:
-		glm::vec3 m_Position{}, m_WorldPosition{}, m_Scale{ 1,1,1 };
+		glm::vec3 m_Position{}, m_WorldPosition{}, m_Scale{ 1,1,1 }, m_Offset;
 		glm::vec3 m_Rotation{}, m_WorldRotation{};
 		bool m_IsDirty{};
 

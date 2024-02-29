@@ -5,7 +5,7 @@
 #include "Renderer.h"
 #include "GameObject.h"
 
-void dae::TextureComponent::Update()
+void dae::TextureComponent::Update(float deltaTime)
 {
     //auto dt{ Timer::GetInstance().GetDeltaTime() };
     auto dt{ 10 };
@@ -21,9 +21,13 @@ void dae::TextureComponent::Update()
     
 
     HandleAnimation();
+
+    if (m_CanRotate) {
+        Angle += deltaTime * m_RotationSpeed;
+    }
 }
 void dae::TextureComponent::HandleAnimation() {
-    const auto& pos{ GetGameObject()->GetTransform()->GetPosition() };
+    const auto& pos{ GetGameObject()->GetTransform()->GetFullPosition() };
     const auto& scale{ GetGameObject()->GetTransform()->GetScale() };
 
     SDL_QueryTexture(m_pTexture->GetSDLTexture(), nullptr, nullptr, &m_SrcRect.w, &m_SrcRect.h);
