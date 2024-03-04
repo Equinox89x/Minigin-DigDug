@@ -14,7 +14,7 @@ namespace dae
 
 		void Init() const;
 		void LateUpdate();
-		void Update(float deltaTime);
+		void Update( );
 		void Render() const;
 
 		~Scene();

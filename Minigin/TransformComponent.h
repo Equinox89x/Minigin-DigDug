@@ -16,7 +16,7 @@ namespace dae {
 		TransformComponent& operator=(const TransformComponent& other) = delete;
 		TransformComponent& operator=(TransformComponent&& other) = delete;
 
-		void Update(float deltaTime) override;
+		void Update( ) override;
 		//virtual void FixedUpdate() override;
 		//void Render() const;
 
@@ -59,6 +59,7 @@ namespace dae {
 
 		void UpdateTransforms();
 		bool IsDirty() const { return m_IsDirty; }
+		void SetDirty();
 
 	protected:
 		bool CheckIfDirty();

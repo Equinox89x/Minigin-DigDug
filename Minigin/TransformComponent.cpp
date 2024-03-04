@@ -45,6 +45,16 @@ void dae::TransformComponent::UpdateTransforms()
 	m_IsDirty = false;
 }
 
+void dae::TransformComponent::SetDirty()
+{
+	m_IsDirty = true;
+	for (const auto gameObject : GetGameObject()->GetChildren()) {
+		if (!gameObject->GetTransform()->IsDirty()) {
+			gameObject->GetTransform()->SetDirty();
+		}
+	}
+}
+
 bool dae::TransformComponent::CheckIfDirty()
 {
 	//If Parent is dirty == update required (spatial relation)
@@ -59,7 +69,7 @@ bool dae::TransformComponent::CheckIfDirty()
 	return false;
 }
 
-void dae::TransformComponent::Update(float /*deltaTime*/)
+void dae::TransformComponent::Update()
 {
 	m_IsDirty = CheckIfDirty();
 

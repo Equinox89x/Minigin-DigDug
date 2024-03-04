@@ -18,18 +18,13 @@ namespace dae
 		FPSCounterComponent& operator=(const FPSCounterComponent& other) = delete;
 		FPSCounterComponent& operator=(FPSCounterComponent&& other) = delete;
 
-		virtual void Update(float deltaTime) override;
-		void Init() override;
-		virtual void FixedUpdate() override;
+		virtual void Update() override;
 		void Render() const override;
 
 		void SetPosition(float x, float y);
 
 
 	private:
-		std::chrono::steady_clock::time_point m_EndTime;
-		std::chrono::steady_clock::time_point m_StartTime;
-		float m_ElapsedTime{ 0 };
-		int m_FPS{ 0 };
+
 	};
 }

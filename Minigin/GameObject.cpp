@@ -11,7 +11,20 @@ dae::GameObject::GameObject()
 }
 
 dae::GameObject::~GameObject() {
+	for (size_t i = 0; i < m_pComponents.size(); i++)
+	{
+		m_pComponents[i].release();
+	}	
+	
+	for (size_t i = 0; i < m_pChildren.size(); i++)
+	{
+		auto it = find(m_pChildren.begin(), m_pChildren.end(), m_pChildren[i]);
+		m_pChildren.erase(it);
+	}
+
+
 	m_pComponents.clear();
+	m_pChildren.clear();
 };
 
 void dae::GameObject::Init()
@@ -25,45 +38,88 @@ void dae::GameObject::Init()
 	}
 }
 
-void dae::GameObject::Update(float deltaTime) {
-		for (size_t i = 0; i < m_pChildren.size(); i++)
-		{
-			if (m_pChildren[i]->IsMarkedForDestroy()) {
-				RemoveChild(m_pChildren[i]);
-				break;
-			}
-		}
+void dae::GameObject::Update() {
 
-		for (const std::unique_ptr<Component>& comp : m_pComponents) {
-			comp->Update(deltaTime);
-		}
+	// I would not remove "marked for destroy" objects before you loop, but after the loop.
+	// Also: do that loop for all objects at once, at the end of the entire update loop.
+	// You do it per game object for the children, but then you still are affected by the order of update having an impact on objects being deleted or not, which is what you want to avoid.
+	// You also wont have to check in the render loop then.
 
-		for (GameObject* child : m_pChildren) {
-			child->Update(deltaTime);
+	//for (size_t i = 0; i < m_pChildren.size(); i++)
+	//{
+	//	if (m_pChildren[i]->IsMarkedForDestroy()) {
+	//		RemoveChild(m_pChildren[i]);
+	//		break;
+	//	}
+	//}
+
+	//for (const std::unique_ptr<Component>& comp : m_pComponents) {
+	//	comp->Update(deltaTime);
+	//}
+
+
+	//for (GameObject* child : m_pChildren) {
+	//	child->Update(deltaTime);
+	//}
+
+	for (size_t i = 0; i < m_pComponents.size(); i++)
+	{
+		if (m_pComponents[i]->IsMarkedForDestroy()) {
+			RemoveComponent(m_pComponents[i]);
 		}
+		else {
+			m_pComponents[i]->Update();
+		}
+	}
+
+	for (size_t i = 0; i < m_pChildren.size(); i++)
+	{
+		if (m_pChildren[i]->IsMarkedForDestroy()) {
+			RemoveChild(m_pChildren[i]);
+		}
+		else {
+			m_pChildren[i]->Update();
+		}
+	}
 }
 
 void dae::GameObject::LateUpdate()
 {
-	for (const std::unique_ptr<Component>& comp : m_pComponents) {
-		if (comp->IsMarkedForDestroy()) {
-			RemoveComponent(comp);
-			break;
+	for (size_t i = 0; i < m_pComponents.size(); i++)
+	{
+		if (m_pComponents[i]->IsMarkedForDestroy()) {
+			RemoveComponent(m_pComponents[i]);
 		}
+		else {
+			m_pComponents[i]->LateUpdate();
+		}
+	}
+
+	//for (const std::unique_ptr<Component>& comp : m_pComponents) {
+	//	if (comp->IsMarkedForDestroy()) {
+	//		RemoveComponent(comp);
+	//		break;
+	//	}
+	//}	
+	//
+	for (const std::unique_ptr<Component>& comp : m_pComponents) {
+		comp->LateUpdate();
+	}
+
+	for (GameObject* child : m_pChildren) {
+		child->LateUpdate();
 	}
 }
 
 void dae::GameObject::Render() const
 {
-		for (const std::unique_ptr<Component>& comp : m_pComponents) {
-			if (comp->MarkedForDelete) continue;
-			comp->Render();
-		}
+	for (const std::unique_ptr<Component>& comp : m_pComponents) {
+		comp->Render();
+	}
 
-		for (GameObject* child : m_pChildren) {
-			if (child->MarkedForDelete) continue;
-			child->Render();
-		}
+	for (GameObject* child : m_pChildren) {
+		child->Render();
+	}
 }
 
 #pragma region Component
@@ -74,21 +130,27 @@ void dae::GameObject::RemoveComponent(const std::unique_ptr<Component>& comp)
 	}
 }
 
-void dae::GameObject::SetParent(GameObject* const parent)
+void dae::GameObject::SetParent(GameObject* const child, bool updateTransforms)
 {
+	//recursive child check, check slides too
 
-	//Remove itself as a child from the previous parent(if any).
-	if (parent->m_pParent) {
-		auto it = find(parent->m_pParent->m_pChildren.begin(), parent->m_pParent->m_pChildren.end(), parent);
-		parent->m_pParent->m_pChildren.erase(it);
+	if (child) {
+		//Remove itself as a child from the previous parent(if any).
+		if (child->m_pParent) {
+			auto it = find(child->m_pParent->m_pChildren.begin(), child->m_pParent->m_pChildren.end(), child);
+			child->m_pParent->m_pChildren.erase(it);
+		}
+
+		if (updateTransforms) {
+			//Update position, rotation and scale
+			m_pTransform->SetDirty();
+		}
+
+		//Set the given parent on itself.
+		child->m_pParent = this;
+		//Add itself as a child to the given parent.
+		m_pChildren.push_back(child);
 	}
-	//Set the given parent on itself.
-	parent->m_pParent = this;
-	//Add itself as a child to the given parent.
-	m_pChildren.push_back(parent);
-	//Update position, rotationand scale
-	m_pTransform->UpdateTransforms();
-
 }
 
 dae::GameObject* dae::GameObject::GetParent() const
@@ -98,38 +160,45 @@ dae::GameObject* dae::GameObject::GetParent() const
 #pragma endregion
 
 
-void dae::GameObject::RemoveChild(GameObject* pObject)
+void dae::GameObject::RemoveChild(GameObject* gameObject)
 {
-	//Remove the given child from the children list
-	auto it = find(m_pChildren.begin(), m_pChildren.end(), pObject);
-	m_pChildren.erase(it);
-	//	• Remove itself as a parent of the child.
-	pObject->m_pParent = nullptr;
-	//	• Update position, rotationand scale
-	//m_pTransform->UpdateTransforms();
+	if (gameObject) {
+		//Remove the given child from the children list
+		auto it = find(m_pChildren.begin(), m_pChildren.end(), gameObject);
+		m_pChildren.erase(it);
+		//	Update position, rotationand scale
+		m_pTransform->UpdateTransforms();
+		//	Remove itself as a parent of the child.
+		gameObject->m_pParent = nullptr;
+	}
 }
 
-dae::GameObject* dae::GameObject::AddChild(GameObject* go)
+dae::GameObject* dae::GameObject::AddChild(GameObject* gameObject, bool updateTransforms)
 {
-	// Remove the given child from the child's previous parent
-	//go->m_pParent
-	//Set itself as parent of the child
-	go->m_pParent = this;
-	//Add the child to its children list.
-	m_pChildren.push_back(go);
-	//Update position, rotationand scale
-	go->GetTransform()->UpdateTransforms();
+	if (gameObject) {
+		// Remove the given child from the child's previous parent if it had a parent before
+		//go->m_pParent
+		//Set itself as parent of the child
+		gameObject->m_pParent = this;
+		//Add the child to its children list.
+		m_pChildren.push_back(gameObject);
 
-	go->Init();
+		if (updateTransforms) {
+			//Update position, rotation and scale
+			gameObject->GetTransform()->UpdateTransforms();
+		}
 
-	return go;
+		gameObject->Init();
+	}
+
+	return gameObject;
 }
 
 dae::GameObject* dae::GameObject::GetChild(std::string name) {
-	for (auto obj : m_pChildren)
+	for (auto child : m_pChildren)
 	{
-		if (obj && obj->GetName() == name)
-			return obj;
+		if (child && child->GetName() == name)
+			return child;
 	}
 	return nullptr;
 }
@@ -138,10 +207,10 @@ std::vector<dae::GameObject*> dae::GameObject::GetChildren(std::string name)
 {
 	std::vector<GameObject*> children;
 
-	for (auto obj : m_pChildren)
+	for (auto child : m_pChildren)
 	{
-		if (obj && obj->GetName() == name)
-			children.push_back(obj);
+		if (child && child->GetName() == name)
+			children.push_back(child);
 	}
 	return children;
 }

@@ -17,15 +17,15 @@ namespace dae
 		virtual void Init() {};
 		virtual void LateUpdate() {};
 		virtual void FixedUpdate() {};
-		virtual void Update(float /*deltaTime*/) {};
+		virtual void Update() {};
 		virtual void Render() const {};
 
 		GameObject* GetGameObject() const { return m_pGameObject; };
 		std::string GetName() { return Name; };
 		void SetName(std::string name) { Name = name; };
 
-		void MarkForDestroy() { MarkedForDelete = true; };
-		bool IsMarkedForDestroy() { return MarkedForDelete; };
+		void MarkForDestroy() { m_MarkedForDelete = true; };
+		bool IsMarkedForDestroy() { return m_MarkedForDelete; };
 
 	protected:
 		GameObject* m_pGameObject{};
@@ -33,7 +33,7 @@ namespace dae
 	private:
 		friend class GameObject;
 		std::string Name{ "" };
-		bool MarkedForDelete{ false };
+		bool m_MarkedForDelete{ false };
 	};
 }
 

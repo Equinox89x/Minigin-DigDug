@@ -23,11 +23,11 @@ namespace dae
 
 		virtual void Init();
 		virtual void LateUpdate();
-		virtual void Update(float deltaTime);
+		virtual void Update();
 		virtual void Render() const;
 
-		void MarkForDestroy() { MarkedForDelete = true; };
-		bool IsMarkedForDestroy() { return MarkedForDelete; };
+		void MarkForDestroy() { m_MarkedForDelete = true; };
+		bool IsMarkedForDestroy() { return m_MarkedForDelete; };
 
 		template<typename Comp>
 		Comp* AddComponent(std::unique_ptr<Comp> comp) {
@@ -73,10 +73,10 @@ namespace dae
 		}
 		void RemoveComponent(const std::unique_ptr<Component>& comp);
 
-		void SetParent(GameObject* const parent);
+		void SetParent(GameObject* const parent, bool updateTransforms = true);
 		GameObject* GetParent() const;
 		void RemoveChild(GameObject* pObject);
-		dae::GameObject* AddChild(GameObject* go);
+		dae::GameObject* AddChild(GameObject* go, bool updateTransforms = true);
 		void SetName(std::string name) { m_ObjectName = name; };
 		std::string GetName() { return m_ObjectName; };
 
@@ -92,6 +92,6 @@ namespace dae
 		TransformComponent* m_pTransform{};
 		std::string m_ObjectName{};
 
-		bool MarkedForDelete{ false }, NeedsUpdate{ true };
+		bool m_MarkedForDelete{ false }, m_NeedsUpdate{ true };
 	};
 }

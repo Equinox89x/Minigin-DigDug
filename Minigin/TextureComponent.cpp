@@ -4,26 +4,25 @@
 #include "ResourceManager.h"
 #include "Renderer.h"
 #include "GameObject.h"
+#include "Timer.h"
 
-void dae::TextureComponent::Update(float deltaTime)
+
+void dae::TextureComponent::Update()
 {
-    //auto dt{ Timer::GetInstance().GetDeltaTime() };
-    auto dt{ 10 };
-
-        AnimTimer -= dt;
-        if (AnimTimer <= 0) {
-            CurrentFrame++;
-            AnimTimer = DefaultAnimTime;
-        }
-        if (CurrentFrame > NrOfFrames) {
-            CurrentFrame = 1;
-        }
+    auto dt{ Timer::GetInstance().GetDeltaTime() };
+    AnimTimer -= dt;
+    if (AnimTimer <= 0) {
+        CurrentFrame++;
+        AnimTimer = DefaultAnimTime;
+    }
+    if (CurrentFrame > NrOfFrames) {
+        CurrentFrame = 1;
+    }
     
-
     HandleAnimation();
 
     if (m_CanRotate) {
-        Angle += deltaTime * m_RotationSpeed;
+        Angle += dt * m_RotationSpeed;
     }
 }
 void dae::TextureComponent::HandleAnimation() {

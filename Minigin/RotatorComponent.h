@@ -14,7 +14,7 @@ namespace dae
 		RotatorComponent& operator=(const RotatorComponent& other) = delete;
 		RotatorComponent& operator=(RotatorComponent&& other) = delete;
 
-		void Update(float deltaTime) override;
+		void Update( ) override;
 
 		void SetRotationSpeed(float speed) { m_Speed = speed; };
 
