@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL.h>
 #include "Singleton.h"
+#define IMGUI_DEFINE_MATH_OPERATORS
 
 namespace dae
 {
