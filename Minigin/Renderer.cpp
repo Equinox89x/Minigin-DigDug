@@ -177,10 +177,9 @@ void draw_multi_plot(std::vector<float> arr, std::vector<float> arr2, std::vecto
 
 void TrashTheCash()
 {
-	std::cout << "Hello World!\n";
+	std::cout << "Runing tests...\n";
 
 	int size{ int(std::pow(2, 26))/10 };
-	std::cout << size << "\n";
 	int* arr{ new int[size] };
 	GameObject3D* arr2{ new GameObject3D[size] };
 	for (int i = 0; i < size; i++)
@@ -210,11 +209,7 @@ void TrashTheCash()
 		int average{ 0 };
 		for (auto item : timingarr) average += int(item);
 		timingarr2.push_back(float(float(average / timingarr.size())));
-		std::cout << step << "; " << average / timingarr.size() << "\n";
 	}
-
-
-	std::cout << "\n\n";
 
 	for (int step = 1; step <= 1024; step *= 2)
 	{
@@ -232,10 +227,7 @@ void TrashTheCash()
 		int average{ 0 };
 		for (auto item : timingarr) average += int(item);
 		timingarr3.push_back(float(float(average / timingarr.size())));
-		std::cout << step << "; " << average / timingarr.size() << "\n";
 	}
-
-	std::cout << "\n\n";
 
 	for (int step = 1; step <= 1024; step *= 2)
 	{
@@ -253,7 +245,6 @@ void TrashTheCash()
 		int average{ 0 };
 		for (auto item : timingarr) average += int(item);
 		timingarr4.push_back(float(float(average / timingarr.size())));
-		std::cout << step << "; " << average / timingarr.size() << "\n";
 	}
 
 	//timingarr2.erase(std::remove(timingarr2.begin(), timingarr2.end(), timingarr2[0]));
