@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL.h>
 #include "Singleton.h"
+#include <functional>
 
 namespace dae {
 
@@ -13,11 +14,11 @@ namespace dae {
 		void Stop();
 
 
-		float GetDeltaTime() const { return static_cast<float>(m_ElapsedTime); };
-		float GetDeltaTimeSec() const { return static_cast<float>(m_DeltaTime); };
+		float GetDeltaTime() const { return static_cast<float>(m_DeltaTime); };
 		uint32_t GetFPS() const { return m_FPS; };
 		float GetTotal() const { return m_TotalTime; };
 
+		void Benchmark(std::function<void()> function);
 
 	private:
 		friend class Singleton<Timer>;
@@ -28,14 +29,13 @@ namespace dae {
 		uint64_t m_StopTime = 0;
 		uint64_t m_PreviousTime = 0;
 		uint64_t m_CurrentTime = 0;
-		uint64_t m_DeltaTime = 0;
 
 		uint32_t m_FPS = 0;
 		float m_dFPS = 0.0f;
 		uint32_t m_FPSCount = 0;
 
 		float m_TotalTime = 0.0f;
-		float m_ElapsedTime = 0.0f;
+		float m_DeltaTime = 0.0f;
 		float m_SecondsPerCount = 0.0f;
 		float m_ElapsedUpperBound = 0.03f;
 		float m_FPSTimer = 0.0f;

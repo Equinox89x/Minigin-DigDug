@@ -35,7 +35,7 @@ namespace dae
 				comp->m_pGameObject = this;
 				dynamic_cast<Component*>(comp.get())->Init();
 				m_pComponents.push_back(std::move(comp));
-				return dynamic_cast<Comp*>(comp.get());
+				return GetComponent<Comp>();
 			}
 			return nullptr;
 		}

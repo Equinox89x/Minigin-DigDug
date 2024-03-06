@@ -11,7 +11,7 @@ void dae::Timer::Update()
 	if (m_IsStopped)
 	{
 		m_FPS = 0;
-		m_ElapsedTime = 0.0f;
+		m_DeltaTime = 0.0f;
 		m_TotalTime = (float)(((m_StopTime - m_PausedTime) - m_BaseTime) * m_BaseTime);
 		return;
 	}
@@ -19,22 +19,21 @@ void dae::Timer::Update()
 	const uint64_t currentTime = SDL_GetPerformanceCounter();
 	m_CurrentTime = currentTime;
 
-	m_ElapsedTime = (float)((m_CurrentTime - m_PreviousTime) * m_SecondsPerCount);
+	m_DeltaTime = (float)((m_CurrentTime - m_PreviousTime) * m_SecondsPerCount);
 	m_PreviousTime = m_CurrentTime;
 
-	if (m_ElapsedTime < 0.0f)
-		m_ElapsedTime = 0.0f;
+	if (m_DeltaTime < 0.0f)
+		m_DeltaTime = 0.0f;
 
-	if (m_ForceElapsedUpperBound && m_ElapsedTime > m_ElapsedUpperBound)
+	if (m_ForceElapsedUpperBound && m_DeltaTime > m_ElapsedUpperBound)
 	{
-		m_ElapsedTime = m_ElapsedUpperBound;
+		m_DeltaTime = m_ElapsedUpperBound;
 	}
 
 	m_TotalTime = static_cast<float>(((m_CurrentTime - m_PausedTime) - m_BaseTime) * m_SecondsPerCount);
-	m_DeltaTime = m_CurrentTime - m_PreviousTime;
 
 	//FPS LOGIC
-	m_FPSTimer += m_ElapsedTime;
+	m_FPSTimer += m_DeltaTime;
 	++m_FPSCount;
 	if (m_FPSTimer >= 1.0f)
 	{
@@ -68,6 +67,13 @@ void dae::Timer::Stop()
 		m_StopTime = currentTime;
 		m_IsStopped = true;
 	}
+}
+
+void dae::Timer::Benchmark(std::function<void()> function)
+{
+	//auto now{std::chrono::}
+	function();
+
 }
 
 

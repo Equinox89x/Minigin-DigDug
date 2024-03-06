@@ -3,6 +3,7 @@
 
 dae::RotatorComponent::RotatorComponent()
 {
+
 }
 
 void dae::RotatorComponent::Update()

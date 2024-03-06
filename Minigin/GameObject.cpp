@@ -5,26 +5,31 @@
 
 dae::GameObject::GameObject()
 {
-	auto comp{ std::make_unique<TransformComponent>() };
-	m_pTransform = comp.get();
-	AddComponent(std::move(comp));
+	AddComponent(std::make_unique<TransformComponent>());
+	m_pTransform = GetComponent<TransformComponent>();
 }
 
 dae::GameObject::~GameObject() {
 	for (size_t i = 0; i < m_pComponents.size(); i++)
 	{
-		m_pComponents[i].release();
+		//m_pComponents[i].release();
+		m_pComponents[i].reset();
+		//m_pComponents.erase(std::remove(m_pComponents.begin(), m_pComponents.end(), m_pComponents[i]));
 	}	
 	
 	for (size_t i = 0; i < m_pChildren.size(); i++)
 	{
-		auto it = find(m_pChildren.begin(), m_pChildren.end(), m_pChildren[i]);
-		m_pChildren.erase(it);
+		m_pChildren.erase(std::remove(m_pChildren.begin(), m_pChildren.end(), m_pChildren[i]));
 	}
 
 
 	m_pComponents.clear();
 	m_pChildren.clear();
+
+	m_pParent = nullptr;
+	m_pTransform = nullptr;
+
+	
 };
 
 void dae::GameObject::Init()
@@ -64,12 +69,12 @@ void dae::GameObject::Update() {
 
 	for (size_t i = 0; i < m_pComponents.size(); i++)
 	{
-		if (m_pComponents[i]->IsMarkedForDestroy()) {
-			RemoveComponent(m_pComponents[i]);
-		}
-		else {
+		//if (m_pComponents[i]->IsMarkedForDestroy()) {
+		//	RemoveComponent(m_pComponents[i]);
+		//}
+		//else {
 			m_pComponents[i]->Update();
-		}
+		//}
 	}
 
 	for (size_t i = 0; i < m_pChildren.size(); i++)
@@ -122,7 +127,6 @@ void dae::GameObject::Render() const
 	}
 }
 
-#pragma region Component
 void dae::GameObject::RemoveComponent(const std::unique_ptr<Component>& comp)
 {
 	if (comp) {
@@ -133,12 +137,10 @@ void dae::GameObject::RemoveComponent(const std::unique_ptr<Component>& comp)
 void dae::GameObject::SetParent(GameObject* const child, bool updateTransforms)
 {
 	//recursive child check, check slides too
-
 	if (child) {
 		//Remove itself as a child from the previous parent(if any).
 		if (child->m_pParent) {
-			auto it = find(child->m_pParent->m_pChildren.begin(), child->m_pParent->m_pChildren.end(), child);
-			child->m_pParent->m_pChildren.erase(it);
+			child->m_pParent->m_pChildren.erase(std::remove(child->m_pParent->m_pChildren.begin(), child->m_pParent->m_pChildren.end(), child));
 		}
 
 		if (updateTransforms) {
@@ -157,19 +159,21 @@ dae::GameObject* dae::GameObject::GetParent() const
 {
 	return m_pParent;
 }
-#pragma endregion
-
 
 void dae::GameObject::RemoveChild(GameObject* gameObject)
 {
 	if (gameObject) {
-		//Remove the given child from the children list
 		auto it = find(m_pChildren.begin(), m_pChildren.end(), gameObject);
-		m_pChildren.erase(it);
-		//	Update position, rotationand scale
-		m_pTransform->UpdateTransforms();
-		//	Remove itself as a parent of the child.
-		gameObject->m_pParent = nullptr;
+		if (it != m_pChildren.end()) {
+			//	Remove itself as a parent of the child.
+			gameObject->m_pParent = nullptr;
+
+			//Remove the given child from the children list
+			m_pChildren.erase(std::remove(m_pChildren.begin(), m_pChildren.end(), gameObject));
+
+			//	Update position, rotation and scale
+			m_pTransform->UpdateTransforms();
+		}
 	}
 }
 
@@ -177,18 +181,23 @@ dae::GameObject* dae::GameObject::AddChild(GameObject* gameObject, bool updateTr
 {
 	if (gameObject) {
 		// Remove the given child from the child's previous parent if it had a parent before
-		//go->m_pParent
+		if (gameObject->m_pParent) {
+			gameObject->m_pParent->RemoveChild(gameObject);
+		}
+
 		//Set itself as parent of the child
 		gameObject->m_pParent = this;
-		//Add the child to its children list.
-		m_pChildren.push_back(gameObject);
 
+
+		//Update position, rotation and scale
 		if (updateTransforms) {
-			//Update position, rotation and scale
 			gameObject->GetTransform()->UpdateTransforms();
 		}
 
 		gameObject->Init();
+
+		//Add the child to its children list.
+		m_pChildren.push_back(std::move(gameObject));
 	}
 
 	return gameObject;

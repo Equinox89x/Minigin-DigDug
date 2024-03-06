@@ -10,6 +10,12 @@ dae::TextObjectComponent::TextObjectComponent(const std::string& text, std::shar
 	: m_needsUpdate(true), m_text(text), m_font(std::move(font)), m_textTexture(nullptr)
 { }
 
+dae::TextObjectComponent::~TextObjectComponent()
+{
+	m_font.reset();
+	m_textTexture.reset();
+}
+
 void dae::TextObjectComponent::Update()
 {
 	if (m_needsUpdate)

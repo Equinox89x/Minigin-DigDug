@@ -19,7 +19,7 @@ namespace dae {
 	public:
 		TextureComponent() {};
 		//TextureComponent(const std::string& filename, glm::vec2 position = { 0,0 }, glm::vec2 scale = { 1,1 }, const float rotation = 0, float animSpeed = 0.3f, int nrOfFrames = 1);
-		virtual ~TextureComponent() = default;
+		virtual ~TextureComponent() override;
 		TextureComponent(const TextureComponent& other) = delete;
 		TextureComponent(TextureComponent&& other) = delete;
 		TextureComponent& operator=(const TextureComponent& other) = delete;
@@ -60,7 +60,7 @@ namespace dae {
 		glm::vec2 m_Position{};
 		glm::vec2 m_Scale{  };
 
-		glm::vec2 Offset;
+		glm::vec2 Offset{};
 
 		bool m_CanRotate{ false };
 		float m_RotationSpeed{ 10 };

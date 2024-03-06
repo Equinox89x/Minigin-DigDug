@@ -14,7 +14,7 @@ namespace dae
 	{
 	public:
 		TextObjectComponent(const std::string& text, std::shared_ptr<Font> font);
-		virtual ~TextObjectComponent() = default;
+		virtual ~TextObjectComponent() override;
 		TextObjectComponent(const TextObjectComponent& other) = delete;
 		TextObjectComponent(TextObjectComponent&& other) = delete;
 		TextObjectComponent& operator=(const TextObjectComponent& other) = delete;

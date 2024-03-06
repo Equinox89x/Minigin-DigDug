@@ -7,6 +7,11 @@
 #include "Timer.h"
 
 
+dae::TextureComponent::~TextureComponent()
+{
+    m_pTexture.reset();
+}
+
 void dae::TextureComponent::Update()
 {
     auto dt{ Timer::GetInstance().GetDeltaTime() };
@@ -64,7 +69,8 @@ void dae::TextureComponent::SetTexture(const std::string& filename, float animSp
 {
     if (FileName != filename) {
         FileName = filename;
-        m_pTexture = ResourceManager::GetInstance().LoadTexture(filename);
+        m_pTexture.reset();
+        m_pTexture = std::move(ResourceManager::GetInstance().LoadTexture(filename));
         NrOfFrames = nrOfFrames;
         DefaultAnimTime = animSpeed;
         if (resetAnim) {

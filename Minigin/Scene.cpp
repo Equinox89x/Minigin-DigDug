@@ -11,7 +11,8 @@ Scene::Scene(const std::string& name) : m_name(name) {}
 Scene::~Scene() {
 	for (size_t i = 0; i < m_objects.size(); i++)
 	{
-		m_objects.erase(std::remove(m_objects.begin(), m_objects.end(), m_objects[i]), m_objects.end());
+		m_objects[i].reset();
+		//m_objects.erase(std::remove(m_objects.begin(), m_objects.end(), m_objects[i]), m_objects.end());
 	}
 	m_objects.clear();
 }
