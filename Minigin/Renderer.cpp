@@ -247,13 +247,6 @@ void TrashTheCash()
 		timingarr4.push_back(float(float(average / timingarr.size())));
 	}
 
-	//timingarr2.erase(std::remove(timingarr2.begin(), timingarr2.end(), timingarr2[0]));
-	//timingarr2.erase(std::remove(timingarr2.begin(), timingarr2.end(), timingarr2[timingarr2.size() - 1]));
-	//timingarr3.erase(std::remove(timingarr3.begin(), timingarr3.end(), timingarr3[0]));
-	//timingarr3.erase(std::remove(timingarr3.begin(), timingarr3.end(), timingarr3[timingarr3.size() - 1]));
-	//timingarr4.erase(std::remove(timingarr4.begin(), timingarr4.end(), timingarr4[0]));
-	//timingarr4.erase(std::remove(timingarr4.begin(), timingarr4.end(), timingarr4[timingarr4.size() - 1]));
-
 	delete[] arr;
 	delete[] arr2;
 	delete[] arr3;
