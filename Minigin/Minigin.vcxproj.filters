@@ -111,6 +111,9 @@
     <ClInclude Include="..\3rdParty\imgui-plot-master\include\imgui_plot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Command.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Texture2D.cpp">
@@ -184,6 +187,9 @@
     </ClCompile>
     <ClCompile Include="..\3rdParty\imgui-plot-master\src\imgui_plot.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Commad.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

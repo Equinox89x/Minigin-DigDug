@@ -87,7 +87,9 @@ void dae::Minigin::Run(const std::function<void()>& load)
 
 	auto& renderer = Renderer::GetInstance();
 	auto& sceneManager = SceneManager::GetInstance();
-	auto& input = InputManager::GetInstance();
+	//auto& input = InputManager::GetInstance();
+
+	auto input = InputCollection(3);
 
 	bool doContinue = true;
 	auto lastTime{ std::chrono::high_resolution_clock::now() };
