@@ -8,6 +8,7 @@
 #include "Command.h"
 #include <Windows.h>
 #include <Xinput.h>
+#include <variant>
 
 #define MAX_PLAYERS 2
 
@@ -41,23 +42,33 @@ namespace dae
 
 	class Input final : public Singleton<Input>
 	{
+	public:
+		using InputKey = std::variant<std::tuple<ButtonStates, SDL_KeyCode, int>, std::tuple<ButtonStates, ControllerButton, int>>;
+
 	private:
-		using ControllerKey = std::tuple<ButtonStates, ControllerButton, int>;
-		using KeyboardKey = std::tuple<ButtonStates, SDL_KeyCode, int>;
-		using ControllerCommandsMap = std::map<ControllerKey, std::unique_ptr<Command>>;
-		using KeyboardCommandsMap = std::map<KeyboardKey, std::unique_ptr<Command>>;
+		using ControllerCommandsMap = std::map<InputKey, std::unique_ptr<Command>>;
+		using KeyboardCommandsMap = std::map<InputKey, std::unique_ptr<Command>>;
 
 		ControllerCommandsMap m_consoleCommands{};
 		KeyboardCommandsMap m_KeyboardCommands{};
+
 		bool m_Clear{};
 
 	public:
+
 		void ClearKeys();
 		bool GetClear() const { return m_Clear; };
 		void SetClear(bool clear) { m_Clear = clear; };
-		void BindKey(ControllerKey key, std::unique_ptr<Command> c);
-		void BindKey(KeyboardKey key, std::unique_ptr<Command> c);
 
+		void BindKey(InputKey key, std::unique_ptr<Command> c) {
+			if (std::holds_alternative<std::tuple<ButtonStates, SDL_KeyCode, int>>(key)) {
+				m_KeyboardCommands[key] = std::move(c);
+			}
+			else {
+				m_consoleCommands[key] = std::move(c);
+			}
+		}		
+		
 		const ControllerCommandsMap& GetConsoleCommands()
 		{
 			return m_consoleCommands;

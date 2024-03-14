@@ -87,9 +87,6 @@ void dae::Input::ClearKeys()
 	m_Clear = true;
 }
 
-void dae::Input::BindKey(ControllerKey key, std::unique_ptr<Command> c) { m_consoleCommands[key] = std::move(c); }
-void dae::Input::BindKey(KeyboardKey key, std::unique_ptr<Command> c) { m_KeyboardCommands[key] = std::move(c); }
-
 bool dae::InputManager::IsPressed(ControllerButton button) const { return pImpl->IsPressed(static_cast<unsigned int>(button)); }
 bool dae::InputManager::IsDownThisFrame(ControllerButton button) const { return pImpl->IsDownThisFrame(static_cast<unsigned int>(button)); }
 bool dae::InputManager::IsUpThisFrame(ControllerButton button) const { return pImpl->IsUpThisFrame(static_cast<unsigned int>(button)); }
@@ -103,7 +100,7 @@ bool dae::InputManager::HandleInput()
 	for (const auto& [controllerKey, action] : Input::GetInstance().GetConsoleCommands())
 	{
 
-		auto [state, button, id] = controllerKey;
+		auto [state, button, id] = std::get<std::tuple<ButtonStates, ControllerButton, int>>(controllerKey);
 
 		switch (state)
 		{
@@ -136,7 +133,7 @@ bool dae::InputManager::HandleInput()
 	while (SDL_PollEvent(&e)) {
 		for (const auto& [key, action] : Input::GetInstance().GetKeyboardCommands())
 		{
-			auto [state, button, id] = key;
+			auto [state, button, id] = std::get<std::tuple<ButtonStates, SDL_KeyCode, int>>(key);
 			switch (state)
 			{
 			case ButtonStates::BUTTON_DOWN:
