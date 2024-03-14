@@ -5,9 +5,8 @@
 #include <unordered_map>
 #include "Component.h"
 
-#define WindowSizeX 720
-#define GameWindowSizeX WindowSizeX-0
-#define WindowSizeY 800
+#define WindowSizeX 640
+#define WindowSizeY 480
 #define WindowBuffer 80
 #define Margin 40.f
 #define SubMargin Margin * 2

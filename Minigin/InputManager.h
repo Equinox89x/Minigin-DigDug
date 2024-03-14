@@ -118,7 +118,7 @@ namespace dae
 				isQuitCommandCalled = m_Inputs[i]->HandleInput();
 			}
 
-			return !isQuitCommandCalled;
+			return isQuitCommandCalled;
 		}
 
 	private:

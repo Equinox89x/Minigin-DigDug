@@ -2,7 +2,10 @@
 #include "GameObject.h"
 #include "InputComponent.h"
 #include "TextureComponent.h"
+#include "PlayerComponent.h"
 #include "Command.h"
+
+using namespace dae;
 
 #pragma region Move Keyboard
 class MoveKeyboard final : public Command
@@ -12,11 +15,16 @@ public:
 	void Execute() override
 	{
 		auto player{ m_pObject->GetComponent<PlayerComponent>() };
-		if (player->GetState() == PlayerComponent::PlayerState::THROW || player->GetState() == PlayerComponent::PlayerState::DEAD) return;
-		m_pObject->GetComponent<InputComponent>()->SetMoveSpeed(m_MoveSpeed);
-		m_pObject->GetComponent<TextureComponent>()->SetTexture(m_TextureName);
-		m_pObject->GetComponent<TextureComponent>()->SetNrOfFrames(3);
+		if (player->GetState() == PlayerComponent::PlayerState::DEAD) return;
+
+		auto input{ m_pObject->GetComponent<InputComponent>() };
+		auto tex{ m_pObject->GetComponent<TextureComponent>() };
+
 		player->SetMovement(m_Movement);
+		input->SetMoveSpeed(m_MoveSpeed);
+
+		tex->SetTexture(m_TextureName);
+		tex->SetNrOfFrames(1);
 	}
 private:
 	GameObject* m_pObject;
@@ -46,24 +54,24 @@ public:
 	void Execute() override
 	{
 		auto player{ m_pObject->GetComponent<PlayerComponent>() };
-		if (player->GetState() == PlayerComponent::PlayerState::THROW || player->GetState() == PlayerComponent::PlayerState::DEAD) return;
+		if (player->GetState() == PlayerComponent::PlayerState::DEAD) return;
 		if (m_MoveSpeed.x != 0) {
-			if (player->GetCanMoveHorizontally()) {
-				m_pObject->GetComponent<InputComponent>()->SetMoveSpeed(m_MoveSpeed);
-				m_pObject->GetComponent<TextureComponent>()->SetTexture(m_TextureName);
-				m_pObject->GetComponent<TextureComponent>()->SetNrOfFrames(3);
-				player->SetMovement(m_Movement);
+			auto input{ m_pObject->GetComponent<InputComponent>() };
+			auto tex{ m_pObject->GetComponent<TextureComponent>() };
 
-			}
+			player->SetMovement(m_Movement);
+			input->SetMoveSpeed(m_MoveSpeed);
+			tex->SetTexture(m_TextureName);
+			tex->SetNrOfFrames(1);
 		}
 		if (m_MoveSpeed.y != 0) {
-			if (player->GetCanMoveVertically()) {
-				m_pObject->GetComponent<InputComponent>()->SetMoveSpeed(m_MoveSpeed);
-				m_pObject->GetComponent<TextureComponent>()->SetTexture(m_TextureName);
-				m_pObject->GetComponent<TextureComponent>()->SetNrOfFrames(3);
-				player->SetMovement(m_Movement);
+			auto input{ m_pObject->GetComponent<InputComponent>() };
+			auto tex{ m_pObject->GetComponent<TextureComponent>() };
 
-			}
+			player->SetMovement(m_Movement);
+			input->SetMoveSpeed(m_MoveSpeed);
+			tex->SetTexture(m_TextureName);
+			tex->SetNrOfFrames(1);
 		}
 	}
 private:
@@ -79,7 +87,8 @@ public:
 	StopMoveController(GameObject* object) : m_pObject(object) {};
 	void Execute() override
 	{
-		m_pObject->GetComponent<InputComponent>()->SetMoveSpeed(glm::vec3(0, 0, 0));
+		auto input{ m_pObject->GetComponent<InputComponent>() };
+		input->SetMoveSpeed(glm::vec3(0, 0, 0));
 	}
 private:
 	GameObject* m_pObject;

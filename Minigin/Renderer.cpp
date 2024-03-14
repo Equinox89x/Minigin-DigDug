@@ -229,15 +229,15 @@ void dae::Renderer::Render() const
 
 	SceneManager::GetInstance().Render();
 	
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplSDL2_NewFrame(m_window);
-	ImGui::NewFrame();
-	//ImGui::ShowDemoWindow();
-	//TrashTheCash();
-	//draw_multi_plot(timingarr2, timingarr3, timingarr4);
+	//ImGui_ImplOpenGL3_NewFrame();
+	//ImGui_ImplSDL2_NewFrame(m_window);
+	//ImGui::NewFrame();
+	////ImGui::ShowDemoWindow();
+	////TrashTheCash();
+	////draw_multi_plot(timingarr2, timingarr3, timingarr4);
 
-	ImGui::Render();
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	//ImGui::Render();
+	//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 	SDL_RenderPresent(m_renderer);
 }

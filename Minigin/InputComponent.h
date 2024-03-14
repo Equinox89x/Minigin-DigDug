@@ -34,10 +34,10 @@ namespace dae
 		glm::vec3 m_Movespeed;
 
 		std::map<MathLib::Side, bool> m_Movement{
-			  std::make_pair(MathLib::Side::Top, false),
-			  std::make_pair(MathLib::Side::Left, false),
-			  std::make_pair(MathLib::Side::Right, false),
-			  std::make_pair(MathLib::Side::Bottom, false),
+			  std::make_pair(MathLib::Side::Top, true),
+			  std::make_pair(MathLib::Side::Left, true),
+			  std::make_pair(MathLib::Side::Right, true),
+			  std::make_pair(MathLib::Side::Bottom, true),
 		};
 	};
 }
