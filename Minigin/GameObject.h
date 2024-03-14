@@ -5,6 +5,26 @@
 #include <unordered_map>
 #include "Component.h"
 
+#define WindowSizeX 720
+#define GameWindowSizeX WindowSizeX-0
+#define WindowSizeY 800
+#define WindowBuffer 80
+#define Margin 40.f
+#define SubMargin Margin * 2
+#define Cellsize 48.3f
+#define PlayerSize 14.f
+
+const enum Names {
+	Player0,
+	Player1,
+	PlayerGeneral,
+	NUM_ENUM_VALUES
+};
+
+const std::string EnumStrings[NUM_ENUM_VALUES] = {
+	"MainPlayer0", "MainPlayer1", "MainPlayer",
+};
+
 namespace dae
 {
 	class Component;
