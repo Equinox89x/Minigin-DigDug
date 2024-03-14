@@ -8,16 +8,16 @@ void dae::InputComponent::UpdatePos(float dt)
 	{
 		auto go{ GetGameObject() };
 
-		glm::vec3 curPos = go->GetTransform()->GetPosition();
-		glm::vec3 furPos = glm::vec3(curPos.x + (m_Movespeed.x * dt), curPos.y + (m_Movespeed.y * dt), 1);
+		glm::vec3 currentPosition = go->GetTransform()->GetPosition();
+		glm::vec3 futurePosition = glm::vec3(currentPosition.x + (m_Movespeed.x * dt), currentPosition.y + (m_Movespeed.y * dt), 1);
 
-		if (furPos.x < 0 || furPos.x >(WindowSizeX) - PlayerSize) return;
+		if (futurePosition.x < 0 || futurePosition.x >(WindowSizeX) - PlayerSize) return;
 
 		if (!m_Movement[MathLib::Side::Top] && m_Movespeed.y < 0) return;
 		if (!m_Movement[MathLib::Side::Bottom] && m_Movespeed.y > 0) return;
 		if (!m_Movement[MathLib::Side::Left] && m_Movespeed.x < 0) return;
 		if (!m_Movement[MathLib::Side::Right] && m_Movespeed.x > 0) return;
-		go->GetTransform()->Translate(furPos.x, furPos.y, 0);
+		go->GetTransform()->Translate(futurePosition.x, futurePosition.y, 0);
 		//m_Movespeed = glm::vec3{ 0,0,0 };
 	}
 }
