@@ -75,9 +75,17 @@ dae::InputManager::InputManager(int controllerIndex)
 
 dae::InputManager::~InputManager()
 {
-	delete pImpl;
+	Cleanup();
+}
+
+void dae::InputManager::Cleanup()
+{
+	if (pImpl) {
+		delete pImpl;
+	}
 	pImpl = nullptr;
 }
+
 
 
 void dae::Input::ClearKeys()
@@ -93,7 +101,6 @@ bool dae::InputManager::IsUpThisFrame(ControllerButton button) const { return pI
 
 bool dae::InputManager::HandleInput()
 {
-	bool isQuitCommandCalled{ false };
 	pImpl->Update();
 
 #pragma region Controller
@@ -150,6 +157,10 @@ bool dae::InputManager::HandleInput()
 				{
 					if (button == e.key.keysym.sym) action->Execute();
 				}
+				if (e.key.keysym.sym == SDLK_ESCAPE) {
+					SDL_Quit();
+					return false;
+				}
 				break;
 			case ButtonStates::BUTTON_UP:
 				if (e.key.type == SDL_KEYUP)
@@ -167,7 +178,5 @@ bool dae::InputManager::HandleInput()
 		}
 	}
 #pragma endregion Keyboard
-
-	return !isQuitCommandCalled;
-
+	return true;
 }

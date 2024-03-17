@@ -59,6 +59,7 @@ namespace dae
 		void ClearKeys();
 		bool GetClear() const { return m_Clear; };
 		void SetClear(bool clear) { m_Clear = clear; };
+		void Cleanup();
 
 		void BindKey(InputKey key, std::unique_ptr<Command> c) {
 			if (std::holds_alternative<std::tuple<ButtonStates, SDL_KeyCode, int>>(key)) {
@@ -98,6 +99,8 @@ namespace dae
 		bool IsDownThisFrame(ControllerButton button) const;
 		bool IsUpThisFrame(ControllerButton button) const;
 		bool HandleInput();
+		void Cleanup();
+
 	private:
 
 	};
@@ -112,10 +115,7 @@ namespace dae
 			}
 		};
 		~InputCollection() {
-			for (int i = 0; i < m_NrOfControllers; i++)
-			{
-				m_Inputs[i].release();
-			}
+			//Cleanup();
 		};
 		InputCollection(const InputCollection& other) = delete;
 		InputCollection(InputCollection&& other) = delete;
@@ -123,17 +123,32 @@ namespace dae
 		InputCollection& operator=(InputCollection&& other) = delete;
 
 		bool ProcessInput() {
-			bool isQuitCommandCalled{ false };
 			for (int i = 0; i < m_NrOfControllers; i++)
 			{
-				isQuitCommandCalled = m_Inputs[i]->HandleInput();
+				m_IsQuitCommandCalled = m_Inputs[i]->HandleInput();
+				if (!m_IsQuitCommandCalled) {
+					return m_IsQuitCommandCalled;
+				}
 			}
 
-			return isQuitCommandCalled;
+			return m_IsQuitCommandCalled;
+		}
+		void Cleanup() {
+			for (int i = 0; i < m_NrOfControllers; i++)
+			{
+				m_Inputs[i]->Cleanup();
+			}
+			for (int i = 0; i < m_NrOfControllers; i++)
+			{
+				m_Inputs[i].reset();
+				m_Inputs[i] = nullptr;
+			}
 		}
 
 	private:
 		int m_NrOfControllers{ 0 };
 		std::vector<std::unique_ptr<InputManager>> m_Inputs;
+		bool m_IsQuitCommandCalled{ false };
+
 	};
 }

@@ -120,5 +120,6 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		std::this_thread::sleep_for(sleepTime);
 	}
 
+	input.Cleanup();
 	Timer::GetInstance().Stop();
 }
