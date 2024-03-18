@@ -3,94 +3,50 @@
 #include "InputComponent.h"
 #include "TextureComponent.h"
 #include "PlayerComponent.h"
+#include "MathLib.h"
 #include "Command.h"
 
-using namespace dae;
+namespace dae {
 
-#pragma region Move Keyboard
-class Move final : public Command
-{
-public:
-	Move(GameObject* object, PlayerComponent::Movement movement, std::string textureName, const glm::vec3& moveSpeed) : m_pObject(object), m_Movement{ movement }, m_MoveSpeed(moveSpeed), m_TextureName(textureName) {}
-	void Execute() override
+	#pragma region Movement
+	class Move final : public Command
 	{
-		auto player{ m_pObject->GetComponent<PlayerComponent>() };
-		if (player->GetState() == PlayerComponent::PlayerState::DEAD) return;
+	public:
+		Move(dae::GameObject* object, MathLib::Movement movement, std::string textureName, const glm::vec3& moveSpeed) : m_pObject(object), m_Movement{ movement }, m_MoveSpeed(moveSpeed), m_TextureName(textureName) {}
+		void Execute() override
+		{
+			auto player{ m_pObject->GetComponent<dae::PlayerComponent>() };
+			if (player->GetState() == dae::PlayerComponent::PlayerState::DEAD) return;
 
-		auto input{ m_pObject->GetComponent<InputComponent>() };
-		auto tex{ m_pObject->GetComponent<TextureComponent>() };
+			auto input{ m_pObject->GetComponent<dae::InputComponent>() };
+			auto tex{ m_pObject->GetComponent<dae::TextureComponent>() };
 
-		player->SetMovement(m_Movement);
-		input->SetMoveSpeed(m_MoveSpeed);
+			player->SetMovement(m_Movement);
+			input->SetMoveSpeed(m_MoveSpeed, m_Movement);
 
-		tex->SetTexture(m_TextureName);
-		//tex->SetNrOfFrames(1);
-	}
-private:
-	GameObject* m_pObject;
-	glm::vec3 m_MoveSpeed;
-	std::string m_TextureName;
-	PlayerComponent::Movement m_Movement;
-};
+			tex->SetTexture(m_TextureName);
+		}
 
-class StopMove final : public Command
-{
-public:
-	StopMove(GameObject* object) : m_pObject(object) {};
-	void Execute() override
+	private:
+		dae::GameObject* m_pObject;
+		glm::vec3 m_MoveSpeed;
+		std::string m_TextureName;
+		MathLib::Movement m_Movement;
+	};
+
+	class StopMove final : public Command
 	{
-		m_pObject->GetComponent<InputComponent>()->SetMoveSpeed(glm::vec3(0, 0, 0));
-	}
-private:
-	GameObject* m_pObject;
-};
-#pragma endregion
+	public:
+		StopMove(dae::GameObject* object, MathLib::Movement direction) : m_pObject(object), m_Movement{ direction } {};
+		void Execute() override
+		{
+			//m_pObject->GetComponent<dae::InputComponent>()->SetMoveSpeed(glm::vec3(0, 0, 0));
+			m_pObject->GetComponent<dae::InputComponent>()->StopMovement(m_Movement);
+		}
+	private:
+		dae::GameObject* m_pObject;
+		MathLib::Movement m_Movement;
+	};
+	#pragma endregion
 
-//#pragma region Move Controller	
-//class MoveController final : public Command
-//{
-//public:
-//	MoveController(GameObject* object, PlayerComponent::Movement movement, std::string textureName, const glm::vec3& moveSpeed) : m_pObject(object), m_Movement{ movement }, m_MoveSpeed(moveSpeed), m_TextureName(textureName) {}
-//	void Execute() override
-//	{
-//		auto player{ m_pObject->GetComponent<PlayerComponent>() };
-//		if (player->GetState() == PlayerComponent::PlayerState::DEAD) return;
-//		if (m_MoveSpeed.x != 0) {
-//			auto input{ m_pObject->GetComponent<InputComponent>() };
-//			auto tex{ m_pObject->GetComponent<TextureComponent>() };
-//
-//			player->SetMovement(m_Movement);
-//			input->SetMoveSpeed(m_MoveSpeed);
-//			tex->SetTexture(m_TextureName);
-//			//tex->SetNrOfFrames(1);
-//		}
-//		if (m_MoveSpeed.y != 0) {
-//			auto input{ m_pObject->GetComponent<InputComponent>() };
-//			auto tex{ m_pObject->GetComponent<TextureComponent>() };
-//
-//			player->SetMovement(m_Movement);
-//			input->SetMoveSpeed(m_MoveSpeed);
-//			tex->SetTexture(m_TextureName);
-//			//tex->SetNrOfFrames(1);
-//		}
-//	}
-//private:
-//	GameObject* m_pObject;
-//	glm::vec3 m_MoveSpeed;
-//	std::string m_TextureName;
-//	PlayerComponent::Movement m_Movement;
-//};
-//
-//class StopMoveController final : public Command
-//{
-//public:
-//	StopMoveController(GameObject* object) : m_pObject(object) {};
-//	void Execute() override
-//	{
-//		auto input{ m_pObject->GetComponent<InputComponent>() };
-//		input->SetMoveSpeed(glm::vec3(0, 0, 0));
-//	}
-//private:
-//	GameObject* m_pObject;
-//};
-//#pragma endregion
+}

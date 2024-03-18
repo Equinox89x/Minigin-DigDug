@@ -12,10 +12,6 @@ namespace dae {
     {
 
     public:
-        enum Movement {
-            UP, DOWN, LEFT, RIGHT
-        };
-
         enum PlayerState {
             ALIVE, DEAD, RESPAWN
         };
@@ -35,7 +31,7 @@ namespace dae {
         void SetStartPos(glm::vec2 startPos) { m_StartPos = startPos; };
         void Reposition() { GetGameObject()->GetComponent<TextureComponent>()->SetPosition(m_StartPos.x, m_StartPos.y); };
 
-        void SetMovement(Movement movement) { m_Movement = movement; };
+        void SetMovement(MathLib::Movement movement) { m_Movement = movement; };
 
         PlayerState GetState() { return m_PlayerState; };
 
@@ -44,8 +40,8 @@ namespace dae {
 
         SDL_Rect m_BottomRect{}, m_LeftRect{}, m_Rect{}, m_BottomLeft{}, m_BottomRight{};
         PlayerState m_PlayerState{ PlayerState::ALIVE };
-        Movement m_Movement{ Movement::DOWN };
-        Movement m_PrevMovement{};
+        MathLib::Movement m_Movement{ MathLib::Movement::DOWN };
+        MathLib::Movement m_PrevMovement{};
         glm::vec2 m_StartPos{};
         glm::vec2 m_PrevLoc{};
     };

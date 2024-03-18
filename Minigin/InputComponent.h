@@ -23,6 +23,8 @@ namespace dae
 		void Render() const override;
 
 		void SetMoveSpeed(const glm::vec3& movespeed);
+		void SetMoveSpeed(const glm::vec3& movespeed, MathLib::Movement direction);
+		void StopMovement(MathLib::Movement direction);
 		void SetCanMove(MathLib::Side side, bool canMove) {
 			m_Movement[side] = canMove;
 		};
@@ -32,6 +34,8 @@ namespace dae
 		void UpdatePos(float dt);
 		glm::vec3 m_StartPos;
 		glm::vec3 m_Movespeed;
+
+		std::map<MathLib::Movement, const glm::vec3> m_MoveSpeedList{};
 
 		std::map<MathLib::Side, bool> m_Movement{
 			  std::make_pair(MathLib::Side::Top, true),

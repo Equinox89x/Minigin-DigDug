@@ -4,6 +4,7 @@
 
 void dae::InputComponent::UpdatePos(float dt)
 {
+
 	if (m_Movespeed.y > 0 || m_Movespeed.y < 0 || m_Movespeed.x > 0 || m_Movespeed.x < 0)
 	{
 		auto go{ GetGameObject() };
@@ -41,4 +42,16 @@ void dae::InputComponent::Render() const
 void dae::InputComponent::SetMoveSpeed(const glm::vec3& movespeed)
 {
 	m_Movespeed = movespeed;
+}
+
+void dae::InputComponent::SetMoveSpeed(const glm::vec3& movespeed, MathLib::Movement direction)
+{
+	m_MoveSpeedList.insert(std::pair<MathLib::Movement, const glm::vec3>{ direction, movespeed });
+	m_Movespeed = movespeed;
+}
+
+void dae::InputComponent::StopMovement(MathLib::Movement direction)
+{
+	m_MoveSpeedList.erase(direction);
+	m_Movespeed = m_MoveSpeedList.size() > 0 ? m_MoveSpeedList.begin()->second : glm::vec3{ 0,0,0 };
 }

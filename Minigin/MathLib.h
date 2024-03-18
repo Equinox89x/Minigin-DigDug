@@ -92,6 +92,10 @@ namespace MathLib {
 	}
 	#pragma endregion
 
+	enum Movement {
+		UP, DOWN, LEFT, RIGHT
+	};
+
 	enum class Side {
 		None,
 		Top,
