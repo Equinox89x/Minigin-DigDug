@@ -10,18 +10,24 @@
 #define WindowBuffer 80
 #define Margin 40.f
 #define SubMargin Margin * 2
-#define Cellsize 48.3f
+#define Cellsize 14.f
 #define PlayerSize 14.f
 
 const enum Names {
 	Player0,
 	Player1,
 	PlayerGeneral,
+	Global,
+	PathCreator,
+	ScoreHolder,
+	Life,
+	Score,
 	NUM_ENUM_VALUES
 };
 
 const std::string EnumStrings[NUM_ENUM_VALUES] = {
-	"MainPlayer0", "MainPlayer1", "MainPlayer",
+	"MainPlayer0", "MainPlayer1", "MainPlayer", "Global", "PathCreator", "ScoreHolder", "Life", "Score", 
+
 };
 
 namespace dae

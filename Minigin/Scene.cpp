@@ -32,6 +32,44 @@ void Scene::RemoveAll()
 	m_objects.clear();
 }
 
+std::shared_ptr<GameObject> Scene::GetGameObject(std::string name) {
+	for (const std::shared_ptr<GameObject>& obj : m_objects)
+	{
+		if (obj && obj->GetName() == name)
+			return obj;
+	}
+	return nullptr;
+}
+
+std::vector<std::shared_ptr<GameObject>> Scene::GetGameObjects(std::string name, bool isCompleteWord)
+{
+	std::vector<std::shared_ptr<GameObject>> children;
+
+	for (const std::shared_ptr<GameObject>& obj : m_objects)
+	{
+		if (obj) {
+			if (!isCompleteWord) {
+				std::size_t found = obj->GetName().find(name);
+				if (found != std::string::npos) {
+					children.push_back(obj);
+
+				}
+			}
+			else if (obj->GetName() == name) {
+				children.push_back(obj);
+			}
+		}
+
+	}
+	return children;
+}
+
+std::vector<std::shared_ptr<GameObject>>& dae::Scene::GetGameObjects()
+{
+	return m_objects;
+}
+
+
 void Scene::Update()
 {
 	for(auto& object : m_objects)

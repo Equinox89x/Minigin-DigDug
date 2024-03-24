@@ -5,6 +5,7 @@
 #include "PlayerComponent.h"
 #include "MathLib.h"
 #include "Command.h"
+#include "ValuesComponent.h"
 
 namespace dae {
 
@@ -24,7 +25,7 @@ namespace dae {
 			player->SetMovement(m_Movement);
 			input->SetMoveSpeed(m_MoveSpeed, m_Movement);
 
-			tex->SetTexture(m_TextureName);
+			tex->SetTexture(m_Movement, m_TextureName, 0.1f, 2);
 		}
 
 	private:
@@ -40,12 +41,40 @@ namespace dae {
 		StopMove(dae::GameObject* object, MathLib::Movement direction) : m_pObject(object), m_Movement{ direction } {};
 		void Execute() override
 		{
-			//m_pObject->GetComponent<dae::InputComponent>()->SetMoveSpeed(glm::vec3(0, 0, 0));
 			m_pObject->GetComponent<dae::InputComponent>()->StopMovement(m_Movement);
+			m_pObject->GetComponent<dae::TextureComponent>()->RemoveTexture(m_Movement);
 		}
 	private:
 		dae::GameObject* m_pObject;
 		MathLib::Movement m_Movement;
+	};
+	#pragma endregion
+
+	#pragma region values
+	class IncreaseScore final : public Command
+	{
+	public:
+		IncreaseScore(GameObject* object) : m_pObject(object) {}
+		void Execute() override
+		{
+
+			m_pObject->GetComponent<ValuesComponent>()->IncreaseScore(100);
+		}
+	private:
+		GameObject* m_pObject;
+	};
+
+
+	class DownLives final : public Command
+	{
+	public:
+		DownLives(GameObject* const object) : m_pObject(object) {}
+		void Execute() override
+		{
+			m_pObject->GetComponent<ValuesComponent>()->Damage();
+		}
+	private:
+		GameObject* m_pObject;
 	};
 	#pragma endregion
 

@@ -2,6 +2,7 @@
 #include <vector>
 
 #include <memory>
+#include "Subject.h"
 
 
 namespace dae

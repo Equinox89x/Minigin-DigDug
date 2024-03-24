@@ -14,6 +14,7 @@
 #include <chrono>
 #include <thread>
 #include "GameObject.h"
+#include <steam_api.h>
 
 SDL_Window* g_window{};
 
@@ -114,6 +115,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		}
 
 		sceneManager.Update();
+		SteamAPI_RunCallbacks();
 		renderer.Render();
 
 		const auto sleepTime = currentTime + std::chrono::milliseconds(msPerFrame) - std::chrono::high_resolution_clock::now();

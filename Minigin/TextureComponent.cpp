@@ -9,21 +9,24 @@
 
 dae::TextureComponent::~TextureComponent()
 {
-    m_pTexture.reset();
+    m_Texture.m_pTexture.reset();
 }
 
 void dae::TextureComponent::Update()
 {
     auto dt{ Timer::GetInstance().GetDeltaTime() };
-    AnimTimer -= dt;
-    if (AnimTimer <= 0) {
-        CurrentFrame++;
-        AnimTimer = DefaultAnimTime;
+
+    if (m_Texture.CanProgress) {
+        m_Texture.AnimTimer -= dt;
+        if (m_Texture.AnimTimer <= 0) {
+            m_Texture.CurrentFrame++;
+            m_Texture.AnimTimer = m_Texture.DefaultAnimTime;
+        }
+        if (m_Texture.CurrentFrame > m_Texture.NrOfFrames) {
+            m_Texture.CurrentFrame = 1;
+        }
     }
-    if (CurrentFrame > NrOfFrames) {
-        CurrentFrame = 1;
-    }
-    
+
     HandleAnimation();
 
     if (m_CanRotate) {
@@ -34,14 +37,14 @@ void dae::TextureComponent::HandleAnimation() {
     const auto& pos{ GetGameObject()->GetTransform()->GetFullPosition() };
     const auto& scale{ GetGameObject()->GetTransform()->GetScale() };
 
-    SDL_QueryTexture(m_pTexture->GetSDLTexture(), nullptr, nullptr, &m_SrcRect.w, &m_SrcRect.h);
-    if (NrOfFrames > 1) {
-        m_SrcRect.w /= NrOfFrames;
-        m_SrcRect.x = m_SrcRect.w * (CurrentFrame - 1);
+    SDL_QueryTexture(m_Texture.m_pTexture->GetSDLTexture(), nullptr, nullptr, &m_SrcRect.w, &m_SrcRect.h);
+    if (m_Texture.NrOfFrames > 1) {
+        m_SrcRect.w /= m_Texture.NrOfFrames;
+        m_SrcRect.x = m_SrcRect.w * (m_Texture.CurrentFrame - 1);
     }
     m_DstRect = { 0, 0, m_SrcRect.w, m_SrcRect.h };
 
-    if (NrOfFrames > 1) m_DstRect.x = m_SrcRect.w * CurrentFrame;
+    if (m_Texture.NrOfFrames > 1) m_DstRect.x = m_SrcRect.w * m_Texture.CurrentFrame;
     m_DstRect.x += static_cast<int>(pos.x + Offset.x) - m_SrcRect.x;
     m_DstRect.y = static_cast<int>(pos.y + Offset.y);
 
@@ -53,30 +56,50 @@ void dae::TextureComponent::HandleAnimation() {
 
 void dae::TextureComponent::Render() const
 {
-    if (NrOfFrames > 1) {
+    if (m_Texture.NrOfFrames > 1) {
         SDL_Point center = { m_SrcRect.w / 2, m_SrcRect.h / 2 };
-        SDL_RenderCopyEx(Renderer::GetInstance().GetSDLRenderer(), m_pTexture->GetSDLTexture(), &m_SrcRect, &m_DstRect, Angle, nullptr, SDL_FLIP_NONE);
+        SDL_RenderCopyEx(Renderer::GetInstance().GetSDLRenderer(), m_Texture.m_pTexture->GetSDLTexture(), &m_SrcRect, &m_DstRect, Angle, nullptr, SDL_FLIP_NONE);
     }
     else {
-        SDL_RenderCopyEx(Renderer::GetInstance().GetSDLRenderer(), m_pTexture->GetSDLTexture(), nullptr, &m_DstRect, Angle, nullptr, SDL_FLIP_NONE);
+        SDL_RenderCopyEx(Renderer::GetInstance().GetSDLRenderer(), m_Texture.m_pTexture->GetSDLTexture(), nullptr, &m_DstRect, Angle, nullptr, SDL_FLIP_NONE);
     }
 
     //SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255); // Set the color to red
     //SDL_RenderDrawRect(Renderer::GetInstance().GetSDLRenderer(), &m_Rect); // D
 }
 
-void dae::TextureComponent::SetTexture(const std::string& filename, float animSpeed, int nrOfFrames, bool resetAnim)
+void dae::TextureComponent::SetTexture(const std::string& filename, float animSpeed, int nrOfFrames, bool resetAnim, bool canProgress)
 {
-    if (FileName != filename) {
-        FileName = filename;
-        m_pTexture.reset();
-        m_pTexture = std::move(ResourceManager::GetInstance().LoadTexture(filename));
-        NrOfFrames = nrOfFrames;
-        DefaultAnimTime = animSpeed;
+    if (m_Texture.FileName != filename) {
+        m_Texture.FileName = filename;
+        m_Texture.m_pTexture.reset();
+        m_Texture.m_pTexture = std::move(ResourceManager::GetInstance().LoadTexture(filename));
+        m_Texture.NrOfFrames = nrOfFrames;
+        m_Texture.DefaultAnimTime = animSpeed;
+        m_Texture.CanProgress = canProgress;
         if (resetAnim) {
-            CurrentFrame = 1;
-            AnimTimer = DefaultAnimTime;
+            m_Texture.CurrentFrame = 1;
+            m_Texture.AnimTimer = m_Texture.DefaultAnimTime;
         }
+    }
+}
+
+void dae::TextureComponent::SetTexture(TextureData& textureData)
+{
+    m_Texture = textureData;
+}
+
+void dae::TextureComponent::SetTexture(MathLib::Movement movement, const std::string& filename, float animSpeed, int nrOfFrames, bool resetAnim, bool canProgress)
+{
+    SetTexture(filename, animSpeed, nrOfFrames, resetAnim, canProgress);
+    FileNames.insert({ movement, m_Texture });
+}
+
+void dae::TextureComponent::RemoveTexture(MathLib::Movement movement)
+{
+    FileNames.erase(movement);
+    if (FileNames.size() > 0) {
+        SetTexture(FileNames.begin()->second);
     }
 }
 

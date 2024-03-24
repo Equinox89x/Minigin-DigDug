@@ -12,6 +12,10 @@ namespace dae
 		void Remove(std::shared_ptr<GameObject> object);
 		void RemoveAll();
 
+		std::shared_ptr<GameObject> GetGameObject(std::string name);
+		std::vector<std::shared_ptr<GameObject>> GetGameObjects(std::string name, bool isCompleteWord = true);
+		std::vector<std::shared_ptr<GameObject>>& GetGameObjects();
+
 		void Init() const;
 		void LateUpdate();
 		void Update( );

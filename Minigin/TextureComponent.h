@@ -7,7 +7,9 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include "Texture2D.h"
+#include "MathLib.h"
 #include "TransformComponent.h"
+#include <map>
 
 
 namespace dae {
@@ -25,35 +27,53 @@ namespace dae {
 		TextureComponent& operator=(const TextureComponent& other) = delete;
 		TextureComponent& operator=(TextureComponent&& other) = delete;
 
+		struct TextureData {
+			std::string FileName{ "" };
+			std::shared_ptr<Texture2D> m_pTexture{};
+			int NrOfFrames{ 1 };
+			int CurrentFrame{ 1 };
+			float DefaultAnimTime{ 0.1f };
+			float AnimTimer{ DefaultAnimTime };
+			bool CanProgress{ true };
+
+		};
+
 		void Update() override;
 		void Render() const;
 
-		void SetTexture(const std::string& filename, float animSpeed = 0.1f, int nrOfFrames = 1, bool resetAnim = true);
+		void SetTexture(const std::string& filename, float animSpeed = 0.1f, int nrOfFrames = 1, bool resetAnim = true, bool canProgress = true);
+		void SetTexture(MathLib::Movement movement, const std::string& filename, float animSpeed = 0.1f, int nrOfFrames = 1, bool resetAnim = true, bool canProgress = true);
+		void SetTexture(TextureData& textureData);
+		void RemoveTexture(MathLib::Movement movement);
 		void SetPosition(const float x, const float y);
 		void AddPosition(const float x, const float y);
 		void SetWorldPosition(const float x, const float y);
 		void Scale(const float x, const float y);
 		void Rotate(const float angle);
 
-		void SetNrOfFrames(int nrOfFrames) { NrOfFrames = nrOfFrames; };
+		//void SetNrOfFrames(int nrOfFrames) { NrOfFrames = nrOfFrames; };
+		void SetNrOfFrames(int nrOfFrames) { m_Texture.NrOfFrames = nrOfFrames; };
 		const SDL_Rect& GetRect() { HandleAnimation(); return m_Rect; };
 		void SetOffset(glm::vec2 offset) { Offset = offset; };
 
-		void SetFrame(int frameNr) { CurrentFrame = frameNr; HandleAnimation(); };
+		//void SetFrame(int frameNr) { CurrentFrame = frameNr; HandleAnimation(); };
+		void SetFrame(int frameNr) { m_Texture.CurrentFrame = frameNr; HandleAnimation(); };
 
 		void SetDirty() { m_needsUpdate = true; };
 		void SetCanRotate( bool canRotate) { m_CanRotate = canRotate; };
 		void SetRotationSpeed( float speed) { m_RotationSpeed = speed; };
 
 	private:
-		std::string FileName{""};
-		std::shared_ptr<Texture2D> m_pTexture{};
+		TextureData m_Texture{};
+		//std::string FileName{""};
+		std::map<MathLib::Movement, TextureData> FileNames{};
+		//std::shared_ptr<Texture2D> m_pTexture{};
 		bool m_needsUpdate{ false };
 		float Angle{ 0 };
-		int NrOfFrames{ 1 };
-		int CurrentFrame{ 1 };
-		float DefaultAnimTime{ 0.1f };
-		float AnimTimer{ DefaultAnimTime };
+		//int NrOfFrames{ 1 };
+		//int CurrentFrame{ 1 };
+		//float DefaultAnimTime{ 0.1f };
+		//float AnimTimer{ DefaultAnimTime };
 		SDL_Rect m_Rect{};
 		SDL_Rect m_SrcRect{};
 		SDL_Rect m_DstRect{};
