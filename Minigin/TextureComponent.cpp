@@ -56,16 +56,18 @@ void dae::TextureComponent::HandleAnimation() {
 
 void dae::TextureComponent::Render() const
 {
-    if (m_Texture.NrOfFrames > 1) {
-        SDL_Point center = { m_SrcRect.w / 2, m_SrcRect.h / 2 };
-        SDL_RenderCopyEx(Renderer::GetInstance().GetSDLRenderer(), m_Texture.m_pTexture->GetSDLTexture(), &m_SrcRect, &m_DstRect, Angle, nullptr, SDL_FLIP_NONE);
-    }
-    else {
-        SDL_RenderCopyEx(Renderer::GetInstance().GetSDLRenderer(), m_Texture.m_pTexture->GetSDLTexture(), nullptr, &m_DstRect, Angle, nullptr, SDL_FLIP_NONE);
+    if (m_IsVisible) {
+        if (m_Texture.NrOfFrames > 1) {
+            SDL_Point center = { m_SrcRect.w / 2, m_SrcRect.h / 2 };
+            SDL_RenderCopyEx(Renderer::GetInstance().GetSDLRenderer(), m_Texture.m_pTexture->GetSDLTexture(), &m_SrcRect, &m_DstRect, Angle, nullptr, SDL_FLIP_NONE);
+        }
+        else {
+            SDL_RenderCopyEx(Renderer::GetInstance().GetSDLRenderer(), m_Texture.m_pTexture->GetSDLTexture(), nullptr, &m_DstRect, Angle, nullptr, SDL_FLIP_NONE);
+        }
     }
 
-    //SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255); // Set the color to red
-    //SDL_RenderDrawRect(Renderer::GetInstance().GetSDLRenderer(), &m_Rect); // D
+    SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255); // Set the color to red
+    SDL_RenderDrawRect(Renderer::GetInstance().GetSDLRenderer(), &m_Rect); // D
 }
 
 void dae::TextureComponent::SetTexture(const std::string& filename, float animSpeed, int nrOfFrames, bool resetAnim, bool canProgress)

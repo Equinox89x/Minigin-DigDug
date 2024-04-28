@@ -1,10 +1,12 @@
 #include "Timer.h"
 #include "InputComponent.h"
 #include "GameObject.h"
+#include "../DigDug/PathwayCreatorComponent.h"
+#include "../DigDug/EntityMovementComponent.h"
 
 void dae::InputComponent::UpdatePos(float dt)
 {
-
+	if (!m_CanMove) return;
 	if (m_Movespeed.y > 0 || m_Movespeed.y < 0 || m_Movespeed.x > 0 || m_Movespeed.x < 0)
 	{
 		auto go{ GetGameObject() };
@@ -27,6 +29,31 @@ void dae::InputComponent::Update()
 {
 
 	auto dt{ Timer::GetInstance().GetDeltaTime() };
+
+	auto pathwayComp{ m_Scene->GetGameObject(EnumStrings[Names::PathCreator])->GetComponent<PathwayCreatorComponent>() };
+	auto playerComp{ m_Scene->GetGameObject(EnumStrings[Names::Player0])->GetComponent<EntityMovementComponent>() };
+
+	m_Movement[MathLib::Side::Left] = false;
+	m_Movement[MathLib::Side::Right] = false;
+	m_Movement[MathLib::Side::Bottom] = false;
+	m_Movement[MathLib::Side::Top] = false;
+
+	for (const auto& pathWay : pathwayComp->GetHorizontalPathways()) {
+		if (MathLib::IsOverlapping(playerComp->GetPathCollider(MathLib::Movement::LEFT), pathWay)) {
+			m_Movement[MathLib::Side::Left] = true;
+		}
+		if (MathLib::IsOverlapping(playerComp->GetPathCollider(MathLib::Movement::RIGHT), pathWay)) {
+			m_Movement[MathLib::Side::Right] = true;
+		}
+	}
+	for (const auto& pathWay : pathwayComp->GetVerticalPathways()) {
+		if (MathLib::IsOverlapping(playerComp->GetPathCollider(MathLib::Movement::DOWN), pathWay)) {
+			m_Movement[MathLib::Side::Bottom] = true;
+		}
+		if (MathLib::IsOverlapping(playerComp->GetPathCollider(MathLib::Movement::UP), pathWay)) {
+			m_Movement[MathLib::Side::Top] = true;
+		}
+	}
 
 	UpdatePos(dt);
 }

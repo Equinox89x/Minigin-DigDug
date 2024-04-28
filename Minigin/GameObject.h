@@ -17,6 +17,9 @@ const enum Names {
 	Player0,
 	Player1,
 	PlayerGeneral,
+	EnemyGeneral,
+	EnemyHolder,
+	PumpGeneral,
 	Global,
 	PathCreator,
 	ScoreHolder,
@@ -26,7 +29,7 @@ const enum Names {
 };
 
 const std::string EnumStrings[NUM_ENUM_VALUES] = {
-	"MainPlayer0", "MainPlayer1", "MainPlayer", "Global", "PathCreator", "ScoreHolder", "Life", "Score", 
+	"MainPlayer0", "MainPlayer1", "MainPlayer","Enemy", "EnemyHolder", "Pump", "Global", "PathCreator", "ScoreHolder", "Life", "Score",
 
 };
 

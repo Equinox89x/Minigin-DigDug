@@ -14,7 +14,9 @@
 #include <chrono>
 #include <thread>
 #include "GameObject.h"
-#include <steam_api.h>
+#include "Audio.h"
+#include "ServiceLocator.h"
+//#include <steam_api.h>
 
 SDL_Window* g_window{};
 
@@ -77,10 +79,13 @@ dae::Minigin::Minigin(const std::string &dataPath)
 
 dae::Minigin::~Minigin()
 {
+	ServiceLocator::Quit();
 	Renderer::GetInstance().Destroy();
 	SDL_DestroyWindow(g_window);
 	g_window = nullptr;
 	SDL_Quit();
+
+
 }
 
 void dae::Minigin::Run(const std::function<void()>& load)
@@ -91,12 +96,18 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto& sceneManager = SceneManager::GetInstance();
 	//auto& input = InputManager::GetInstance();
 
+	auto sound{ new AudioMaker() };
+	ServiceLocator::provide(sound);
+
+
 	auto input = InputCollection(3);
 
 	bool doContinue = true;
 	auto lastTime{ std::chrono::high_resolution_clock::now() };
 	float lag{ 0 };
 
+	std::thread audioThread(&Audio::Update, sound);
+	audioThread.join();
 	Timer::GetInstance().Start();
 	sceneManager.Init();
 	while (doContinue)
@@ -115,13 +126,16 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		}
 
 		sceneManager.Update();
-		SteamAPI_RunCallbacks();
+		//SteamAPI_RunCallbacks();
 		renderer.Render();
 
 		const auto sleepTime = currentTime + std::chrono::milliseconds(msPerFrame) - std::chrono::high_resolution_clock::now();
 		std::this_thread::sleep_for(sleepTime);
 	}
 
+
 	input.Cleanup();
 	Timer::GetInstance().Stop();
+	ServiceLocator::getAudio()->StopAllSounds();
+
 }

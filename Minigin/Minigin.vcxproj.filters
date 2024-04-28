@@ -111,9 +111,6 @@
     <ClInclude Include="..\3rdParty\imgui-plot-master\include\imgui_plot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Commands.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
     <ClInclude Include="Command.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
@@ -138,9 +135,6 @@
     <ClInclude Include="MathLib.h">
       <Filter>Header Files\Misc</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerComponent.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Event.h">
       <Filter>Header Files\Observer</Filter>
     </ClInclude>
@@ -149,12 +143,6 @@
     </ClInclude>
     <ClInclude Include="Subject.h">
       <Filter>Header Files\Observer</Filter>
-    </ClInclude>
-    <ClInclude Include="Observers.h">
-      <Filter>Header Files\Observer</Filter>
-    </ClInclude>
-    <ClInclude Include="PathwayCreatorComponent.h">
-      <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="ValuesComponent.h">
       <Filter>Header Files\Components</Filter>
@@ -165,12 +153,21 @@
     <ClInclude Include="SteamHolder.h">
       <Filter>Header Files\Misc</Filter>
     </ClInclude>
+    <ClInclude Include="AudioMaker.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="ServiceLocator.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Texture2D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Minigin.cpp">
@@ -242,20 +239,20 @@
     <ClCompile Include="InputComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerComponent.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Observers.cpp">
-      <Filter>Source Files\Observers</Filter>
-    </ClCompile>
-    <ClCompile Include="PathwayCreatorComponent.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
     <ClCompile Include="ValuesComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="Steam.cpp">
       <Filter>Source Files\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioMaker.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="ServiceLocator.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioComponent.cpp">
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

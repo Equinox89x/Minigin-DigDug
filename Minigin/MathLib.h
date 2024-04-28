@@ -92,8 +92,24 @@ namespace MathLib {
 	}
 	#pragma endregion
 
+	inline bool IsSameRect(const SDL_Rect& rect1, const SDL_Rect& rect)
+	{
+		return (rect1.x == rect.x &&
+			rect1.y == rect.y &&
+			rect1.w == rect.w &&
+			rect1.h == rect.h);
+	}
+
 	enum Movement {
 		UP, DOWN, LEFT, RIGHT
+	};	
+	
+	enum EMovingState {
+		MovingLeft,
+		MovingRight,
+		MovingUp,
+		MovingDown,
+		Still
 	};
 
 	enum class Side {
@@ -102,6 +118,10 @@ namespace MathLib {
 		Bottom,
 		Left,
 		Right
+	};
+
+	enum ELifeState {
+		ALIVE, DEAD, RESPAWN
 	};
 
 	inline Side GetNonOverlappingSide(const SDL_Rect& rect1, const SDL_Rect& rect2) {
@@ -174,10 +194,9 @@ namespace MathLib {
 		return direction * speed;
 	}
 
-	inline float CalculateChance(float min = 0.f, float max = 1.f) {
-		std::random_device randomDevice;
-		std::mt19937 generatedNr(randomDevice());
-		std::uniform_real_distribution<float> distributeVal(min, max);
-		return distributeVal(generatedNr);
+	inline int CalculateChance(/*int min = 0.f,*/ int max = 100.f) {
+		srand(static_cast<unsigned int>(time(0)));
+		int nr{ rand() % (max + 1) };
+		return nr;
 	}
 }

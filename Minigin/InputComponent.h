@@ -4,6 +4,7 @@
 #include "TransformComponent.h"
 #include "MathLib.h"
 #include <map>
+#include "Scene.h"
 
 namespace dae
 {
@@ -11,7 +12,7 @@ namespace dae
 	{
 	public:
 
-		InputComponent(glm::vec3 startPos) : m_StartPos{ startPos }, m_Movespeed{ 0,0,0 } {}
+		InputComponent(Scene* scene, glm::vec3 startPos) : m_Scene{scene}, m_StartPos { startPos }, m_Movespeed{ 0,0,0 } {}
 		~InputComponent() {};
 		InputComponent(const InputComponent& other) = delete;
 		InputComponent(InputComponent&& other) = delete;
@@ -29,11 +30,14 @@ namespace dae
 			m_Movement[side] = canMove;
 		};
 		const std::map<MathLib::Side, bool>& GetCanMove() { return m_Movement; };
+		void DisableMovement(bool IsDisabled) { m_CanMove = !IsDisabled; };
 
 	private:
-		void UpdatePos(float dt);
+		Scene* m_Scene{ nullptr };
 		glm::vec3 m_StartPos;
 		glm::vec3 m_Movespeed;
+
+		bool m_CanMove{ true };
 
 		std::map<MathLib::Movement, const glm::vec3> m_MoveSpeedList{};
 
@@ -43,5 +47,7 @@ namespace dae
 			  std::make_pair(MathLib::Side::Right, true),
 			  std::make_pair(MathLib::Side::Bottom, true),
 		};
+
+		void UpdatePos(float dt);
 	};
 }

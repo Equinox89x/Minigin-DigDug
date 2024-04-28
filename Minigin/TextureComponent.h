@@ -50,6 +50,7 @@ namespace dae {
 		void SetWorldPosition(const float x, const float y);
 		void Scale(const float x, const float y);
 		void Rotate(const float angle);
+		void SetIsVisible(bool isVisible) { m_IsVisible = isVisible; };
 
 		//void SetNrOfFrames(int nrOfFrames) { NrOfFrames = nrOfFrames; };
 		void SetNrOfFrames(int nrOfFrames) { m_Texture.NrOfFrames = nrOfFrames; };
@@ -68,7 +69,7 @@ namespace dae {
 		//std::string FileName{""};
 		std::map<MathLib::Movement, TextureData> FileNames{};
 		//std::shared_ptr<Texture2D> m_pTexture{};
-		bool m_needsUpdate{ false };
+		bool m_needsUpdate{ false }, m_IsVisible{ true };
 		float Angle{ 0 };
 		//int NrOfFrames{ 1 };
 		//int CurrentFrame{ 1 };

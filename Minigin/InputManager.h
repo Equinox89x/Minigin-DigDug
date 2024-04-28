@@ -1,7 +1,5 @@
 #pragma once
 #include "Singleton.h"
-#include <backends/imgui_impl_sdl2.h>
-#include "Singleton.h"
 #include <tuple>
 #include <map>
 #include <memory>
