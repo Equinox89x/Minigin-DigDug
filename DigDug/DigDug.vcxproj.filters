@@ -19,17 +19,14 @@
     <Filter Include="Header Files\Components">
       <UniqueIdentifier>{2ab9cb37-8f4e-43b6-9e7d-ff5701c0a107}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Misc">
-      <UniqueIdentifier>{55241e17-bec0-4a11-8f51-379603f496c1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Misc">
       <UniqueIdentifier>{a585b54c-2fc1-4a6e-8960-e7a58f84676b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Misc">
+      <UniqueIdentifier>{55241e17-bec0-4a11-8f51-379603f496c1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Minigin\Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PumpComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
@@ -47,6 +44,12 @@
     </ClCompile>
     <ClCompile Include="Observers.cpp">
       <Filter>Source Files\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Minigin\Main.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="FireComponent.cpp">
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +73,9 @@
     </ClInclude>
     <ClInclude Include="Observers.h">
       <Filter>Header Files\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="FireComponent.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,6 +1,7 @@
 #include "EnemyComponent.h"
 #include "Timer.h"
 #include "EntityMovementComponent.h"
+#include "FireComponent.h"
 
 dae::EnemyComponent::~EnemyComponent()
 {
@@ -52,8 +53,9 @@ void dae::MovingState::Update()
 {
 	if (MathLib::CalculateChance() >= 80) {
 		if (EnemyType == EEnemyType::Fygar) {
-			if (MathLib::CalculateChance() >= 50) {
+			if (MathLib::CalculateChance() >= 70) {
 				gameObject->GetComponent<EnemyComponent>()->SetState(new GhostState());
+				//gameObject->GetComponent<EnemyComponent>()->SetState(new BreatheFireState());
 			}
 			else {
 				gameObject->GetComponent<EnemyComponent>()->SetState(new BreatheFireState());
@@ -67,6 +69,7 @@ void dae::MovingState::Update()
 
 void dae::InflatingState::Update()
 {
+
 }
 
 void dae::GhostState::Init()
@@ -86,19 +89,33 @@ void dae::GhostState::Update()
 	if (distanceToTarget <= 1) {
 		gameObject->GetComponent<EnemyComponent>()->SetState(new MovingState());
 	}
-
-
 }
 
 void dae::BreatheFireState::Init()
 {
 	gameObject->GetComponent<EntityMovementComponent>()->DisableMovement(true);
+	gameObject->GetComponent<TextureComponent>()->SetTexture("Enemies/FygarPrepare.png", 0.2f, 3);	
 }
 
 void dae::BreatheFireState::Update()
 {
-	m_FireTimer -= Timer::GetInstance().GetDeltaTime();
-	if (m_FireTimer <= 0) {
-		gameObject->GetComponent<EnemyComponent>()->SetState(new MovingState());
+	m_PrepareTimer -= Timer::GetInstance().GetDeltaTime();
+	if (!m_IsPrepareComplete) {
+		if (m_PrepareTimer <= 0) {
+			m_IsPrepareComplete = true;
+			gameObject->GetComponent<TextureComponent>()->SetTexture("Enemies/FygarLeft.png", 0.2f, 2, true, false);
+
+			auto go{ std::make_shared<GameObject>() };
+			m_Scene->Add(go);
+			fireObject = go.get();
+			go->AddComponent(std::make_unique<FireComponent>(m_Scene, gameObject->GetTransform()->GetWorldPosition()));
+		}
+	}
+
+	if (fireObject) {
+		if (fireObject->GetComponent<FireComponent>()->GetIsFireFinished()) {
+			fireObject->MarkForDestroy();
+			gameObject->GetComponent<EnemyComponent>()->SetState(new MovingState());
+		}
 	}
 }

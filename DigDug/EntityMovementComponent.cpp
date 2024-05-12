@@ -130,11 +130,6 @@ void dae::EntityMovementComponent::Render() const
 	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_BottomMapBorder);
 }
 
-void dae::EntityMovementComponent::Init()
-{
-
-}
-
 void dae::EntityMovementComponent::CheckMovement(const std::vector<SDL_Rect>& horizontal, const std::vector<SDL_Rect>& vertical)
 {
 	for (auto& item : m_MovementDir) {

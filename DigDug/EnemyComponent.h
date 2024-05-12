@@ -58,7 +58,9 @@ namespace dae {
         virtual void Init() override;
         virtual void Update() override;
     private:
-        float m_FireTimer{ 0.3f };
+        float m_FireTimer{ 0.3f }, m_PrepareTimer{ 0.6f };
+        GameObject* fireObject{ nullptr };
+        bool m_IsPrepareComplete{ false };
     };
 
     class DeathState : public EnemyState {

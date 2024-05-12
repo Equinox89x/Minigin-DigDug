@@ -190,6 +190,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll" "$(O
     <ClCompile Include="..\Minigin\Main.cpp" />
     <ClCompile Include="EnemyComponent.cpp" />
     <ClCompile Include="EntityMovementComponent.cpp" />
+    <ClCompile Include="FireComponent.cpp" />
     <ClCompile Include="Observers.cpp" />
     <ClCompile Include="PathwayCreatorComponent.cpp" />
     <ClCompile Include="PlayerComponent.cpp" />
@@ -199,6 +200,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll" "$(O
     <ClInclude Include="Commands.h" />
     <ClInclude Include="EnemyComponent.h" />
     <ClInclude Include="EntityMovementComponent.h" />
+    <ClInclude Include="FireComponent.h" />
     <ClInclude Include="Observers.h" />
     <ClInclude Include="PathwayCreatorComponent.h" />
     <ClInclude Include="PlayerComponent.h" />

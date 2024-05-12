@@ -20,7 +20,7 @@ namespace dae {
         EntityMovementComponent& operator=(EntityMovementComponent&&) noexcept = delete;
         virtual void Update() override;
         virtual void Render() const override;
-        virtual void Init() override;
+        virtual void Init() override {};
 
         void CheckMovement(const std::vector<SDL_Rect>& horizontal, const std::vector<SDL_Rect>& vertical);
         void SetIsController(bool isController) { m_IsController = isController; };
