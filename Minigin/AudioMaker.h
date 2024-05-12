@@ -3,6 +3,7 @@
 #include <queue>
 #include "Audio.h"
 #include <thread>
+#include <future>
 
 class AudioMaker final : public Audio
 {
@@ -29,6 +30,7 @@ private:
     void Initialize();
 
     bool m_Running;
+    std::promise<void> m_StopSignal;
     Mix_Music* m_pMusic;
     std::mutex m_Mutex;
     std::condition_variable m_ConditionVariable;

@@ -10,26 +10,28 @@ dae::GameObject::GameObject()
 }
 
 dae::GameObject::~GameObject() {
-	for (size_t i = 0; i < m_pComponents.size(); i++)
-	{
-		//m_pComponents[i].release();
-		m_pComponents[i].reset();
-		//m_pComponents.erase(std::remove(m_pComponents.begin(), m_pComponents.end(), m_pComponents[i]));
-	}	
-	
-	for (size_t i = 0; i < m_pChildren.size(); i++)
-	{
-		m_pChildren.erase(std::remove(m_pChildren.begin(), m_pChildren.end(), m_pChildren[i]));
-	}
+	//for (size_t i = 0; i < m_pComponents.size(); i++)
+	//{
+	//	//m_pComponents[i].release();
+	//	if (m_pComponents[i]) {
+	//		m_pComponents[i].reset();
+	//	}
+	//	//m_pComponents.erase(std::remove(m_pComponents.begin(), m_pComponents.end(), m_pComponents[i]));
+	//}	
+	//
+	//for (size_t i = 0; i < m_pChildren.size(); i++)
+	//{
+	//	m_pChildren.erase(std::remove(m_pChildren.begin(), m_pChildren.end(), m_pChildren[i]));
+	//}
 
 
-	m_pComponents.clear();
-	m_pChildren.clear();
+	//m_pComponents.clear();
+	//m_pChildren.clear();
 
-	m_pParent = nullptr;
-	m_pTransform = nullptr;
+	//m_pParent = nullptr;
+	//m_pTransform = nullptr;
 
-	
+	//
 };
 
 void dae::GameObject::Init()
@@ -67,38 +69,36 @@ void dae::GameObject::Update() {
 	//	child->Update(deltaTime);
 	//}
 
-	for (size_t i = 0; i < m_pComponents.size(); i++)
+	for (auto& comp : m_pComponents)
 	{
-		//if (m_pComponents[i]->IsMarkedForDestroy()) {
-		//	RemoveComponent(m_pComponents[i]);
-		//}
-		//else {
-			m_pComponents[i]->Update();
-		//}
+		comp->Update();
 	}
 
-	for (size_t i = 0; i < m_pChildren.size(); i++)
+	for (auto& child : m_pChildren)
 	{
-		if (m_pChildren[i]->IsMarkedForDestroy()) {
-			RemoveChild(m_pChildren[i]);
-		}
-		else {
-			m_pChildren[i]->Update();
-		}
+		child->Update();
 	}
+
+	m_pComponents.erase(std::remove_if(m_pComponents.begin(), m_pComponents.end(),
+		[](const std::unique_ptr<Component>& comp) { return comp->IsMarkedForDestroy(); }),
+		m_pComponents.end());
+
+	m_pChildren.erase(std::remove_if(m_pChildren.begin(), m_pChildren.end(),
+		[](GameObject* child) { return child->IsMarkedForDestroy(); }),
+		m_pChildren.end());
 }
 
 void dae::GameObject::LateUpdate()
 {
-	for (size_t i = 0; i < m_pComponents.size(); i++)
-	{
-		if (m_pComponents[i]->IsMarkedForDestroy()) {
-			RemoveComponent(m_pComponents[i]);
-		}
-		else {
-			m_pComponents[i]->LateUpdate();
-		}
-	}
+	//for (size_t i = 0; i < m_pComponents.size(); i++)
+	//{
+	//	if (m_pComponents[i]->IsMarkedForDestroy()) {
+	//		RemoveComponent(m_pComponents[i]);
+	//	}
+	//	else {
+	//		m_pComponents[i]->LateUpdate();
+	//	}
+	//}
 
 	//for (const std::unique_ptr<Component>& comp : m_pComponents) {
 	//	if (comp->IsMarkedForDestroy()) {
@@ -125,6 +125,50 @@ void dae::GameObject::Render() const
 	for (GameObject* child : m_pChildren) {
 		child->Render();
 	}
+}
+
+void dae::GameObject::Cleanup()
+{
+	//for (size_t i = 0; i < m_pComponents.size(); i++)
+	//{
+	//	//m_pComponents[i].release();
+	//	if (m_pComponents[i]) {
+	//		m_pComponents[i].reset();
+	//	}
+	//	//m_pComponents.erase(std::remove(m_pComponents.begin(), m_pComponents.end(), m_pComponents[i]));
+	//}
+
+	//for (size_t i = 0; i < m_pChildren.size(); i++)
+	//{
+	//	m_pChildren.erase(std::remove(m_pChildren.begin(), m_pChildren.end(), m_pChildren[i]));
+	//}
+
+
+	//m_pComponents.clear();
+	//m_pChildren.clear();
+
+	for (auto& comp : m_pComponents)
+	{
+		comp->MarkForDestroy();
+	}
+
+	for (auto& child : m_pChildren)
+	{
+		child->MarkForDestroy();
+	}
+
+	m_pComponents.erase(std::remove_if(m_pComponents.begin(), m_pComponents.end(),
+		[](const std::unique_ptr<Component>& comp) { return comp && comp->IsMarkedForDestroy(); }),
+		m_pComponents.end());
+
+	m_pChildren.erase(std::remove_if(m_pChildren.begin(), m_pChildren.end(),
+		[](GameObject* child) { return child && child->IsMarkedForDestroy(); }),
+		m_pChildren.end());
+
+	m_pParent = nullptr;
+	m_pTransform = nullptr;
+
+
 }
 
 void dae::GameObject::RemoveComponent(const std::unique_ptr<Component>& comp)

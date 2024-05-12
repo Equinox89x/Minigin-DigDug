@@ -1,9 +1,9 @@
 #pragma once
 #include <memory>
-#include "TransformComponent.h"
 #include <typeindex>
 #include <unordered_map>
 #include "Component.h"
+#include "TransformComponent.h"
 
 #define WindowSizeX 640
 #define WindowSizeY 480
@@ -35,7 +35,7 @@ const std::string EnumStrings[NUM_ENUM_VALUES] = {
 
 namespace dae
 {
-	class Component;
+	//class Component;
 	class TransformComponent;
 
 	class GameObject final
@@ -53,8 +53,12 @@ namespace dae
 		virtual void LateUpdate();
 		virtual void Update();
 		virtual void Render() const;
+		void Cleanup();
 
-		void MarkForDestroy() { m_MarkedForDelete = true; };
+		void MarkForDestroy() { 
+			Cleanup();
+			m_MarkedForDelete = true;
+		};
 		bool IsMarkedForDestroy() { return m_MarkedForDelete; };
 
 		template<typename Comp>

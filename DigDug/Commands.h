@@ -72,10 +72,10 @@ namespace dae {
 		Pump(GameObject* const object, GameObject* const pumpObject) : m_pObject(object), m_pPumpObject{ pumpObject } {}
 		void Execute() override
 		{
-			m_pPumpObject->GetComponent<dae::PumpComponent>()->Pump(m_pObject->GetTransform()->GetWorldPosition());
 			m_pObject->GetComponent<dae::AudioComponent>()->PlayShootSound();
 			m_pObject->GetComponent<dae::EntityMovementComponent>()->DisableMovement(true);
 			m_pObject->GetComponent<dae::InputComponent>()->DisableMovement(true);
+			m_pPumpObject->GetComponent<dae::PumpComponent>()->Pump(m_pObject->GetTransform()->GetWorldPosition());
 		}
 	private:
 		GameObject* m_pObject;

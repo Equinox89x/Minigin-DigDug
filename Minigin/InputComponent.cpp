@@ -58,14 +58,6 @@ void dae::InputComponent::Update()
 	UpdatePos(dt);
 }
 
-void dae::InputComponent::FixedUpdate()
-{
-}
-
-void dae::InputComponent::Render() const
-{
-}
-
 void dae::InputComponent::SetMoveSpeed(const glm::vec3& movespeed)
 {
 	m_Movespeed = movespeed;

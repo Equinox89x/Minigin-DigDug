@@ -20,6 +20,7 @@ namespace dae
 		void LateUpdate();
 		void Update( );
 		void Render() const;
+		void Cleanup();
 
 		~Scene();
 		Scene(const Scene& other) = delete;
@@ -29,7 +30,6 @@ namespace dae
 
 	private: 
 		explicit Scene(const std::string& name);
-
 		std::string m_name;
 		std::vector < std::shared_ptr<GameObject>> m_objects{};
 

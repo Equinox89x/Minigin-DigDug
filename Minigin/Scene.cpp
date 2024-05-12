@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include "Scene.h"
 #include "GameObject.h"
 #include <algorithm>
 
@@ -9,11 +10,6 @@ unsigned int Scene::m_idCounter = 0;
 Scene::Scene(const std::string& name) : m_name(name) {}
 
 Scene::~Scene() {
-	for (size_t i = 0; i < m_objects.size(); i++)
-	{
-		m_objects[i].reset();
-		//m_objects.erase(std::remove(m_objects.begin(), m_objects.end(), m_objects[i]), m_objects.end());
-	}
 	m_objects.clear();
 }
 
@@ -24,7 +20,9 @@ void Scene::Add(std::shared_ptr<GameObject> object)
 
 void Scene::Remove(std::shared_ptr<GameObject> object)
 {
-	m_objects.erase(std::remove(m_objects.begin(), m_objects.end(), object), m_objects.end());
+	if (object) {
+		m_objects.erase(std::remove(m_objects.begin(), m_objects.end(), object), m_objects.end());
+	}
 }
 
 void Scene::RemoveAll()
@@ -69,13 +67,16 @@ std::vector<std::shared_ptr<GameObject>>& dae::Scene::GetGameObjects()
 	return m_objects;
 }
 
-
 void Scene::Update()
 {
-	for(auto& object : m_objects)
-	{
-		object->Update();
-	}
+	for (auto& object : m_objects)
+    {
+        object->Update();
+    }
+
+	m_objects.erase(std::remove_if(m_objects.begin(), m_objects.end(),
+		[](const std::shared_ptr<GameObject>& obj) { return obj && obj->IsMarkedForDestroy(); }),
+		m_objects.end());
 }
 
 void Scene::Render() const
@@ -84,6 +85,17 @@ void Scene::Render() const
 	{
 		object->Render();
 	}
+}
+
+void dae::Scene::Cleanup()
+{
+	for (auto& obj : m_objects) {
+		obj->MarkForDestroy();
+	}
+
+	m_objects.erase(std::remove_if(m_objects.begin(), m_objects.end(),
+		[](const std::shared_ptr<GameObject>& obj) { return obj && obj->IsMarkedForDestroy(); }),
+		m_objects.end());
 }
 
 void Scene::LateUpdate()

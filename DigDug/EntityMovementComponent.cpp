@@ -61,53 +61,73 @@ void dae::EntityMovementComponent::Update()
 		float deltaTime{ Timer::GetInstance().GetDeltaTime() };
 		float speed{ deltaTime * m_Speed };
 
-		switch (m_State)
-		{
-		case MathLib::EMovingState::MovingUp:
-			GetGameObject()->GetTransform()->AddTranslate(0, -speed);
-			break;
-		case MathLib::EMovingState::MovingLeft:
-			GetGameObject()->GetTransform()->AddTranslate(-speed, 0);
-			break;
-		case MathLib::EMovingState::MovingRight:
-			GetGameObject()->GetTransform()->AddTranslate(speed, 0);
-			break;
-		case MathLib::EMovingState::MovingDown:
-			GetGameObject()->GetTransform()->AddTranslate(0, speed);
-			break;
-		default:
-			break;
+		if(!m_IsGhostMode) {
+			switch (m_State)
+			{
+			case MathLib::EMovingState::MovingUp:
+				GetGameObject()->GetTransform()->AddTranslate(0, -speed);
+				break;
+			case MathLib::EMovingState::MovingLeft:
+				m_LastDir = "Left";
+				GetGameObject()->GetTransform()->AddTranslate(-speed, 0);
+				break;
+			case MathLib::EMovingState::MovingRight:
+				m_LastDir = "Right";
+				GetGameObject()->GetTransform()->AddTranslate(speed, 0);
+				break;
+			case MathLib::EMovingState::MovingDown:
+				GetGameObject()->GetTransform()->AddTranslate(0, speed);
+				break;
+			default:
+				break;
+			}
 		}
+		else {
+			//auto player{ m_Scene->GetGameObject(EnumStrings[Names::Player0]) };
+			
+			float dx = m_CachedLocation.x - GetGameObject()->GetTransform()->GetWorldPosition().x;
+			float dy = m_CachedLocation.y - GetGameObject()->GetTransform()->GetWorldPosition().y;
+			float distanceToTarget = std::sqrt(dx * dx + dy * dy);
+			if (distanceToTarget != 0) {
+				dx /= distanceToTarget;
+				dy /= distanceToTarget;
+			}
+
+			GetGameObject()->GetTransform()->AddTranslate(dx * 2.f, dy * 2.f);
+
+		}
+
+		GetGameObject()->GetComponent<TextureComponent>()->SetTexture("Enemies/" + m_EnemyName + (m_IsGhostMode ? "Ghost" : m_LastDir) + ".png", 0.2f, 2);
 	}
 }
 
 void dae::EntityMovementComponent::Render() const
 {
-	SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 255, 0, 255); // Set the color to red
-	SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_LeftRect);
-	SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 255, 0, 255); // Set the color to red
-	SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_RightRect);
-	SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 255, 255, 255); // Set the color to red
-	SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_TopRect);	
-	SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 255, 255, 255); // Set the color to red
-	SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_BottomRect);	
-	SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 255, 255, 255); // Set the color to red
-	SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_Rect);
+	//SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 255, 0, 255); // Set the color to red
+	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_LeftRect);
+	//SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 255, 0, 255); // Set the color to red
+	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_RightRect);
+	//SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 255, 255, 255); // Set the color to red
+	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_TopRect);	
+	//SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 255, 255, 255); // Set the color to red
+	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_BottomRect);	
+	//SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 255, 255, 255); // Set the color to red
+	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_Rect);
 
-	SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 255, 0, 255); // Set the color to red
-	SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_LeftMoveRect);
-	SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 255, 0, 255); // Set the color to red
-	SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_RightMoveRect);
-	SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 255, 255, 255); // Set the color to red
-	SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_TopMoveRect);
-	SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 255, 255, 255); // Set the color to red
-	SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_BottomMoveRect);
+	//SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 255, 0, 255); // Set the color to red
+	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_LeftMoveRect);
+	//SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 255, 0, 255); // Set the color to red
+	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_RightMoveRect);
+	//SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 255, 255, 255); // Set the color to red
+	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_TopMoveRect);
+	//SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 255, 255, 255); // Set the color to red
+	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_BottomMoveRect);
 
-	SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 200, 0, 200); // Set the color to red
-	SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_LeftMapBorder);
-	SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_RightMapBorder);
-	SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_TopMapBorder);
-	SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_BottomMapBorder);
+	//SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 200, 0, 200); // Set the color to red
+	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_LeftMapBorder);
+	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_RightMapBorder);
+	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_TopMapBorder);
+	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_BottomMapBorder);
 }
 
 void dae::EntityMovementComponent::Init()

@@ -125,9 +125,13 @@ void dae::Minigin::Run(const std::function<void()>& load)
 			lag -= fixedTimeStep;
 		}
 
+		if (!doContinue) {
+			sceneManager.Cleanup();
+		}
 		sceneManager.Update();
 		//SteamAPI_RunCallbacks();
 		renderer.Render();
+		sceneManager.LateUpdate();
 
 		const auto sleepTime = currentTime + std::chrono::milliseconds(msPerFrame) - std::chrono::high_resolution_clock::now();
 		std::this_thread::sleep_for(sleepTime);
@@ -137,5 +141,4 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	input.Cleanup();
 	Timer::GetInstance().Stop();
 	ServiceLocator::getAudio()->StopAllSounds();
-
 }

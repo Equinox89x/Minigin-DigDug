@@ -5,11 +5,6 @@
 
 dae::PathwayCreatorComponent::~PathwayCreatorComponent()
 {
-	for (auto key : m_Pathways)
-	{
-		key.second.Clean();
-	}
-
 	m_Pathways.clear();
 }
 

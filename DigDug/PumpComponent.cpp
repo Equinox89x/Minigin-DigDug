@@ -15,10 +15,13 @@ void dae::PumpComponent::Pump(glm::vec3 loc)
 	//On space press, we shoot, or pump if we have an enemy attached
 	if (m_SelectedEnemy) {
 		//Stop pump movement
-		m_CanMove = false;
-		m_SelectedEnemy->GetComponent<dae::EntityMovementComponent>()->DisableMovement(true);
+		//m_CanMove = false;
+		//m_SelectedEnemy->GetComponent<dae::EntityMovementComponent>()->DisableMovement(true);
 		//release if enemy dead
-		if (m_SelectedEnemy->GetComponent<EnemyComponent>()->PumpUp()) {
+		if (m_SelectedEnemy->IsMarkedForDestroy()) {
+			ReleasePump();
+		}
+		else if (m_SelectedEnemy->GetComponent<EnemyComponent>()->PumpUp()) {
 			ReleasePump();
 		}
 	}
@@ -49,6 +52,10 @@ void dae::PumpComponent::ReleasePump()
 void dae::PumpComponent::AttachPump(GameObject* enemy)
 {
 	m_SelectedEnemy = enemy;
+	auto comp{ m_SelectedEnemy->GetComponent<dae::EntityMovementComponent>() };
+	m_SelectedEnemy->GetComponent<TextureComponent>()->SetTexture("Enemies/"+ comp->GetEnemyName() + "Inflate.png", 0.f, 4, true, false);
+	comp->DisableMovement(true);
+	m_CanMove = false;
 }
 
 void dae::PumpComponent::Update()
@@ -58,10 +65,11 @@ void dae::PumpComponent::Update()
 	UpdatePosition();
 
 	if (!m_SelectedEnemy) {
-		if (auto holder{ m_Scene->GetGameObject(EnumStrings[Names::EnemyHolder]) }) {
-			for (auto enemy : holder->GetChildren()) {
+		auto enemies{ m_Scene->GetGameObjects(EnumStrings[Names::EnemyGeneral], false) };
+		if (enemies.size() > 0) {
+			for (auto enemy : enemies) {
 				if (MathLib::IsOverlapping(enemy->GetComponent<TextureComponent>()->GetRect(), texComp->GetRect())) {
-					AttachPump(enemy);
+					AttachPump(enemy.get());
 				}
 			}
 		}
@@ -103,8 +111,4 @@ void dae::PumpComponent::UpdatePosition()
 	default:
 		break;
 	}
-}
-
-void dae::PumpComponent::Render() const
-{
 }

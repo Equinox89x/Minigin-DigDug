@@ -51,6 +51,7 @@ void AudioMaker::Update()
 		}
 		std::cout << "Exiting console audio update" << std::endl;
 	});
+
 	m_AudioThread.detach();
 }
 
@@ -74,6 +75,9 @@ void AudioMaker::StopAllSounds()
 
 	m_Running = false;
 	m_ConditionVariable.notify_one();
+
+	if (m_AudioThread.joinable())
+		m_AudioThread.join();
 }
 
 void AudioMaker::PlayMusic()

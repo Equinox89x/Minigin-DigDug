@@ -51,8 +51,15 @@ namespace dae {
         };
 
         void DisableMovement(bool isDisabled) { m_CanMove = !isDisabled; };
-
         MathLib::Movement GetDirection() { return m_Movement; };
+
+        void SetEnemyName(std::string enemyName) {
+            m_EnemyName = enemyName;
+        }
+        std::string GetEnemyName() { return m_EnemyName; };
+
+        void SetGhostModeEnabled(bool isEnabled) { m_IsGhostMode = isEnabled; };
+        void SetGhostLocation(glm::vec2 loc) { m_CachedLocation = loc; };
 
     private:
         bool m_IsController{ false }, m_ShouldDig{ false }, m_IsAutonomous{ false }, m_CanMove{ true };
@@ -70,7 +77,7 @@ namespace dae {
 
         //Autonomous
         float m_Speed{ 50 }, m_MoveTimer{ 2 };
-        bool m_CanChangeState{ false };
+        bool m_CanChangeState{ false }, m_IsGhostMode{ false };
         SDL_Rect m_LeftMapBorder{}, m_RightMapBorder{}, m_TopMapBorder{}, m_BottomMapBorder{};
         SDL_Rect m_LastHorLeft{}, m_LastVertTop{}, m_CurrentHorLeft{}, m_CurrentVertTop{}, m_LastHorRight{}, m_LastVertBottom{}, m_CurrentHorRight{}, m_CurrentVertBottom{};
         MathLib::EMovingState m_State{ MathLib::EMovingState::MovingLeft };
@@ -80,5 +87,8 @@ namespace dae {
               std::make_pair(MathLib::EMovingState::MovingRight, true),
               std::make_pair(MathLib::EMovingState::MovingDown, true),
         };
+        std::string m_EnemyName{"Pooka"};
+        std::string m_LastDir{"Left"};
+        glm::vec2 m_CachedLocation{};
     };
 }

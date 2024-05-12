@@ -3,6 +3,7 @@
 #include <memory>
 #include "TransformComponent.h"
 #include "MathLib.h"
+#include "Component.h"
 #include <map>
 #include "Scene.h"
 
@@ -20,8 +21,8 @@ namespace dae
 		InputComponent& operator=(InputComponent&& other) = delete;
 
 		void Update() override;
-		virtual void FixedUpdate() override;
-		void Render() const override;
+		virtual void FixedUpdate() override {};
+		void Render() const override {};
 
 		void SetMoveSpeed(const glm::vec3& movespeed);
 		void SetMoveSpeed(const glm::vec3& movespeed, MathLib::Movement direction);
