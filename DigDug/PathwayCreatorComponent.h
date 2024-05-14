@@ -63,7 +63,7 @@ namespace dae {
 
 		private:
 			Scene* m_pScene{ nullptr };
-			GameObject* m_pCharacter{ nullptr };
+			std::vector<std::shared_ptr<GameObject>> m_pCharacters{ nullptr };
 			std::map<int, PathWay> m_Pathways{};
 			std::vector<PathWay> m_Spawns{};
 			std::vector<PathWay> m_EnemySpawns{};

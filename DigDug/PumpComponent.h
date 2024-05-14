@@ -24,6 +24,7 @@ namespace dae {
         void ResetMovement(glm::vec3 loc);
         void ReleasePump();
         void AttachPump(GameObject* enemy);
+        void SetPlayer(GameObject* player);
 
 
     private:

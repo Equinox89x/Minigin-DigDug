@@ -2,11 +2,14 @@
 #include "Timer.h"
 #include "EntityMovementComponent.h"
 #include "FireComponent.h"
+#include <ValuesComponent.h>
 
 dae::EnemyComponent::~EnemyComponent()
 {
 	delete m_State;
 	m_State = nullptr;
+
+	m_Player = nullptr;
 }
 
 void dae::EnemyComponent::Update()
@@ -29,10 +32,21 @@ bool dae::EnemyComponent::PumpUp()
 	return currentPumpStage >= maxPumpStage;
 }
 
+void dae::DeathState::Init()
+{
+	if (EnemyType == EEnemyType::Pooka) {
+		//add score based on layer
+	}
+	else {
+		//add score based on layer
+	}
+}
+
 void dae::DeathState::Update()
 {
 	m_DeathTimer -= Timer::GetInstance().GetDeltaTime();
 	if (m_DeathTimer <= 0) {
+		gameObject->GetComponent<EnemyComponent>()->GetPlayer()->GetComponent<ValuesComponent>()->IncreaseScore(m_Score);
 		gameObject->MarkForDestroy();
 	}
 }
@@ -73,7 +87,10 @@ void dae::InflatingState::Update()
 
 void dae::GhostState::Init()
 {
-	m_CachedLocation  = m_Scene->GetGameObject(EnumStrings[Names::Player0])->GetTransform()->GetWorldPosition();
+	auto players{ m_Scene->GetGameObjects(EnumStrings[Names::PlayerGeneral], false) };
+	int randNr{ MathLib::CalculateChance(static_cast<int>(players.size()) - 1) };
+
+	m_CachedLocation  = m_Scene->GetGameObject(EnumStrings[Names::PlayerGeneral] + std::to_string(randNr))->GetTransform()->GetWorldPosition();
 	gameObject->GetComponent<EntityMovementComponent>()->SetGhostModeEnabled(true);
 	gameObject->GetComponent<EntityMovementComponent>()->SetGhostLocation(m_CachedLocation);
 	gameObject->GetComponent<EnemyComponent>()->SetLifeState(MathLib::ELifeState::INVINCIBLE);

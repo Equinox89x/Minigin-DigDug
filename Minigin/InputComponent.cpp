@@ -31,7 +31,7 @@ void dae::InputComponent::Update()
 	auto dt{ Timer::GetInstance().GetDeltaTime() };
 
 	auto pathwayComp{ m_Scene->GetGameObject(EnumStrings[Names::PathCreator])->GetComponent<PathwayCreatorComponent>() };
-	auto playerComp{ m_Scene->GetGameObject(EnumStrings[Names::Player0])->GetComponent<EntityMovementComponent>() };
+	auto playerComp{ GetGameObject()->GetComponent<EntityMovementComponent>()};
 
 	m_Movement[MathLib::Side::Left] = false;
 	m_Movement[MathLib::Side::Right] = false;

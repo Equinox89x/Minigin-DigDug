@@ -2,18 +2,6 @@
 #include "Subject.h"
 #include "Event.h"
 
-dae::ValuesComponent::~ValuesComponent()
-{}
-
-void dae::ValuesComponent::Update()
-{}
-
-void dae::ValuesComponent::FixedUpdate()
-{}
-
-void dae::ValuesComponent::Render() const
-{}
-
 void dae::ValuesComponent::Damage()
 {
 	m_Lives--;
@@ -69,12 +57,4 @@ void dae::ValuesComponent::GameEnd()
 	m_Score = 0;
 	NrOfHits = 0;
 	NrOfShotsFired = 0;
-	//FileReader* file{ new FileReader("../Data/highscore.txt") };
-	//auto str{ file->ReadGameDataFile() };
-	//auto data{ file->ParseDataSimple(str, '+') };
-	//auto score{ data["Highscore"] };
-	//std::string scoreStr{ std::any_cast<std::string>(score) };
-	//if (GetScores() > std::stoi(scoreStr)) {
-	//	file->WriteData("Highscore", std::to_string(GetScores()));
-	//}
 }

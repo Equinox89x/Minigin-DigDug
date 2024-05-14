@@ -7,7 +7,6 @@
 
 void dae::PumpComponent::Init()
 {
-	m_Player = m_Scene->GetGameObject(EnumStrings[Names::Player0]).get();
 }
 
 void dae::PumpComponent::Pump(glm::vec3 loc)
@@ -54,6 +53,7 @@ void dae::PumpComponent::ReleasePump()
 void dae::PumpComponent::AttachPump(GameObject* enemy)
 {
 	m_SelectedEnemy = enemy;
+	m_SelectedEnemy->GetComponent<EnemyComponent>()->SetPlayer(m_Player);
 	auto comp{ m_SelectedEnemy->GetComponent<dae::EntityMovementComponent>() };
 	m_SelectedEnemy->GetComponent<TextureComponent>()->SetTexture("Enemies/"+ comp->GetEnemyName() + "Inflate.png", 0.f, 4, true, false);
 	comp->DisableMovement(true);
@@ -62,9 +62,19 @@ void dae::PumpComponent::AttachPump(GameObject* enemy)
 	m_Player->GetComponent<dae::InputComponent>()->DisableMovement(true);
 }
 
+void dae::PumpComponent::SetPlayer(GameObject* player)
+{
+	m_Player = player;
+}
+
 void dae::PumpComponent::Update()
 {
 	auto texComp = GetGameObject()->GetComponent<TextureComponent>();
+	auto rect = texComp->GetRect();
+	rect.w /= 3;
+	rect.h /= 3;
+	rect.x -= 5;
+	rect.y += 10;
 
 	UpdatePosition();
 
@@ -72,7 +82,7 @@ void dae::PumpComponent::Update()
 		auto enemies{ m_Scene->GetGameObjects(EnumStrings[Names::EnemyGeneral], false) };
 		if (enemies.size() > 0) {
 			for (auto enemy : enemies) {
-				if (MathLib::IsOverlapping(enemy->GetComponent<TextureComponent>()->GetRect(), texComp->GetRect())) {
+				if (MathLib::IsOverlapping(enemy->GetComponent<TextureComponent>()->GetRect(), rect)) {
 					if (enemy->GetComponent<EnemyComponent>()->GetLifeState() != MathLib::ELifeState::INVINCIBLE) {
 						AttachPump(enemy.get());
 					}
@@ -90,7 +100,7 @@ void dae::PumpComponent::Update()
 	auto pathcomp{ paths->GetComponent<PathwayCreatorComponent>() };
 	for (auto path : pathcomp->GetPathways()) {
 		//Release Pump if it hits a wall;
-		if (MathLib::IsOverlapping(path.second.TextureComponent->GetRect(), texComp->GetRect())) {
+		if (MathLib::IsOverlapping(path.second.TextureComponent->GetRect(), rect)) {
 			if (path.second.PathState == EPathState::Undug) {
 				ReleasePump();
 			}

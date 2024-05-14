@@ -64,10 +64,11 @@ namespace dae {
 
     class DeathState : public EnemyState {
     public:
-        virtual void Init() override {};
+        virtual void Init() override;
         virtual void Update() override;
     private:
         float m_DeathTimer{ 0.3f };
+        int m_Score{ 200 };
     };
 
 
@@ -101,6 +102,11 @@ namespace dae {
             m_State->Init();
         }
         EnemyState* GetState() { return m_State; };
+
+        void SetPlayer(GameObject* player) {
+            m_Player = player;
+        }
+        GameObject* GetPlayer() { return m_Player; };
         
     private:
         Scene* m_Scene{ nullptr };
@@ -109,5 +115,6 @@ namespace dae {
 
         EnemyState* m_State{ nullptr };
         EEnemyType EnemyType{ EEnemyType::Pooka };
+        GameObject* m_Player{ nullptr };
     };
 }

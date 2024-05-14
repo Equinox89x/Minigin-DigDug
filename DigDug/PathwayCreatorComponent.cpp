@@ -64,31 +64,33 @@ void dae::PathwayCreatorComponent::ActivatePathway(int id)
 
 void dae::PathwayCreatorComponent::Update()
 {
-	if (m_pCharacter) {
-		const auto& playercomp{ m_pCharacter->GetComponent<EntityMovementComponent>() };
+	if (m_pCharacters.size() > 0) {
+		for (const auto& character : m_pCharacters) {
+			const auto& playercomp{ character->GetComponent<EntityMovementComponent>() };
 
-		for (const auto& gameObj : GetGameObject()->GetChildren())
-		{
-			auto texComp{ gameObj->GetComponent<TextureComponent>() };
-			if (MathLib::IsOverlapping(texComp->GetRect(), playercomp->GetCollider())) {
-				playercomp->SetNextTileId(std::stoi(gameObj->GetName()));
+			for (const auto& gameObj : GetGameObject()->GetChildren())
+			{
+				auto texComp{ gameObj->GetComponent<TextureComponent>() };
+				if (MathLib::IsOverlapping(texComp->GetRect(), playercomp->GetCollider())) {
+					playercomp->SetNextTileId(std::stoi(gameObj->GetName()));
+				}
+				if (MathLib::IsOverlapping(texComp->GetRect(), playercomp->GetCharacterCollider())) {
+					playercomp->SetCurrentTileId(std::stoi(gameObj->GetName()));
+				}
 			}
-			if (MathLib::IsOverlapping(texComp->GetRect(), playercomp->GetCharacterCollider())) {
-				playercomp->SetCurrentTileId(std::stoi(gameObj->GetName()));
-			}
+
+			playercomp->SetShouldDig(m_Pathways[playercomp->GetNextTileId()].PathState == EPathState::Undug);
+			ActivatePathway(playercomp->GetCurrentTileId());
 		}
-
-		playercomp->SetShouldDig(m_Pathways[playercomp->GetNextTileId()].PathState == EPathState::Undug);
-		ActivatePathway(playercomp->GetCurrentTileId());
 	}
 	else {
-		m_pCharacter = m_pScene->GetGameObject(EnumStrings[Player0]).get();
+		m_pCharacters = m_pScene->GetGameObjects(EnumStrings[PlayerGeneral], false);
 	}
 }
 
 void dae::PathwayCreatorComponent::Init()
 {
-	m_pCharacter = m_pScene->GetGameObject(EnumStrings[Player0]).get();
+	m_pCharacters = m_pScene->GetGameObjects(EnumStrings[PlayerGeneral], false);
 }
 
 void dae::PathwayCreatorComponent::Render() const

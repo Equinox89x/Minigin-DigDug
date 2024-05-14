@@ -24,7 +24,9 @@ const enum Names {
 	PathCreator,
 	ScoreHolder,
 	Life,
-	Score,
+	ScoreGeneral,
+	Score1,
+	Score2,
 	Selector,
 	MainMenu,
 	Background,
@@ -39,7 +41,7 @@ const enum Names {
 };
 
 const std::string EnumStrings[NUM_ENUM_VALUES] = {
-	"MainPlayer0", "MainPlayer1", "MainPlayer","Enemy", "EnemyHolder", "Pump", "Global", "PathCreator", "ScoreHolder", "Life", "Score", "Selector", "MainMenu", "Background",
+	"Player1", "Player2", "Player","Enemy", "EnemyHolder", "Pump", "Global", "PathCreator", "ScoreHolder", "Life", "Score", "Score0", "Score1", "Selector", "MainMenu", "Background",
 	"DigDugSolo", "DigDugSolo0", "DigDugSolo1", "DigDugSolo2", "DigDugCoop", "DigDugVersus",
 };
 

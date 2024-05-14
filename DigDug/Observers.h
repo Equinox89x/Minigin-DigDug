@@ -14,24 +14,25 @@ namespace dae
 	class HealthObserver final : public Observer
 	{
 	public:
-		HealthObserver(Scene* scene) : m_Scene{ scene } {};
+		HealthObserver(Scene* scene, int id) : m_Scene{ scene }, m_Id{id} {};
 		void Notify(GameObject* go, Event& event) override;
 
 	private:
 		Scene* m_Scene;
+		int m_Id{ 0 };
 	};
 
 	class ScoreObserver final : public Observer
 	{
 	public:
 
-		ScoreObserver(Scene* const scene);
+		ScoreObserver(Scene* const scene, int id) : m_Scene{ scene }, m_Id{ id } {};
 		~ScoreObserver();
 		void Notify(GameObject* go, Event& event) override;
 
 	private:
-
-		Scene* m_pGO;
+		Scene* m_Scene;
+		int m_Id{ 0 };
 
 	};
 	
