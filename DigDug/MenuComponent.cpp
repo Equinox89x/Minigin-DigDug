@@ -36,3 +36,26 @@ void dae::MenuComponent::StartGame(GameObject* /*pMenu*/)
 	//	break;
 	//}
 }
+
+void dae::MenuComponent::SkipLevel()
+{
+	auto& manager = SceneManager::GetInstance();
+	auto scene = manager.GetActiveScene();
+	if (m_SelectedGameMode == MathLib::GameMode::SOLO) {
+		int id = -1;
+		if (manager.GetScene(EnumStrings[SoloLevelName0])) {
+			id = 0;
+		}		
+		if (manager.GetScene(EnumStrings[SoloLevelName1])) {
+			id = 1;
+		}	
+		if (manager.GetScene(EnumStrings[SoloLevelName2])) {
+			id = 2;
+		}
+		CreateLevel(m_SelectedGameMode, id);
+	}
+	else {
+		CreateMenu();
+	}
+	manager.DeleteScene(scene);
+}

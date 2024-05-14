@@ -133,5 +133,22 @@ namespace dae {
 	};
 
 #pragma endregion
+#pragma region Skipping
+	class Skip final : public Command
+	{
+	public:
+		Skip(Scene* scene, GameObject* object) : m_pObject(object), m_Scene{ scene } {}
+		void Execute() override
+		{
+			if (!m_Scene->GetIsActive()) return;
+
+			m_pObject->GetComponent<MenuComponent>()->SkipLevel();
+		}
+	private:
+		Scene* m_Scene;
+		GameObject* m_pObject;
+
+	};
+#pragma endregion
 
 }

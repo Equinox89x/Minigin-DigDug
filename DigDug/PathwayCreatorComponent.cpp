@@ -8,7 +8,7 @@ dae::PathwayCreatorComponent::~PathwayCreatorComponent()
 	m_Pathways.clear();
 }
 
-void dae::PathwayCreatorComponent::AddPathway(int id, glm::vec2 pos)
+void dae::PathwayCreatorComponent::AddPathway(int id, glm::vec2 pos, std::string type)
 {
 	auto go = std::make_shared<GameObject>();
 	m_pScene->Add(go);
@@ -28,7 +28,26 @@ void dae::PathwayCreatorComponent::AddPathway(int id, glm::vec2 pos)
 		component,
 		EPathState::Undug,
 	};
+
+
+	if(type == "dug"){
+		pathWay.PathState = EPathState::Dug;
+	}
+	else if (type == "spawn") {
+		pathWay.PathState = EPathState::Spawn;
+		m_Spawns.push_back(pathWay);
+	}
+	else if(type == "enemySpawn"){
+		pathWay.PathState = EPathState::EnemySpawn;
+		m_EnemySpawns.push_back(pathWay);
+	}
+
+
 	m_Pathways.insert({ id, pathWay });
+
+	if (type == "dug" || type == "spawn" || type == "enemySpawn") {
+		ActivatePathway(id);
+	}
 }
 
 void dae::PathwayCreatorComponent::AddPassageway(glm::vec2 pos, glm::vec2 size)
@@ -39,7 +58,8 @@ void dae::PathwayCreatorComponent::AddPassageway(glm::vec2 pos, glm::vec2 size)
 
 void dae::PathwayCreatorComponent::ActivatePathway(int id)
 {
-	GetGameObject()->GetChild(std::to_string(id))->GetComponent<TextureComponent>()->Scale(0.5f, 0.4f);
+	m_Pathways[id].TextureComponent->SetIsVisible(true);
+	m_Pathways[id].PathState = EPathState::Dug;
 }
 
 void dae::PathwayCreatorComponent::Update()
@@ -59,8 +79,7 @@ void dae::PathwayCreatorComponent::Update()
 		}
 
 		playercomp->SetShouldDig(m_Pathways[playercomp->GetNextTileId()].PathState == EPathState::Undug);
-		m_Pathways[playercomp->GetCurrentTileId()].TextureComponent->SetIsVisible(true);
-		m_Pathways[playercomp->GetCurrentTileId()].PathState = EPathState::Dug;
+		ActivatePathway(playercomp->GetCurrentTileId());
 	}
 	else {
 		m_pCharacter = m_pScene->GetGameObject(EnumStrings[Player0]).get();

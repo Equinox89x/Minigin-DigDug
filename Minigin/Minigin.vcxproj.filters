@@ -46,6 +46,9 @@
     <Filter Include="Source Files\Observers">
       <UniqueIdentifier>{5597d8fe-a3b2-439b-ab71-8eb331f461a5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\library">
+      <UniqueIdentifier>{5155b488-1648-4303-9e1d-ffd6c4ef3e4a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Singleton.h">
@@ -165,6 +168,9 @@
     <ClInclude Include="AudioComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
+    <ClInclude Include="FileReader.h">
+      <Filter>Header Files\Misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Texture2D.cpp">
@@ -253,6 +259,9 @@
     </ClCompile>
     <ClCompile Include="AudioComponent.cpp">
       <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="FileReader.cpp">
+      <Filter>Source Files\Misc</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

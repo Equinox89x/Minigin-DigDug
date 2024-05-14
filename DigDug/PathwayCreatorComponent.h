@@ -7,7 +7,7 @@
 namespace dae {
 
 	enum class EPathState {
-		Dug, Undug
+		Dug, Undug, Spawn, EnemySpawn
 	};
 
 	struct PathWay {
@@ -33,12 +33,16 @@ namespace dae {
 		PathwayCreatorComponent& operator=(const PathwayCreatorComponent& other) = delete;
 		PathwayCreatorComponent& operator=(PathwayCreatorComponent&& other) = delete;
 
-		void AddPathway(int id, glm::vec2 pos);
+		void AddPathway(int id, glm::vec2 pos, std::string type);
 		void AddPassageway(glm::vec2 pos, glm::vec2 size);
 		void ActivatePathway(int id);
 		virtual void Update() override;
 		virtual void Init() override;
 		virtual void Render() const override;
+
+		std::vector<PathWay>& GetSpawns() { return m_Spawns; };
+		std::vector<PathWay>& GetEnemySpawns() { return m_EnemySpawns; };
+
 
 		std::vector<SDL_Rect>& GetVerticalPathways() { return m_VerticalPathways; };
 		std::vector<SDL_Rect>& GetHorizontalPathways() { return m_HorizontalPathways; };
@@ -61,6 +65,8 @@ namespace dae {
 			Scene* m_pScene{ nullptr };
 			GameObject* m_pCharacter{ nullptr };
 			std::map<int, PathWay> m_Pathways{};
+			std::vector<PathWay> m_Spawns{};
+			std::vector<PathWay> m_EnemySpawns{};
 
 			std::vector<SDL_Rect> m_VerticalPathways{};
 			std::vector<SDL_Rect> m_HorizontalPathways{};
