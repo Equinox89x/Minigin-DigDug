@@ -20,44 +20,35 @@ void dae::MenuComponent::CycleGameMode(bool isMoveUp)
 
 void dae::MenuComponent::StartGame(GameObject* /*pMenu*/)
 {
-	//pMenu->SetIsHidden(true);
-	//switch (m_SelectedGameMode)
-	//{
-	//case MathLib::GameMode::SOLO:
-	SceneManager::GetInstance().GetScene(EnumStrings[MainMenu])->SetActive(false);
+	auto& manager = SceneManager::GetInstance();
+	auto scene = manager.GetActiveScene();
+
+	Input::GetInstance().ClearKeys();
 	CreateLevel(m_SelectedGameMode, 0);
-	//	break;
-	//case MathLib::GameMode::COOP:
-	//	CreateLevel(m_pScene);
-	//	break;
-	//case MathLib::GameMode::VERSUS:
-	//	CreateLevel(m_pScene);
-	//	break;
-	//default:
-	//	break;
-	//}
+
+	manager.DeleteScene(scene);
 }
 
 void dae::MenuComponent::SkipLevel()
 {
 	auto& manager = SceneManager::GetInstance();
 	auto scene = manager.GetActiveScene();
+
 	Input::GetInstance().ClearKeys();
 	if (m_SelectedGameMode == MathLib::GameMode::SOLO) {
-		int id = -1;
 		if (manager.GetScene(EnumStrings[SoloLevelName0])) {
-			id = 1;
+			CreateLevel(m_SelectedGameMode, 1);
 		}		
 		else if (manager.GetScene(EnumStrings[SoloLevelName1])) {
-			id = 2;
+			CreateLevel(m_SelectedGameMode, 2);
 		}	
 		else if (manager.GetScene(EnumStrings[SoloLevelName2])) {
-			id = 0;
+			CreateMenu();
 		}
-		CreateLevel(m_SelectedGameMode, id);
 	}
 	else {
 		CreateMenu();
 	}
+
 	manager.DeleteScene(scene);
 }
