@@ -1,7 +1,6 @@
 #pragma once
 #include "Scene.h"
-
-//class dae::Scene;
+#include "MathLib.h"
 
 void MakeMenu();
-void CreateGlobalGameObject(dae::Scene* scene);
+void CreateGlobalGameObject(dae::Scene* scene, MathLib::GameMode gm);

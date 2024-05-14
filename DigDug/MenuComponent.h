@@ -9,8 +9,8 @@ namespace dae {
     class MenuComponent final : public Component
     {
     public:
-        MenuComponent(Scene* scene, std::function<void(MathLib::GameMode gm, int levelIndex)> createLevel, std::function<void()> createMenu, std::vector<glm::vec2> cursorLocations) :
-            m_Scene{ scene }, CreateLevel{ createLevel }, CreateMenu{createMenu}, m_CursorLocations{ cursorLocations } {  };
+        MenuComponent(Scene* scene, std::function<void(MathLib::GameMode gm, int levelIndex)> createLevel, std::function<void()> createMenu, std::vector<glm::vec2> cursorLocations, MathLib::GameMode gamemode = MathLib::GameMode::SOLO) :
+            m_Scene{ scene }, CreateLevel{ createLevel }, CreateMenu{ createMenu }, m_CursorLocations{ cursorLocations }, m_SelectedGameMode{gamemode} {  };
         ~MenuComponent() = default;
 
         MenuComponent(const MenuComponent&) = delete;

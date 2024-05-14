@@ -1,4 +1,5 @@
 #include "MenuComponent.h"
+#include <InputManager.h>
 
 void dae::MenuComponent::CycleGameMode(bool isMoveUp)
 {
@@ -41,16 +42,17 @@ void dae::MenuComponent::SkipLevel()
 {
 	auto& manager = SceneManager::GetInstance();
 	auto scene = manager.GetActiveScene();
+	Input::GetInstance().ClearKeys();
 	if (m_SelectedGameMode == MathLib::GameMode::SOLO) {
 		int id = -1;
 		if (manager.GetScene(EnumStrings[SoloLevelName0])) {
-			id = 0;
-		}		
-		if (manager.GetScene(EnumStrings[SoloLevelName1])) {
 			id = 1;
-		}	
-		if (manager.GetScene(EnumStrings[SoloLevelName2])) {
+		}		
+		else if (manager.GetScene(EnumStrings[SoloLevelName1])) {
 			id = 2;
+		}	
+		else if (manager.GetScene(EnumStrings[SoloLevelName2])) {
+			id = 0;
 		}
 		CreateLevel(m_SelectedGameMode, id);
 	}
