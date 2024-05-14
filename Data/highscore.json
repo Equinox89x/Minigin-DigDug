@@ -1,0 +1,9 @@
+{
+    "data": [
+        {"name": "bram", "score":100},
+        {"name": "bram", "score":101},
+        {"name": "bram", "score":120},
+        {"name": "bram", "score":30},
+        {"name": "bram", "score":400}
+    ]
+}
