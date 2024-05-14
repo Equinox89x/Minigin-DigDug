@@ -1,4 +1,5 @@
 #include "SceneManager.h"
+#include "SceneManager.h"
 #include "Scene.h"
 
 void dae::SceneManager::Init()
@@ -13,7 +14,8 @@ void dae::SceneManager::Update()
 {
 	for(auto& scene : m_scenes)
 	{
-		scene->Update();
+		if (scene->GetIsActive())
+			scene->Update();
 	}
 }
 
@@ -21,7 +23,8 @@ void dae::SceneManager::LateUpdate()
 {
 	for (auto& scene : m_scenes)
 	{
-		scene->LateUpdate();
+		if (scene->GetIsActive())
+			scene->LateUpdate();
 	}
 }
 
@@ -29,7 +32,8 @@ void dae::SceneManager::Render()
 {
 	for (const auto& scene : m_scenes)
 	{
-		scene->Render();
+		if (scene->GetIsActive())
+			scene->Render();
 	}
 }
 
@@ -46,4 +50,28 @@ dae::Scene& dae::SceneManager::CreateScene(const std::string& name)
 	const auto& scene = std::shared_ptr<Scene>(new Scene(name));
 	m_scenes.push_back(scene);
 	return *scene;
+}
+
+std::shared_ptr<dae::Scene> dae::SceneManager::GetScene(int index)
+{
+	if (index - 1 <= m_scenes.size()) {
+		return m_scenes[index];
+	}
+	else {
+		return nullptr;
+	}
+}
+
+std::shared_ptr<dae::Scene> dae::SceneManager::GetScene(std::string name)
+{
+	auto scene = std::find_if(m_scenes.begin(), m_scenes.end(), [&](const std::shared_ptr<dae::Scene>& scene) {
+		return scene->GetName() == name;
+	});
+
+	if (scene != m_scenes.end()) {
+		return *scene;
+	}
+	else {
+		return nullptr;
+	}
 }

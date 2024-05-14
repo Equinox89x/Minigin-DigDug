@@ -62,6 +62,9 @@ void dae::PathwayCreatorComponent::Update()
 		m_Pathways[playercomp->GetCurrentTileId()].TextureComponent->SetIsVisible(true);
 		m_Pathways[playercomp->GetCurrentTileId()].PathState = EPathState::Dug;
 	}
+	else {
+		m_pCharacter = m_pScene->GetGameObject(EnumStrings[Player0]).get();
+	}
 }
 
 void dae::PathwayCreatorComponent::Init()

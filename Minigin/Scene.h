@@ -22,6 +22,11 @@ namespace dae
 		void Render() const;
 		void Cleanup();
 
+		void SetActive(bool isActive) { m_IsActive = isActive; };
+		bool GetIsActive() { return m_IsActive; };
+
+		std::string GetName() { return m_name; };
+
 		~Scene();
 		Scene(const Scene& other) = delete;
 		Scene(Scene&& other) = delete;
@@ -32,6 +37,7 @@ namespace dae
 		explicit Scene(const std::string& name);
 		std::string m_name;
 		std::vector < std::shared_ptr<GameObject>> m_objects{};
+		bool m_IsActive{ false };
 
 		static unsigned int m_idCounter; 
 	};

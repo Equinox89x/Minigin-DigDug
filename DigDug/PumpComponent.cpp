@@ -13,6 +13,8 @@ void dae::PumpComponent::Init()
 void dae::PumpComponent::Pump(glm::vec3 loc)
 {
 	//On space press, we shoot, or pump if we have an enemy attached
+	m_DestroyTimer = 0.7f;
+
 	if (m_SelectedEnemy) {
 		//Stop pump movement
 		//m_CanMove = false;
@@ -56,6 +58,8 @@ void dae::PumpComponent::AttachPump(GameObject* enemy)
 	m_SelectedEnemy->GetComponent<TextureComponent>()->SetTexture("Enemies/"+ comp->GetEnemyName() + "Inflate.png", 0.f, 4, true, false);
 	comp->DisableMovement(true);
 	m_CanMove = false;
+	m_Player->GetComponent<dae::EntityMovementComponent>()->DisableMovement(true);
+	m_Player->GetComponent<dae::InputComponent>()->DisableMovement(true);
 }
 
 void dae::PumpComponent::Update()
@@ -69,11 +73,18 @@ void dae::PumpComponent::Update()
 		if (enemies.size() > 0) {
 			for (auto enemy : enemies) {
 				if (MathLib::IsOverlapping(enemy->GetComponent<TextureComponent>()->GetRect(), texComp->GetRect())) {
-					AttachPump(enemy.get());
+					if (enemy->GetComponent<EnemyComponent>()->GetLifeState() != MathLib::ELifeState::INVINCIBLE) {
+						AttachPump(enemy.get());
+					}
 				}
 			}
 		}
+		m_DestroyTimer -= Timer::GetInstance().GetDeltaTime();
+		if (m_DestroyTimer <= 0) {
+			ReleasePump();
+		}
 	}
+
 
 	auto paths{ m_Scene->GetGameObject(EnumStrings[Names::PathCreator]) };
 	auto pathcomp{ paths->GetComponent<PathwayCreatorComponent>() };

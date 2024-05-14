@@ -1,7 +1,6 @@
 #pragma once
 #include "Component.h"
 #include "TextureComponent.h"
-#include "Scene.h"
 #include "MathLib.h"
 #include "Scene.h"
 
@@ -88,9 +87,10 @@ namespace dae {
         EnemyComponent& operator=(const EnemyComponent&) = delete;
         EnemyComponent& operator=(EnemyComponent&&) noexcept = delete;
         virtual void Update() override;
-        virtual void Render() const override;
+        virtual void Render() const override {};
         virtual void Init() override;
-        MathLib::ELifeState GetState() { return m_PlayerState; };
+        MathLib::ELifeState GetLifeState() { return m_PlayerState; };
+        void SetLifeState(MathLib::ELifeState state) { m_PlayerState = state; };
 
         bool PumpUp();
 
@@ -100,6 +100,7 @@ namespace dae {
             m_State->SetData(m_Scene, GetGameObject(), EnemyType);
             m_State->Init();
         }
+        EnemyState* GetState() { return m_State; };
         
     private:
         Scene* m_Scene{ nullptr };

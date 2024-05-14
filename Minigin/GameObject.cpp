@@ -46,29 +46,6 @@ void dae::GameObject::Init()
 }
 
 void dae::GameObject::Update() {
-
-	// I would not remove "marked for destroy" objects before you loop, but after the loop.
-	// Also: do that loop for all objects at once, at the end of the entire update loop.
-	// You do it per game object for the children, but then you still are affected by the order of update having an impact on objects being deleted or not, which is what you want to avoid.
-	// You also wont have to check in the render loop then.
-
-	//for (size_t i = 0; i < m_pChildren.size(); i++)
-	//{
-	//	if (m_pChildren[i]->IsMarkedForDestroy()) {
-	//		RemoveChild(m_pChildren[i]);
-	//		break;
-	//	}
-	//}
-
-	//for (const std::unique_ptr<Component>& comp : m_pComponents) {
-	//	comp->Update(deltaTime);
-	//}
-
-
-	//for (GameObject* child : m_pChildren) {
-	//	child->Update(deltaTime);
-	//}
-
 	for (auto& comp : m_pComponents)
 	{
 		comp->Update();
@@ -90,23 +67,6 @@ void dae::GameObject::Update() {
 
 void dae::GameObject::LateUpdate()
 {
-	//for (size_t i = 0; i < m_pComponents.size(); i++)
-	//{
-	//	if (m_pComponents[i]->IsMarkedForDestroy()) {
-	//		RemoveComponent(m_pComponents[i]);
-	//	}
-	//	else {
-	//		m_pComponents[i]->LateUpdate();
-	//	}
-	//}
-
-	//for (const std::unique_ptr<Component>& comp : m_pComponents) {
-	//	if (comp->IsMarkedForDestroy()) {
-	//		RemoveComponent(comp);
-	//		break;
-	//	}
-	//}	
-	//
 	for (const std::unique_ptr<Component>& comp : m_pComponents) {
 		comp->LateUpdate();
 	}

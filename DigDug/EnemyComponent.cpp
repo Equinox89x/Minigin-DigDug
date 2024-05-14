@@ -14,10 +14,6 @@ void dae::EnemyComponent::Update()
 	m_State->Update();
 }
 
-void dae::EnemyComponent::Render() const
-{
-}
-
 void dae::EnemyComponent::Init()
 {
 	SetState(new MovingState());
@@ -46,6 +42,9 @@ void dae::MovingState::Init()
 	if (gameObject) {
 		gameObject->GetComponent<EntityMovementComponent>()->SetGhostModeEnabled(false);
 		gameObject->GetComponent<EntityMovementComponent>()->DisableMovement(false);
+		if (auto comp{ gameObject->GetComponent<EnemyComponent>() }) {
+			comp->SetLifeState(MathLib::ELifeState::ALIVE);
+		}
 	}
 }
 
@@ -77,7 +76,7 @@ void dae::GhostState::Init()
 	m_CachedLocation  = m_Scene->GetGameObject(EnumStrings[Names::Player0])->GetTransform()->GetWorldPosition();
 	gameObject->GetComponent<EntityMovementComponent>()->SetGhostModeEnabled(true);
 	gameObject->GetComponent<EntityMovementComponent>()->SetGhostLocation(m_CachedLocation);
-
+	gameObject->GetComponent<EnemyComponent>()->SetLifeState(MathLib::ELifeState::INVINCIBLE);
 }
 
 void dae::GhostState::Update()
@@ -95,6 +94,8 @@ void dae::BreatheFireState::Init()
 {
 	gameObject->GetComponent<EntityMovementComponent>()->DisableMovement(true);
 	gameObject->GetComponent<TextureComponent>()->SetTexture("Enemies/FygarPrepare.png", 0.2f, 3);	
+	gameObject->GetComponent<EnemyComponent>()->SetLifeState(MathLib::ELifeState::ALIVE);
+
 }
 
 void dae::BreatheFireState::Update()

@@ -120,8 +120,12 @@ namespace MathLib {
 		Right
 	};
 
+	enum class GameMode {
+		SOLO, COOP, VERSUS
+	};
+
 	enum ELifeState {
-		ALIVE, DEAD, RESPAWN
+		ALIVE, DEAD, RESPAWN, INVINCIBLE
 	};
 
 	inline Side GetNonOverlappingSide(const SDL_Rect& rect1, const SDL_Rect& rect2) {

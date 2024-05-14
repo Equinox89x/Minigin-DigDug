@@ -32,7 +32,7 @@ namespace dae {
         bool m_CanMove{ false };
         GameObject* m_SelectedEnemy{nullptr};
         GameObject* m_Player{nullptr};
-
+        float m_DestroyTimer{ 0.7f };
         void UpdatePosition();
     };
 }
