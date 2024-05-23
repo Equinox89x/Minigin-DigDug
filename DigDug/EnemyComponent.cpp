@@ -90,7 +90,8 @@ void dae::GhostState::Init()
 	auto players{ m_Scene->GetGameObjects(EnumStrings[Names::PlayerGeneral], false) };
 	int randNr{ MathLib::CalculateChance(static_cast<int>(players.size()) - 1) };
 
-	m_CachedLocation  = m_Scene->GetGameObject(EnumStrings[Names::PlayerGeneral] + std::to_string(randNr))->GetTransform()->GetWorldPosition();
+	auto id{ m_Scene->GetGameObject(EnumStrings[Names::PlayerGeneral] + std::to_string(randNr))->GetComponent<EntityMovementComponent>()->GetCurrentTileId() };
+	m_CachedLocation  = m_Scene->GetGameObject(std::to_string(id))->GetCenter();
 	gameObject->GetComponent<EntityMovementComponent>()->SetGhostModeEnabled(true);
 	gameObject->GetComponent<EntityMovementComponent>()->SetGhostLocation(m_CachedLocation);
 	gameObject->GetComponent<EnemyComponent>()->SetLifeState(MathLib::ELifeState::INVINCIBLE);
@@ -98,9 +99,9 @@ void dae::GhostState::Init()
 
 void dae::GhostState::Update()
 {
-	//TODO if reached a dug tile near a player
-	float dx = m_CachedLocation.x - gameObject->GetTransform()->GetWorldPosition().x;
-	float dy = m_CachedLocation.y - gameObject->GetTransform()->GetWorldPosition().y;
+	//if reached a dug tile near a player
+	float dx = m_CachedLocation.x - gameObject->GetCenter().x;
+	float dy = m_CachedLocation.y - gameObject->GetCenter().y;
 	float distanceToTarget = std::sqrt(dx * dx + dy * dy);
 	if (distanceToTarget <= 1) {
 		gameObject->GetComponent<EnemyComponent>()->SetState(new MovingState());

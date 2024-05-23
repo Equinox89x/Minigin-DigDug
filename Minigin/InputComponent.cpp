@@ -38,7 +38,22 @@ void dae::InputComponent::Update()
 	m_Movement[MathLib::Side::Bottom] = false;
 	m_Movement[MathLib::Side::Top] = false;
 
-	for (const auto& pathWay : pathwayComp->GetHorizontalPathways()) {
+	for (const auto& pathWay : pathwayComp->GetPathways()) {
+		if (MathLib::IsOverlapping(playerComp->GetPathCollider(MathLib::Movement::LEFT), pathWay.second.HorizontalWay)) {
+			m_Movement[MathLib::Side::Left] = true;
+		}
+		if (MathLib::IsOverlapping(playerComp->GetPathCollider(MathLib::Movement::RIGHT), pathWay.second.HorizontalWay)) {
+			m_Movement[MathLib::Side::Right] = true;
+		}
+		if (MathLib::IsOverlapping(playerComp->GetPathCollider(MathLib::Movement::DOWN), pathWay.second.VerticalWay)) {
+			m_Movement[MathLib::Side::Bottom] = true;
+		}
+		if (MathLib::IsOverlapping(playerComp->GetPathCollider(MathLib::Movement::UP), pathWay.second.VerticalWay)) {
+			m_Movement[MathLib::Side::Top] = true;
+		}
+
+	}
+	/*for (const auto& pathWay : pathwayComp->GetHorizontalPathways()) {
 		if (MathLib::IsOverlapping(playerComp->GetPathCollider(MathLib::Movement::LEFT), pathWay)) {
 			m_Movement[MathLib::Side::Left] = true;
 		}
@@ -53,7 +68,7 @@ void dae::InputComponent::Update()
 		if (MathLib::IsOverlapping(playerComp->GetPathCollider(MathLib::Movement::UP), pathWay)) {
 			m_Movement[MathLib::Side::Top] = true;
 		}
-	}
+	}*/
 
 	UpdatePos(dt);
 }

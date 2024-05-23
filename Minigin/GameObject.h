@@ -67,7 +67,7 @@ namespace dae
 		virtual void Render() const;
 		void Cleanup();
 
-		void MarkForDestroy() { 
+		void MarkForDestroy() {
 			Cleanup();
 			m_MarkedForDelete = true;
 		};
@@ -92,7 +92,7 @@ namespace dae
 					return static_cast<Comp*>(component.get());
 			}
 			return nullptr;
-		}		
+		}
 
 		template<typename Comp>
 		Comp* GetComponent(std::string name) {
@@ -103,7 +103,7 @@ namespace dae
 					return static_cast<Comp*>(component.get());
 			}
 			return nullptr;
-		}		
+		}
 
 		template<typename Comp>
 		void RemoveComponent(Comp* componentPtr) {
@@ -124,6 +124,7 @@ namespace dae
 		void SetName(std::string name) { m_ObjectName = name; };
 		std::string GetName() { return m_ObjectName; };
 
+		const glm::vec2 GetCenter() const { return m_Center; };
 		TransformComponent* GetTransform() const { return m_pTransform; };
 		std::vector<GameObject*>& GetChildren() { return m_pChildren; };
 		GameObject* GetChild(std::string name);
@@ -135,6 +136,7 @@ namespace dae
 		GameObject* m_pParent{ nullptr };
 		TransformComponent* m_pTransform{};
 		std::string m_ObjectName{};
+		glm::vec2 m_Center{};
 
 		bool m_MarkedForDelete{ false }, m_NeedsUpdate{ true };
 	};

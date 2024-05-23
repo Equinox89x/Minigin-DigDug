@@ -6,6 +6,7 @@
 #include <vector>
 #include <cmath>
 #include <random>
+#include "Timer.h"
 
 
 namespace MathLib {
@@ -199,7 +200,10 @@ namespace MathLib {
 	}
 
 	inline int CalculateChance(/*int min = 0.f,*/ int max = 100.f) {
-		srand(static_cast<unsigned int>(time(0)));
+		if (max <= 0) {
+			return 0;
+		}
+		srand(static_cast<unsigned int>(dae::Timer::GetInstance().GetTotal()));
 		int nr{ rand() % (max + 1) };
 		return nr;
 	}

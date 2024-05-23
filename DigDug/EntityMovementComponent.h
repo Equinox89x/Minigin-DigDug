@@ -1,6 +1,7 @@
 #pragma once
 #include "Component.h"
 #include "TextureComponent.h"
+#include "PathwayCreatorComponent.h"
 #include "Scene.h"
 #include "MathLib.h"
 #include <map>
@@ -20,9 +21,9 @@ namespace dae {
         EntityMovementComponent& operator=(EntityMovementComponent&&) noexcept = delete;
         virtual void Update() override;
         virtual void Render() const override;
-        virtual void Init() override {};
+        virtual void Init() override { };
 
-        void CheckMovement(const std::vector<SDL_Rect>& horizontal, const std::vector<SDL_Rect>& vertical);
+        void CheckMovement(const std::map<int, PathWay>& pathways);
         void SetIsController(bool isController) { m_IsController = isController; };
 
         void SetStartPos(glm::vec2 startPos) { m_StartPos = startPos; };
@@ -37,7 +38,7 @@ namespace dae {
         void SetShouldDig(bool shouldDig) { m_ShouldDig = shouldDig; };
 
         void SetNextTileId(int id) { m_NextTileId = id; };
-        void SetCurrentTileId(int id) { m_CurrentTileId = id; };        
+        void SetCurrentTileId(int id);        
         int GetNextTileId() { return m_NextTileId; };
         int GetCurrentTileId() { return m_CurrentTileId; };
 
@@ -64,10 +65,10 @@ namespace dae {
     private:
         bool m_IsController{ false }, m_ShouldDig{ false }, m_IsAutonomous{ false }, m_CanMove{ true };
         int m_NextTileId{ 0 }, m_CurrentTileId{ 0 };
+        std::map<MathLib::Movement, int> m_CurrentSurroundingTiles{};
         Scene* m_Scene{ nullptr };
 
         SDL_Rect m_BottomRect{}, m_TopRect{}, m_Rect{}, m_LeftRect{}, m_RightRect{}, m_PathwayColliderRect{};
-        SDL_Rect m_BottomMoveRect{}, m_TopMoveRect{}, m_LeftMoveRect{}, m_RightMoveRect{};
             
         MathLib::ELifeState m_PlayerState{ MathLib::ELifeState::ALIVE };
         MathLib::Movement m_Movement{ MathLib::Movement::DOWN };
@@ -79,7 +80,6 @@ namespace dae {
         float m_Speed{ 50 }, m_MoveTimer{ 2 };
         bool m_CanChangeState{ false }, m_IsGhostMode{ false };
         SDL_Rect m_LeftMapBorder{}, m_RightMapBorder{}, m_TopMapBorder{}, m_BottomMapBorder{};
-        SDL_Rect m_LastHorLeft{}, m_LastVertTop{}, m_CurrentHorLeft{}, m_CurrentVertTop{}, m_LastHorRight{}, m_LastVertBottom{}, m_CurrentHorRight{}, m_CurrentVertBottom{};
         MathLib::EMovingState m_State{ MathLib::EMovingState::MovingLeft };
         std::map<MathLib::EMovingState, bool> m_MovementDir{
               std::make_pair(MathLib::EMovingState::MovingUp, true),
@@ -89,6 +89,7 @@ namespace dae {
         };
         std::string m_EnemyName{"Pooka"};
         std::string m_LastDir{"Left"};
-        glm::vec2 m_CachedLocation{};
+        glm::vec2 m_CachedLocation{0,0};
+        PathWay m_Target;
     };
 }

@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "ResourceManager.h"
 #include "Renderer.h"
+#include "TextureComponent.h"
 
 dae::GameObject::GameObject()
 {
@@ -46,6 +47,13 @@ void dae::GameObject::Init()
 }
 
 void dae::GameObject::Update() {
+	if (auto comp{ GetComponent<TextureComponent>() }) {
+		if (GetTransform()) {
+			m_Center.x = comp->GetRect().x + (comp->GetRect().w/1.75f);
+			m_Center.y = GetTransform()->GetFullPosition().y + comp->GetRect().h / 2.3f;
+		}
+	}
+
 	for (auto& comp : m_pComponents)
 	{
 		comp->Update();
