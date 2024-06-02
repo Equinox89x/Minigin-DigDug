@@ -58,12 +58,8 @@ void dae::MovingState::Init()
 {
 	m_Timer = static_cast<float>(MathLib::CalculateChance(10));
 	if (gameObject) {
-		if (EnemyType == EEnemyType::Fygar) {
-			gameObject->GetComponent<TextureComponent>()->SetTexture("Enemies/FygarLeft.png", 0.1f, 2);
-		}
-		else {
-			gameObject->GetComponent<TextureComponent>()->SetTexture("Enemies/PookaLeft.png", 0.1f, 2);
-		}
+		std::string enemy{ EnemyType == EEnemyType::Fygar ? "Fygar" : "Pooka" };
+		gameObject->GetComponent<TextureComponent>()->SetTexture("Enemies/" + enemy + "Left.png", 0.1f, 2);
 		gameObject->GetComponent<EntityMovementComponent>()->SetGhostModeEnabled(false);
 		gameObject->GetComponent<EntityMovementComponent>()->DisableMovement(false);
 		if (auto comp{ gameObject->GetComponent<EnemyComponent>() }) {
