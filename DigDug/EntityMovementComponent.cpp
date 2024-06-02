@@ -38,25 +38,25 @@ void dae::EntityMovementComponent::Update()
 
 	if (!m_CanMove) return;
 	if (m_IsAutonomous) {
-		switch (m_State)
-		{
-		case MathLib::EMovingState::MovingUp:
-			m_PathwayColliderRect = m_TopRect;
-			break;
-		case MathLib::EMovingState::MovingLeft:
-			m_PathwayColliderRect = m_LeftRect;
-			m_LastDir = "Left";
-			break;
-		case MathLib::EMovingState::MovingRight:
-			m_PathwayColliderRect = m_RightRect;
-			m_LastDir = "Right";
-			break;
-		case MathLib::EMovingState::MovingDown:
-			m_PathwayColliderRect = m_BottomRect;
-			break;
-		default:
-			break;
-		}
+		//switch (m_State)
+		//{
+		//case MathLib::EMovingState::MovingUp:
+		//	m_PathwayColliderRect = m_TopRect;
+		//	break;
+		//case MathLib::EMovingState::MovingLeft:
+		//	m_PathwayColliderRect = m_LeftRect;
+		//	m_Movement = MathLib::LEFT;
+		//	break;
+		//case MathLib::EMovingState::MovingRight:
+		//	m_PathwayColliderRect = m_RightRect;
+		//	m_Movement = MathLib::RIGHT;
+		//	break;
+		//case MathLib::EMovingState::MovingDown:
+		//	m_PathwayColliderRect = m_BottomRect;
+		//	break;
+		//default:
+		//	break;
+		//}
 
 		if (m_CachedLocation == glm::vec2{ 0,0 }) {
 			auto comp{ m_Scene->GetGameObject(EnumStrings[Names::PathCreator])->GetComponent<PathwayCreatorComponent>() };
@@ -74,6 +74,11 @@ void dae::EntityMovementComponent::Update()
 			auto comp{ m_Scene->GetGameObject(EnumStrings[Names::PathCreator])->GetComponent<PathwayCreatorComponent>() };
 			CheckMovement(comp->GetPathways());
 		}
+
+
+
+		//m_Movement == MathLib::LEFT ? m_LastDir = "Left" : m_LastDir = "Right";
+		//dx < 0 ? m_Movement = MathLib::LEFT : m_Movement = MathLib::RIGHT;
 
 		GetGameObject()->GetTransform()->AddTranslate(dx * 2.f, dy * 2.f);
 		GetGameObject()->GetComponent<TextureComponent>()->SetTexture("Enemies/" + m_EnemyName + (m_IsGhostMode ? "Ghost" : m_LastDir) + ".png", 0.2f, 2);
@@ -125,6 +130,15 @@ void dae::EntityMovementComponent::CheckMovement(const std::map<int, PathWay>& p
 
 		if (paths.size() > 0) {
 			m_CachedLocation = paths[randIndex].Middle;
+
+			if (m_CachedLocation.x > GetGameObject()->GetTransform()->GetFullPosition().x) {
+				m_Movement = MathLib::RIGHT;
+				m_LastDir = "Right";
+			}
+			else {
+				m_Movement = MathLib::LEFT;
+				m_LastDir = "Left";
+			}
 		}
 }
 

@@ -56,7 +56,14 @@ void dae::DeathState::Update()
 
 void dae::MovingState::Init()
 {
+	m_Timer = static_cast<float>(MathLib::CalculateChance(10));
 	if (gameObject) {
+		if (EnemyType == EEnemyType::Fygar) {
+			gameObject->GetComponent<TextureComponent>()->SetTexture("Enemies/FygarLeft.png", 0.1f, 2);
+		}
+		else {
+			gameObject->GetComponent<TextureComponent>()->SetTexture("Enemies/PookaLeft.png", 0.1f, 2);
+		}
 		gameObject->GetComponent<EntityMovementComponent>()->SetGhostModeEnabled(false);
 		gameObject->GetComponent<EntityMovementComponent>()->DisableMovement(false);
 		if (auto comp{ gameObject->GetComponent<EnemyComponent>() }) {
@@ -67,14 +74,16 @@ void dae::MovingState::Init()
 
 void dae::MovingState::Update()
 {
+	m_Timer -= Timer::GetInstance().GetDeltaTime();
+	if (m_Timer > 0) return;
 	if (MathLib::CalculateChance() >= 80) {
 		if (EnemyType == EEnemyType::Fygar) {
-			if (MathLib::CalculateChance() >= 70) {
-				gameObject->GetComponent<EnemyComponent>()->SetState(new GhostState());
+			if (MathLib::CalculateChance() >= 50) {
 				//gameObject->GetComponent<EnemyComponent>()->SetState(new BreatheFireState());
+				gameObject->GetComponent<EnemyComponent>()->SetState(new BreatheFireState());
 			}
 			else {
-				gameObject->GetComponent<EnemyComponent>()->SetState(new BreatheFireState());
+				gameObject->GetComponent<EnemyComponent>()->SetState(new GhostState());
 			}
 		}
 		else {
@@ -125,12 +134,18 @@ void dae::BreatheFireState::Update()
 	if (!m_IsPrepareComplete) {
 		if (m_PrepareTimer <= 0) {
 			m_IsPrepareComplete = true;
-			gameObject->GetComponent<TextureComponent>()->SetTexture("Enemies/FygarLeft.png", 0.2f, 2, true, false);
+			auto dir{ gameObject->GetComponent<EntityMovementComponent>()->GetLastDirection() };
+			//if (gameObject->GetComponent<EntityMovementComponent>()->GetDirection() == MathLib::Movement::LEFT) {
+				gameObject->GetComponent<TextureComponent>()->SetTexture("Enemies/Fygar"+ dir +".png", 0.2f, 2, true, false);
+			//}
+			//else {
+			//	gameObject->GetComponent<TextureComponent>()->SetTexture("Enemies/FygarRight.png", 0.2f, 2, true, false);
+			//}
 
 			auto go{ std::make_shared<GameObject>() };
 			m_Scene->Add(go);
 			fireObject = go.get();
-			go->AddComponent(std::make_unique<FireComponent>(m_Scene, gameObject->GetTransform()->GetWorldPosition()));
+			go->AddComponent(std::make_unique<FireComponent>(m_Scene, gameObject));
 		}
 	}
 

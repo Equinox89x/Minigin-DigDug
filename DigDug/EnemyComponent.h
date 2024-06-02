@@ -37,6 +37,9 @@ namespace dae {
     public:
         virtual void Init() override;
         virtual void Update() override;
+
+    private:
+        float m_Timer{ 5 };
     };   
     
     class InflatingState : public EnemyState {

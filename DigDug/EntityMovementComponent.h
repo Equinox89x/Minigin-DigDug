@@ -23,7 +23,6 @@ namespace dae {
         virtual void Render() const override;
         virtual void Init() override { };
 
-        void CheckMovement(const std::map<int, PathWay>& pathways);
         void SetIsController(bool isController) { m_IsController = isController; };
 
         void SetStartPos(glm::vec2 startPos) { m_StartPos = startPos; };
@@ -53,6 +52,7 @@ namespace dae {
 
         void DisableMovement(bool isDisabled) { m_CanMove = !isDisabled; };
         MathLib::Movement GetDirection() { return m_Movement; };
+        std::string GetLastDirection() { return m_LastDir; }
 
         void SetEnemyName(std::string enemyName) {
             m_EnemyName = enemyName;
@@ -75,6 +75,8 @@ namespace dae {
         MathLib::Movement m_PrevMovement{};
         glm::vec2 m_StartPos{};
         glm::vec2 m_PrevLoc{};
+
+        void CheckMovement(const std::map<int, PathWay>& pathways);
 
         //Autonomous
         float m_Speed{ 50 }, m_MoveTimer{ 2 };

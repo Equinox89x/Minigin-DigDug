@@ -9,7 +9,7 @@ namespace dae {
     class FireComponent  final : public Component
     {
     public:
-        FireComponent(Scene* scene, glm::vec2 pos) : m_Scene{ scene }, m_OriginLocation{ pos } { };
+        FireComponent(Scene* scene, GameObject* gameObject) : m_Scene{ scene }, m_EnemyGameObject{ gameObject }, m_OriginLocation { gameObject->GetTransform()->GetWorldPosition() } { };
         ~FireComponent() = default;
         FireComponent(const FireComponent&) = delete;
         FireComponent(FireComponent&&) noexcept = delete;
@@ -26,6 +26,8 @@ namespace dae {
         float m_Timer{ 0.8f };
         bool m_FireFinished{ false };
         glm::vec2 m_OriginLocation{};
+        GameObject* m_EnemyGameObject{ nullptr };
+        std::string m_Direction{ "Left" };
     };
 
 }
