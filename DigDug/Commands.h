@@ -85,6 +85,7 @@ namespace dae {
 		{
 			if (!m_Scene->GetIsActive()) return;
 
+			if (!m_pObject && !m_pPumpObject) return;
 			m_pObject->GetComponent<dae::AudioComponent>()->PlayShootSound();
 			m_pObject->GetComponent<dae::EntityMovementComponent>()->DisableMovement(true);
 			m_pObject->GetComponent<dae::InputComponent>()->DisableMovement(true);

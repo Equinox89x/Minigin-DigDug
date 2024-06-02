@@ -3,6 +3,7 @@
 #include "EntityMovementComponent.h"
 #include "FireComponent.h"
 #include <ValuesComponent.h>
+#include "Observers.h"
 
 dae::EnemyComponent::~EnemyComponent()
 {
@@ -28,6 +29,8 @@ bool dae::EnemyComponent::PumpUp()
 	GetGameObject()->GetComponent<TextureComponent>()->SetFrame(currentPumpStage);
 	if (currentPumpStage >= maxPumpStage) {
 		SetState(new DeathState());
+		Event scoreEvent{ EventType::EnemyDeath };
+		Notify(GetGameObject(), scoreEvent);
 	}
 	return currentPumpStage >= maxPumpStage;
 }

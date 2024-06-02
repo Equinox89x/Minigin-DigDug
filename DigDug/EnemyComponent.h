@@ -3,6 +3,7 @@
 #include "TextureComponent.h"
 #include "MathLib.h"
 #include "Scene.h"
+#include "Subject.h"
 
 namespace dae {
 
@@ -62,7 +63,7 @@ namespace dae {
         bool m_IsPrepareComplete{ false };
     };
 
-    class DeathState : public EnemyState {
+    class DeathState : public EnemyState, public Subject {
     public:
         virtual void Init() override;
         virtual void Update() override;
@@ -78,7 +79,7 @@ namespace dae {
     //DeathState* EnemyState::death = new DeathState();
 
 
-    class EnemyComponent final : public Component
+    class EnemyComponent final : public Component, public Subject
     {
     public:
         EnemyComponent(Scene* scene, EEnemyType enemyType = EEnemyType::Pooka) : m_Scene{ scene }, EnemyType{ enemyType } { SetState(new MovingState); };

@@ -59,3 +59,16 @@ void dae::ScoreObserver::Notify(GameObject* player, Event& event)
 //	auto enemies{ m_Scene->GetGameObject(EnumStrings[Names::EnemyHolder])->GetChildren() };
 //
 //}
+
+void dae::EnemyDeathObserver::Notify(GameObject* /*go*/, Event& event)
+{
+	switch (event.GetEvent())
+	{
+	case EventType::EnemyDeath:
+		auto enemies{ m_Scene->GetGameObjects(EnumStrings[Names::EnemyGeneral], false) };
+		if (enemies.size() <= 1) {
+			m_Scene->GetGameObject(EnumStrings[Names::Global])->GetComponent<MenuComponent>()->SkipLevel();
+		}
+		break;
+	}
+}

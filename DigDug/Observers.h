@@ -35,6 +35,19 @@ namespace dae
 		int m_Id{ 0 };
 
 	};
+
+	class EnemyDeathObserver final : public Observer
+	{
+	public:
+
+		EnemyDeathObserver(Scene* const scene) : m_Scene{ scene } {};
+		~EnemyDeathObserver() {};
+		void Notify(GameObject* go, Event& event) override;
+
+	private:
+		Scene* m_Scene;
+
+	};
 	
 	//class PumpEnemyOverlapObserver final : public Observer
 	//{

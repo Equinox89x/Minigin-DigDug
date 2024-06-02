@@ -42,12 +42,15 @@ void dae::PumpComponent::ResetMovement(glm::vec3 loc)
 
 void dae::PumpComponent::ReleasePump()
 {
-	m_CanMove = false;
-	m_Player->GetComponent<dae::EntityMovementComponent>()->DisableMovement(false);
-	m_Player->GetComponent<dae::InputComponent>()->DisableMovement(false);
-	m_SelectedEnemy = nullptr;
-	ResetMovement({0,0,0});
-	GetGameObject()->GetComponent<TextureComponent>()->SetIsVisible(false);
+	if (IsMarkedForDestroy()) return;
+	if (m_Player) {
+		m_CanMove = false;
+		if (auto comp{ m_Player->GetComponent<dae::EntityMovementComponent>() }) comp->DisableMovement(false);
+		if (auto comp{ m_Player->GetComponent<dae::InputComponent>() }) comp->DisableMovement(false);
+		m_SelectedEnemy = nullptr;
+		ResetMovement({0,0,0});
+		if (auto go{ GetGameObject() }) go->GetComponent<TextureComponent>()->SetIsVisible(false);
+	}
 }
 
 void dae::PumpComponent::AttachPump(GameObject* enemy)
