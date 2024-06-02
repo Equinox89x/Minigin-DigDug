@@ -7,7 +7,7 @@
 #include <cmath>
 #include <random>
 #include "Timer.h"
-
+#include <chrono>
 
 namespace MathLib {
 
@@ -203,8 +203,9 @@ namespace MathLib {
 		if (max <= 0) {
 			return 0;
 		}
-		srand(static_cast<unsigned int>(dae::Timer::GetInstance().GetTotal()));
-		int nr{ rand() % (max + 1) };
-		return nr;
+		std::random_device rd; // Non-deterministic random number generator
+		std::mt19937 gen(rd() + 1 * static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
+		auto distribution = std::uniform_int_distribution<>(0,max);
+		return static_cast<int>(distribution(gen));
 	}
 }

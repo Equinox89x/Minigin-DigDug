@@ -31,7 +31,7 @@
                     "undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug",
                     "undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug",
                     "undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug",
-                    "undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug",
+                    "undug|dug|enemySpawn|dug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug",
                     "undug|undug|undug|undug|dug|dug|spawn|dug|dug|undug|undug|undug|undug|undug",
                     "undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug"
                 ]
@@ -41,14 +41,14 @@
                 "index": 2,
                 "tiles": [
                     "undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug",
+                    "dug|enemySpawn|dug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug",
                     "undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug",
-                    "undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug",
-                    "undug|undug|undug|undug|undug|undug|undug|undug|dug|dug|dug|undug|undug|undug",
+                    "undug|undug|undug|undug|undug|undug|undug|undug|enemySpawn|dug|dug|undug|undug|undug",
                     "undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|dug|undug|undug|undug",
                     "undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|dug|undug|undug|undug",
                     "undug|undug|dug|dug|spawn|dug|undug|undug|undug|undug|dug|dug|enemySpawn|undug",
-                    "undug|undug|dug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug",
-                    "undug|enemySpawn|dug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug",
+                    "undug|undug|enemySpawn|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug",
+                    "undug|enemySpawn|dug|undug|undug|undug|undug|undug|undug|dug|enemySpawn|dug|undug|undug",
                     "undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug"
                 ]
             }    

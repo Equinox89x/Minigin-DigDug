@@ -17,6 +17,7 @@ namespace dae {
         Live,
         GameOver,
         Score,
+        EnemyDeath,
         Reset,
     };
 }
