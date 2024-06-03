@@ -4,6 +4,10 @@
 #include "FireComponent.h"
 #include <ValuesComponent.h>
 #include "Observers.h"
+#include <TextObjectComponent.h>
+#include "FloatingScoreComponent.h"
+#include "ResourceManager.h"
+#include "GameObject.h"
 
 dae::EnemyComponent::~EnemyComponent()
 {
@@ -37,6 +41,13 @@ bool dae::EnemyComponent::PumpUp()
 
 void dae::DeathState::Init()
 {
+	auto font{ ResourceManager::GetInstance().LoadFont("Emulogic.ttf", 10) };
+
+	auto go{ std::make_shared<GameObject>() };
+	go->AddComponent(std::make_unique<TextObjectComponent>(std::to_string(m_Score), font));
+	go->AddComponent(std::make_unique<FloatingScoreComponent>(m_Scene, m_Score, gameObject->GetTransform()->GetFullPosition()));
+	m_Scene->Add(go);
+
 	if (EnemyType == EEnemyType::Pooka) {
 		//add score based on layer
 	}
@@ -75,7 +86,6 @@ void dae::MovingState::Update()
 	if (MathLib::CalculateChance() >= 80) {
 		if (EnemyType == EEnemyType::Fygar) {
 			if (MathLib::CalculateChance() >= 50) {
-				//gameObject->GetComponent<EnemyComponent>()->SetState(new BreatheFireState());
 				gameObject->GetComponent<EnemyComponent>()->SetState(new BreatheFireState());
 			}
 			else {
@@ -131,12 +141,7 @@ void dae::BreatheFireState::Update()
 		if (m_PrepareTimer <= 0) {
 			m_IsPrepareComplete = true;
 			auto dir{ gameObject->GetComponent<EntityMovementComponent>()->GetLastDirection() };
-			//if (gameObject->GetComponent<EntityMovementComponent>()->GetDirection() == MathLib::Movement::LEFT) {
-				gameObject->GetComponent<TextureComponent>()->SetTexture("Enemies/Fygar"+ dir +".png", 0.2f, 2, true, false);
-			//}
-			//else {
-			//	gameObject->GetComponent<TextureComponent>()->SetTexture("Enemies/FygarRight.png", 0.2f, 2, true, false);
-			//}
+			gameObject->GetComponent<TextureComponent>()->SetTexture("Enemies/Fygar"+ dir +".png", 0.2f, 2, true, false);
 
 			auto go{ std::make_shared<GameObject>() };
 			m_Scene->Add(go);
