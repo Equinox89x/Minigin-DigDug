@@ -4,4 +4,4 @@
 
 void MakeMenu();
 void CreateGlobalGameObject(dae::Scene* scene, MathLib::GameMode gm);
-void MakeHighScoreScreen(int scoreNr, bool isNewHighScore);
+void MakeHighScoreScreen();

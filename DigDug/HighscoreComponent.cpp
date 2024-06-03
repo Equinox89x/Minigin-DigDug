@@ -3,6 +3,7 @@
 #include "ResourceManager.h"
 #include "Renderer.h"
 #include "Commands.h"
+#include <FileReader.h>
 
 
 void dae::HighscoreComponent::Init()
@@ -72,10 +73,31 @@ void dae::HighscoreComponent::Select()
 {
 	if (m_Name == "Enter Name") m_Name = "";
 	if (m_SelectedKey > m_KeyboardKeys.size()-1) {
-		//TODO send data$
+		//TODO send data
+
+		FileReader* file{ new FileReader("../Data/highscore.json") };
+		auto scores{ file->GetDocument()["data"].GetArray() };
+
+		std::string text{ "{ \"data\": [" };
+		text += "{ \"name\": \"" + m_Name + "\",  \"score\": \"" + std::to_string(m_Score)+"\"},";
+
+		int i{ 0 };
+		for (const auto& score : scores)
+		{
+			if (i < 4) {
+				text += "{ \"name\": \"" + std::string(score.GetObj()["name"].GetString()) + "\", \"score\": \"" + std::string(score.GetObj()["score"].GetString()) + "\"}";
+			}
+			if (i < 3) {
+				text += ",";
+			}
+			i++;
+		}
+		text += "]}";
+		file->WriteString(text);
+		delete file;
 		auto scene{ SceneManager::GetInstance().GetActiveScene() };
 		scene->SetActive(false);
-		m_CreateHighscoreScreen(m_Score, false);
+		m_CreateHighscoreScreen();
 		SceneManager::GetInstance().DeleteScene(scene);
 	}
 	else {

@@ -29,6 +29,7 @@ namespace dae {
 		void Render() const override {};
 
 		void WriteData(std::map<std::string, std::string> dataKeys);
+		void WriteString(std::string text);
 		const Document& GetDocument() { return m_Document; };
 
 		void Open();

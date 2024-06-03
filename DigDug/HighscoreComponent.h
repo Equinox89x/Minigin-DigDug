@@ -12,7 +12,7 @@ namespace dae {
 
     {
     public:
-        HighscoreComponent(Scene* scene, int scoreNr, std::function<void(int score, bool isNewHighscore)> createHighscoreScreen) : m_Scene{ scene }, m_Score{ scoreNr },m_CreateHighscoreScreen { createHighscoreScreen } { };
+        HighscoreComponent(Scene* scene, int scoreNr, std::function<void()> createHighscoreScreen) : m_Scene{ scene }, m_Score{ scoreNr },m_CreateHighscoreScreen { createHighscoreScreen } { };
         ~HighscoreComponent() = default;
         HighscoreComponent(const HighscoreComponent&) = delete;
         HighscoreComponent(HighscoreComponent&&) noexcept = delete;
@@ -36,7 +36,7 @@ namespace dae {
 
         int m_SelectedKey{ 0 };
         std::string m_Name{ "Enter Name" };
-        std::function<void(int score, bool isNewHighscore)> m_CreateHighscoreScreen;
+        std::function<void()> m_CreateHighscoreScreen;
         int m_Score{ 0 };
     };
 }

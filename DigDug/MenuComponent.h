@@ -9,7 +9,7 @@ namespace dae {
     class MenuComponent final : public Component
     {
     public:
-        MenuComponent(Scene* scene, std::function<void(MathLib::GameMode gm, int levelIndex)> createLevel, std::function<void(int score, bool isNewHighscore)> createHighscoreScreen, std::vector<glm::vec2> cursorLocations, MathLib::GameMode gamemode = MathLib::GameMode::SOLO) :
+        MenuComponent(Scene* scene, std::function<void(MathLib::GameMode gm, int levelIndex)> createLevel, std::function<void()> createHighscoreScreen, std::vector<glm::vec2> cursorLocations, MathLib::GameMode gamemode = MathLib::GameMode::SOLO) :
             m_Scene{ scene }, CreateLevel{ createLevel }, CreateHighscoreMenu{ createHighscoreScreen }, m_CursorLocations{ cursorLocations }, m_SelectedGameMode{gamemode} {  };
         ~MenuComponent() = default;
 
@@ -34,6 +34,6 @@ namespace dae {
         std::vector<glm::vec2> m_CursorLocations{};
 
         std::function<void(MathLib::GameMode gm, int levelIndex)> CreateLevel;
-        std::function<void(int score, bool isNewHighscore)> CreateHighscoreMenu;
+        std::function<void()> CreateHighscoreMenu;
     };
 }

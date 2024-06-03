@@ -19,7 +19,7 @@ dae::FileReader::FileReader(const std::string& filePath)
 
 dae::FileReader::~FileReader()
 {
-	m_File.close();
+	Close();
 }
 
 const Document& dae::FileReader::ReadFile() {
@@ -35,7 +35,7 @@ const Document& dae::FileReader::ReadFile() {
 	while (std::getline(inputFile, line)) {
 		content += line;
 	}
-	inputFile.close();
+	Close();
 
 	m_Document.Parse(content.c_str());
 
@@ -72,12 +72,24 @@ void dae::FileReader::WriteData(std::map<std::string, std::string> dataKeys)
 	std::ofstream ofs(m_FileName);
 	if (ofs.is_open()) {
 		ofs << buffer.GetString();
-		ofs.close();
 		std::cout << "Successfully wrote JSON to " << m_FileName << std::endl;
 	}
 	else {
 		std::cerr << "Failed to open file " << m_FileName << std::endl;
 	}
+	Close();
+}
+
+void dae::FileReader::WriteString(std::string text)
+{
+	std::ofstream outFile(m_FileName);
+	if (!outFile.is_open()) {
+		std::cerr << "Failed to open the file: " << m_FileName << std::endl;
+		return;
+	}
+
+	outFile << text;
+	Close();
 }
 
 

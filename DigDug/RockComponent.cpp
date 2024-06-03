@@ -8,6 +8,8 @@
 
 void dae::RockComponent::Update()
 {
+	if (GetGameObject()->IsMarkedForDestroy()) return;
+	if (IsMarkedForDestroy()) return;
 	auto players{ m_Scene->GetGameObjects(EnumStrings[Names::PlayerGeneral], false) };
 	auto rect{ GetGameObject()->GetComponent<TextureComponent>()->GetRect() };
 	rect.y += rect.h;
@@ -62,10 +64,19 @@ void dae::RockComponent::Update()
 					go->AddComponent(std::make_unique<FloatingScoreComponent>(m_Scene, GetScore(), GetGameObject()->GetTransform()->GetFullPosition()));
 					m_Scene->Add(go);
 
+					m_PlayerHasPassed = false;
+					m_Skipcheck = false;
 					m_DeathTimer = 999;
+
 					Event scoreEvent{ EventType::RockDeath };
 					Notify(GetGameObject(), scoreEvent);
-					GetGameObject()->MarkForDestroy();
+					//GetGameObject()->MarkForDestroy();
+					if (auto object{ GetGameObject() }) {
+						if (auto comp{ object->GetComponent<TextureComponent>() }) {
+							if (comp->IsMarkedForDestroy()) return;
+							comp->SetIsVisible(false);
+						}
+					}
 				}
 			}
 		}
