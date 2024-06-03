@@ -19,5 +19,6 @@ namespace dae {
         Score,
         EnemyDeath,
         Reset,
+        RockDeath,
     };
 }

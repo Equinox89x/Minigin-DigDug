@@ -7,6 +7,7 @@
 #include "Commands.h"
 #include "TextObjectComponent.h"
 #include "SteamHolder.h"
+#include "RockComponent.h"
 
 void dae::HealthObserver::Notify(GameObject* go, Event& event)
 {
@@ -72,6 +73,19 @@ void dae::EnemyDeathObserver::Notify(GameObject* /*go*/, Event& event)
 		if (enemies.size() <= 1) {
 			m_Scene->GetGameObject(EnumStrings[Names::Global])->GetComponent<MenuComponent>()->SkipLevel();
 		}
+		break;
+	}
+}
+
+void dae::RockDeathObserver::Notify(GameObject* go, Event& event)
+{
+	auto comp{ go->GetComponent<RockComponent>() };
+	switch (event.GetEvent())
+	{
+	case EventType::RockDeath:
+		auto player{ m_Scene->GetGameObject(EnumStrings[Names::PlayerGeneral] + std::to_string(comp->GetPlayerId())) };
+		ValuesComponent* valueComp{ player->GetComponent<ValuesComponent>() };
+		valueComp->IncreaseScore(comp->GetScore());
 		break;
 	}
 }

@@ -7,7 +7,7 @@
 namespace dae {
 
 	enum class EPathState {
-		Dug, Undug, Spawn, EnemySpawn
+		Dug, Undug, Spawn, EnemySpawn, Rock
 	};
 
 	struct PathWay {
@@ -39,7 +39,6 @@ namespace dae {
 		void AddPathway(int id, glm::vec2 pos, std::string type, glm::vec2 pos2, glm::vec2 size);
 		void ActivatePathway(int id);
 		virtual void Update() override;
-		void HandleEntityTileOverlap();
 		virtual void Init() override;
 		virtual void Render() const override;
 
@@ -70,5 +69,8 @@ namespace dae {
 			std::vector<PathWay> m_EnemySpawns{};
 
 			SDL_Rect m_LeftMapBorder{}, m_RightMapBorder{}, m_TopMapBorder{}, m_BottomMapBorder{};
+
+			void HandleEntityTileOverlap();
+
 	};
 }

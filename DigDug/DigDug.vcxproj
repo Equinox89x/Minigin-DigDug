@@ -198,6 +198,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll" "$(O
     <ClCompile Include="PathwayCreatorComponent.cpp" />
     <ClCompile Include="PlayerComponent.cpp" />
     <ClCompile Include="PumpComponent.cpp" />
+    <ClCompile Include="RockComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Commands.h" />
@@ -212,6 +213,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll" "$(O
     <ClInclude Include="PathwayCreatorComponent.h" />
     <ClInclude Include="PlayerComponent.h" />
     <ClInclude Include="PumpComponent.h" />
+    <ClInclude Include="RockComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Minigin\Minigin.vcxproj">

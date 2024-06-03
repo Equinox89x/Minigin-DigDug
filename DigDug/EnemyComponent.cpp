@@ -7,6 +7,7 @@
 #include <TextObjectComponent.h>
 #include "FloatingScoreComponent.h"
 #include "ResourceManager.h"
+#include "Renderer.h"
 #include "GameObject.h"
 
 dae::EnemyComponent::~EnemyComponent()
@@ -20,6 +21,19 @@ dae::EnemyComponent::~EnemyComponent()
 void dae::EnemyComponent::Update()
 {
 	m_State->Update();
+}
+
+void dae::EnemyComponent::Render() const
+{
+	//SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 255, 255, 255);
+	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_ScoreRect0);
+	//SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 0, 255, 255);
+	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_ScoreRect1);
+	//SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255);
+	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_ScoreRect2);
+	//SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 255, 0, 255);
+	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_ScoreRect3);
+
 }
 
 void dae::EnemyComponent::Init()
@@ -41,18 +55,31 @@ bool dae::EnemyComponent::PumpUp()
 
 void dae::DeathState::Init()
 {
+	gameObject->GetComponent<EnemyComponent>()->SetLifeState(MathLib::ELifeState::DEAD);
 	auto font{ ResourceManager::GetInstance().LoadFont("Emulogic.ttf", 10) };
+	auto pos{ gameObject->GetTransform()->GetFullPosition() };
 
-	auto go{ std::make_shared<GameObject>() };
-	go->AddComponent(std::make_unique<TextObjectComponent>(std::to_string(m_Score), font));
-	go->AddComponent(std::make_unique<FloatingScoreComponent>(m_Scene, m_Score, gameObject->GetTransform()->GetFullPosition()));
+	auto rect{ gameObject->GetComponent<TextureComponent>()->GetRect() };
+
+	EnemyType == EEnemyType::Pooka ? m_Score = 200 : m_Score = 400;
+
+	if (MathLib::IsCompletelyOverlapping(m_ScoreRect1, rect)) {
+		EnemyType == EEnemyType::Pooka ? m_Score += 100 : m_Score += 200;
+	}
+	if (MathLib::IsCompletelyOverlapping(m_ScoreRect2, rect)) {
+		EnemyType == EEnemyType::Pooka ? m_Score += 200 : m_Score += 400;
+	}
+	if (MathLib::IsCompletelyOverlapping(m_ScoreRect3, rect)) {
+		EnemyType == EEnemyType::Pooka ? m_Score += 300 : m_Score += 600;
+	}
+
+	auto go{ std::make_shared<dae::GameObject>() };
+	go->AddComponent(std::make_unique<dae::TextObjectComponent>(std::to_string(m_Score), font));
+	go->AddComponent(std::make_unique<dae::FloatingScoreComponent>(m_Scene, m_Score, pos));
 	m_Scene->Add(go);
 
-	if (EnemyType == EEnemyType::Pooka) {
-		//add score based on layer
-	}
-	else {
-		//add score based on layer
+	if (auto player{ gameObject->GetComponent<EnemyComponent>()->GetPlayer() }) {
+		player->GetComponent<ValuesComponent>()->IncreaseScore(m_Score);
 	}
 }
 
@@ -60,7 +87,7 @@ void dae::DeathState::Update()
 {
 	m_DeathTimer -= Timer::GetInstance().GetDeltaTime();
 	if (m_DeathTimer <= 0) {
-		gameObject->GetComponent<EnemyComponent>()->GetPlayer()->GetComponent<ValuesComponent>()->IncreaseScore(m_Score);
+		
 		gameObject->MarkForDestroy();
 	}
 }

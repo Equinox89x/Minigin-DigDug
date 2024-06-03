@@ -2,6 +2,8 @@
 #include "GameObject.h"
 #include "EntityMovementComponent.h"
 #include "Renderer.h"
+#include "RockComponent.h"
+#include <memory>
 
 dae::PathwayCreatorComponent::~PathwayCreatorComponent()
 {
@@ -49,12 +51,13 @@ void dae::PathwayCreatorComponent::AddPathway(int id, glm::vec2 pos, std::string
 		m_EnemySpawns.push_back(pathWay);
 	}
 
-
 	m_Pathways.insert({ id, pathWay });
 
 	if (type == "dug" || type == "spawn" || type == "enemySpawn") {
 		ActivatePathway(id);
 	}
+
+
 }
 void dae::PathwayCreatorComponent::ActivatePathway(int id)
 {

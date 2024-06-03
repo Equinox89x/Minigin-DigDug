@@ -60,6 +60,9 @@
     <ClCompile Include="FloatingScoreComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
+    <ClCompile Include="RockComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PumpComponent.h">
@@ -96,6 +99,9 @@
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="FloatingScoreComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="RockComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>

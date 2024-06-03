@@ -56,7 +56,7 @@ void dae::GameObject::Update() {
 
 	for (auto& comp : m_pComponents)
 	{
-		comp->Update();
+		if(!comp->IsMarkedForDestroy()) comp->Update();
 	}
 
 	for (auto& child : m_pChildren)

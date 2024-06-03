@@ -5,6 +5,13 @@
 #include "Scene.h"
 #include "Subject.h"
 
+namespace {
+    constexpr SDL_Rect m_ScoreRect0{ 0, 45 * 3, 1000, int(45 * 1.5f) };
+    constexpr SDL_Rect m_ScoreRect1{ 0, int(45 * 4.5), 1000, int(45 * 1.75f) };
+    constexpr SDL_Rect m_ScoreRect2{ 0, int(45 * 6.25), 1000, int(45 * 2) };
+    constexpr SDL_Rect m_ScoreRect3{ 0,int(45 * 8.25), 1000, int(45 * 2) };
+}
+
 namespace dae {
 
     enum class EEnemyType {
@@ -92,7 +99,7 @@ namespace dae {
         EnemyComponent& operator=(const EnemyComponent&) = delete;
         EnemyComponent& operator=(EnemyComponent&&) noexcept = delete;
         virtual void Update() override;
-        virtual void Render() const override {};
+        virtual void Render() const override;
         virtual void Init() override;
         MathLib::ELifeState GetLifeState() { return m_PlayerState; };
         void SetLifeState(MathLib::ELifeState state) { m_PlayerState = state; };
@@ -120,5 +127,7 @@ namespace dae {
         EnemyState* m_State{ nullptr };
         EEnemyType EnemyType{ EEnemyType::Pooka };
         GameObject* m_Player{ nullptr };
+
+
     };
 }
