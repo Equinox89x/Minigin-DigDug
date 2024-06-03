@@ -27,7 +27,6 @@ namespace dae
 
 		void SetText(const std::string& text);
 		void SetPosition(const float x, const float y);
-		void SetName(std::string name) { m_ComponentName = name; };
 		void SetColor(SDL_Color color) { m_Color = color; };
 
 		void SetIsVisible(bool isvisible) { Isvisible = isvisible; };
@@ -39,7 +38,6 @@ namespace dae
 		glm::vec3 m_Position{};
 		std::shared_ptr<Font> m_font;
 		std::unique_ptr<Texture2D> m_textTexture;
-		std::string m_ComponentName;
 		SDL_Color m_Color{ 255,255,255 };
 		bool Isvisible;
 	};

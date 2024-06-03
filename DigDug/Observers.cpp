@@ -40,6 +40,7 @@ void dae::ScoreObserver::Notify(GameObject* player, Event& event)
 	case EventType::Score:
 		if (auto scoreHolder{m_Scene->GetGameObject(EnumStrings[Names::ScoreGeneral]+std::to_string(m_Id))}) {
 			scoreHolder->GetComponent<TextObjectComponent>()->SetText(player->GetName() + " Score: " + std::to_string(score));
+			scoreHolder->GetComponent<TextObjectComponent>()->SetName(std::to_string(score));
 			//if (score == 500) {
 			//	g_SteamAchievements->SetAchievement("ACH_WIN_ONE_GAME");
 			//}
@@ -48,6 +49,8 @@ void dae::ScoreObserver::Notify(GameObject* player, Event& event)
 	case EventType::Reset:
 		if (auto scoreHolder{ m_Scene->GetGameObject(EnumStrings[Names::ScoreGeneral] + std::to_string(m_Id)) }) {
 			scoreHolder->GetComponent<TextObjectComponent>()->SetText(player->GetName() + " Score: " + std::to_string(score));
+			scoreHolder->GetComponent<TextObjectComponent>()->SetName(std::to_string(score));
+
 		}
 		break;
 

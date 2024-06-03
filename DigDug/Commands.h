@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include <functional>
 #include "InputComponent.h"
 #include "TextureComponent.h"
 #include "../DigDug/EntityMovementComponent.h"
@@ -9,6 +10,7 @@
 #include "AudioComponent.h"
 #include "../DigDug/PumpComponent.h"
 #include "../DigDug/MenuComponent.h"
+#include "../DigDug/HighscoreComponent.h"
 
 namespace dae {
 
@@ -148,6 +150,57 @@ namespace dae {
 	private:
 		Scene* m_Scene;
 		GameObject* m_pObject;
+
+	};
+#pragma endregion
+		
+#pragma region Highscore
+	class MoveKeyboardCursor final : public Command
+	{
+	public:
+		MoveKeyboardCursor(Scene* scene, GameObject* object, glm::vec2 key) : m_pObject(object), m_Scene{ scene }, m_Key{key} {}
+		void Execute() override
+		{
+			if (!m_Scene->GetIsActive()) return;
+			m_pObject->GetComponent<HighscoreComponent>()->MoveCursor(m_Key);
+		}
+	private:
+		Scene* m_Scene;
+		GameObject* m_pObject;
+		glm::vec2 m_Key{};
+
+	};
+
+	class SelectKey final : public Command
+	{
+	public:
+		SelectKey(Scene* scene, GameObject* object) : m_pObject(object), m_Scene{ scene } {}
+		void Execute() override
+		{
+			if (!m_Scene->GetIsActive()) return;
+			m_pObject->GetComponent<HighscoreComponent>()->Select();
+		}
+	private:
+		Scene* m_Scene;
+		GameObject* m_pObject;
+
+	};
+
+	class BackToMenu final : public Command
+	{
+	public:
+		BackToMenu(Scene* scene, std::function<void()> makeMenuFn) : m_MakeMenuFn(makeMenuFn), m_Scene{ scene } {}
+		void Execute() override
+		{
+			if (!m_Scene->GetIsActive()) return;
+			auto scene{ SceneManager::GetInstance().GetActiveScene() };
+			scene->SetActive(false);
+			m_MakeMenuFn();
+			SceneManager::GetInstance().DeleteScene(scene);
+		}
+	private:
+		Scene* m_Scene;
+		std::function<void()> m_MakeMenuFn;
 
 	};
 #pragma endregion

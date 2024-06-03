@@ -1,5 +1,6 @@
 #include "MenuComponent.h"
 #include <InputManager.h>
+#include <TextObjectComponent.h>
 
 void dae::MenuComponent::CycleGameMode(bool isMoveUp)
 {
@@ -43,11 +44,15 @@ void dae::MenuComponent::SkipLevel()
 			CreateLevel(m_SelectedGameMode, 2);
 		}	
 		else if (manager.GetScene(EnumStrings[SoloLevelName2])) {
-			CreateMenu();
+			if (auto go{ m_Scene->GetGameObject(EnumStrings[Names::Score1]) }) {
+				if (auto comp{ go->GetComponent<TextObjectComponent>() }) {
+ 					CreateHighscoreMenu(std::stoi(comp->GetName()), false);
+				}
+			}
 		}
 	}
 	else {
-		CreateMenu();
+		CreateHighscoreMenu(std::stoi(m_Scene->GetGameObject(EnumStrings[Names::Score1])->GetComponent<TextObjectComponent>()->GetName()), false);
 	}
 
 	manager.DeleteScene(scene);
