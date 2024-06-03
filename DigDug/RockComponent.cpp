@@ -62,10 +62,10 @@ void dae::RockComponent::Update()
 					go->AddComponent(std::make_unique<FloatingScoreComponent>(m_Scene, GetScore(), GetGameObject()->GetTransform()->GetFullPosition()));
 					m_Scene->Add(go);
 
+					m_DeathTimer = 999;
 					Event scoreEvent{ EventType::RockDeath };
 					Notify(GetGameObject(), scoreEvent);
 					GetGameObject()->MarkForDestroy();
-					m_DeathTimer = 999;
 				}
 			}
 		}

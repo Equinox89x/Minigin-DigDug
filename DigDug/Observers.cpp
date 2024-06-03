@@ -8,6 +8,7 @@
 #include "TextObjectComponent.h"
 #include "SteamHolder.h"
 #include "RockComponent.h"
+#include <FileReader.h>
 
 void dae::HealthObserver::Notify(GameObject* go, Event& event)
 {
@@ -71,6 +72,12 @@ void dae::EnemyDeathObserver::Notify(GameObject* /*go*/, Event& event)
 	case EventType::EnemyDeath:
 		auto enemies{ m_Scene->GetGameObjects(EnumStrings[Names::EnemyGeneral], false) };
 		if (enemies.size() <= 1) {
+			if (auto player{ m_Scene->GetGameObject(EnumStrings[Names::Player0]) }) {
+				if (auto comp{ player->GetComponent<ValuesComponent>() }) {
+					FileReader* file{ new FileReader("../Data/save.json") };
+					file->WriteData({ {"Score", std::to_string(comp->GetScores())} });
+				}
+			}
 			m_Scene->GetGameObject(EnumStrings[Names::Global])->GetComponent<MenuComponent>()->SkipLevel();
 		}
 		break;
@@ -86,6 +93,17 @@ void dae::RockDeathObserver::Notify(GameObject* go, Event& event)
 		auto player{ m_Scene->GetGameObject(EnumStrings[Names::PlayerGeneral] + std::to_string(comp->GetPlayerId())) };
 		ValuesComponent* valueComp{ player->GetComponent<ValuesComponent>() };
 		valueComp->IncreaseScore(comp->GetScore());
+
+		auto enemies{ m_Scene->GetGameObjects(EnumStrings[Names::EnemyGeneral], false) };
+		if (enemies.size() <= 1) {
+			if (auto playerScore{ m_Scene->GetGameObject(EnumStrings[Names::Player0]) }) {
+				if (auto scoreComp{ playerScore->GetComponent<ValuesComponent>() }) {
+					FileReader* file{ new FileReader("../Data/save.json") };
+					file->WriteData({ {"Score", std::to_string(scoreComp->GetScores())} });
+				}
+			}
+			m_Scene->GetGameObject(EnumStrings[Names::Global])->GetComponent<MenuComponent>()->SkipLevel();
+		}
 		break;
 	}
 }

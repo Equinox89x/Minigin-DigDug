@@ -56,14 +56,27 @@ const Document& dae::FileReader::ReadFile() {
 	return m_Document;
 }
 
-void dae::FileReader::WriteData(std::string dataKey, std::string data)
+void dae::FileReader::WriteData(std::map<std::string, std::string> dataKeys)
 {
-	std::ofstream file(m_FileName);
+	rapidjson::Document document;
+	document.SetObject();
+	rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+	for (auto& item : dataKeys) {
+		document.AddMember(rapidjson::StringRef(item.first.c_str()), rapidjson::StringRef(item.second.c_str()), allocator);
+	}
 
-	if (file.is_open()) {
-		file << dataKey + ":" + data << std::endl;
-		file << "+";
-		file.close();
+	rapidjson::StringBuffer buffer;
+	rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+	document.Accept(writer);
+
+	std::ofstream ofs(m_FileName);
+	if (ofs.is_open()) {
+		ofs << buffer.GetString();
+		ofs.close();
+		std::cout << "Successfully wrote JSON to " << m_FileName << std::endl;
+	}
+	else {
+		std::cerr << "Failed to open file " << m_FileName << std::endl;
 	}
 }
 

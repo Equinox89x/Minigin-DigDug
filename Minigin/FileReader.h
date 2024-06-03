@@ -28,7 +28,7 @@ namespace dae {
 		virtual void FixedUpdate() override {};
 		void Render() const override {};
 
-		void WriteData(std::string dataKey, std::string data);
+		void WriteData(std::map<std::string, std::string> dataKeys);
 		const Document& GetDocument() { return m_Document; };
 
 		void Open();

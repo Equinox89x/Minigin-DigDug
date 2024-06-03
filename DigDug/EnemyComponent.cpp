@@ -26,13 +26,13 @@ void dae::EnemyComponent::Update()
 void dae::EnemyComponent::Render() const
 {
 	//SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 255, 255, 255);
-	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_ScoreRect0);
+	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_Scoreect0);
 	//SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 0, 255, 255);
-	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_ScoreRect1);
+	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_Scoreect1);
 	//SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255);
-	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_ScoreRect2);
+	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_Scoreect2);
 	//SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 255, 0, 255);
-	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_ScoreRect3);
+	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_Scoreect3);
 
 }
 
