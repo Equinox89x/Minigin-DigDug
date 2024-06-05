@@ -123,6 +123,8 @@ void dae::MovingState::Init()
 
 void dae::MovingState::Update()
 {
+	if (m_IsVersus) return;
+
 	m_Timer -= Timer::GetInstance().GetDeltaTime();
 	if (m_Timer > 0) return;
 	if (MathLib::CalculateChance() >= 80) {

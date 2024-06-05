@@ -25,10 +25,11 @@ namespace dae {
         virtual void Update() = 0;
         virtual void Init() = 0;
 
-        void SetData(dae::Scene* scene, GameObject* go, EEnemyType enemyType) {
+        void SetData(dae::Scene* scene, GameObject* go, EEnemyType enemyType, bool isVersus) {
             m_Scene = scene;
             gameObject = go;
             EnemyType = enemyType;
+            m_IsVersus = isVersus;
         }
 
     protected:
@@ -36,7 +37,7 @@ namespace dae {
         GameObject* gameObject{ nullptr };
         MathLib::Movement m_Movement{ MathLib::Movement::DOWN };
         EEnemyType EnemyType{ EEnemyType::Pooka };
-
+        bool m_IsVersus{ false };
 
     };
 
@@ -92,7 +93,7 @@ namespace dae {
     class EnemyComponent final : public Component, public Subject
     {
     public:
-        EnemyComponent(Scene* scene, EEnemyType enemyType = EEnemyType::Pooka) : m_Scene{ scene }, EnemyType{ enemyType } { SetState(new MovingState); };
+        EnemyComponent(Scene* scene, EEnemyType enemyType = EEnemyType::Pooka, bool isVersus = false) : m_Scene{ scene }, EnemyType{ enemyType }, m_IsVersus{ isVersus } { SetState(new MovingState); };
         ~EnemyComponent();
         EnemyComponent(const EnemyComponent&) = delete;
         EnemyComponent(EnemyComponent&&) noexcept = delete;
@@ -109,7 +110,7 @@ namespace dae {
         void SetState(EnemyState* state) {
             delete m_State;
             m_State = state;
-            m_State->SetData(m_Scene, GetGameObject(), EnemyType);
+            m_State->SetData(m_Scene, GetGameObject(), EnemyType, m_IsVersus);
             m_State->Init();
         }
         EnemyState* GetState() { return m_State; };
@@ -123,6 +124,7 @@ namespace dae {
         Scene* m_Scene{ nullptr };
         int currentPumpStage{ 0 }, maxPumpStage{ 4 };
         MathLib::ELifeState m_PlayerState{ MathLib::ELifeState::ALIVE };
+        bool m_IsVersus{ false };
 
         EnemyState* m_State{ nullptr };
         EEnemyType EnemyType{ EEnemyType::Pooka };

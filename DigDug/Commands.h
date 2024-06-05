@@ -12,6 +12,7 @@
 #include "../DigDug/MenuComponent.h"
 #include "../DigDug/HighscoreComponent.h"
 #include "../DigDug/PlayerComponent.h"
+#include "../DigDug/EnemyComponent.h"
 
 namespace dae {
 
@@ -25,15 +26,28 @@ namespace dae {
 		{
 			if (!m_Scene->GetIsActive()) return;
 			auto player{ m_pObject->GetComponent<dae::EntityMovementComponent>() };
-			auto state{ m_pObject->GetComponent<PlayerComponent>()->GetState() };
-			if (state == MathLib::ELifeState::ALIVE || state == MathLib::ELifeState::INVINCIBLE) {
+
+
+			if (auto playerComp{ m_pObject->GetComponent<PlayerComponent>() }) {
+				auto state{ playerComp->GetState() };
+				if (state == MathLib::ELifeState::ALIVE || state == MathLib::ELifeState::INVINCIBLE) {
+					auto input{ m_pObject->GetComponent<dae::InputComponent>() };
+					auto tex{ m_pObject->GetComponent<dae::TextureComponent>() };
+
+					player->SetMovement(m_Movement);
+					input->SetMoveSpeed(m_MoveSpeed, m_Movement);
+					tex->SetTexture(m_Movement, m_TextureName + (player->GetShouldDig() ? "Dig.png" : ".png"), 0.1f, 2);
+				}
+			}
+			else {
 				auto input{ m_pObject->GetComponent<dae::InputComponent>() };
 				auto tex{ m_pObject->GetComponent<dae::TextureComponent>() };
 
 				player->SetMovement(m_Movement);
 				input->SetMoveSpeed(m_MoveSpeed, m_Movement);
-				tex->SetTexture(m_Movement, m_TextureName + (player->GetShouldDig() ? "Dig.png" : ".png"), 0.1f, 2);
+				tex->SetTexture(m_Movement, m_TextureName + ".png", 0.1f, 2);
 			}
+			
 		}
 
 	private:
@@ -100,6 +114,23 @@ namespace dae {
 
 		GameObject* m_pObject;
 		GameObject* m_pPumpObject;
+	};
+
+	class FygarFire final : public Command
+	{
+	public:
+		FygarFire(Scene* scene, GameObject* const object) : m_pObject(object), m_Scene{ scene } {}
+		void Execute() override
+		{
+			if (!m_Scene->GetIsActive()) return;
+
+			if (!m_pObject) return;
+			m_pObject->GetComponent<EnemyComponent>()->SetState(new BreatheFireState());
+		}
+	private:
+		Scene* m_Scene{ nullptr };
+
+		GameObject* m_pObject;
 	};
 	#pragma endregion
 
