@@ -11,6 +11,7 @@
 #include "../DigDug/PumpComponent.h"
 #include "../DigDug/MenuComponent.h"
 #include "../DigDug/HighscoreComponent.h"
+#include "../DigDug/PlayerComponent.h"
 
 namespace dae {
 
@@ -24,7 +25,8 @@ namespace dae {
 		{
 			if (!m_Scene->GetIsActive()) return;
 			auto player{ m_pObject->GetComponent<dae::EntityMovementComponent>() };
-			if (player->GetState() == MathLib::ELifeState::ALIVE || player->GetState() != MathLib::ELifeState::INVINCIBLE) {
+			auto state{ m_pObject->GetComponent<PlayerComponent>()->GetState() };
+			if (state == MathLib::ELifeState::ALIVE || state == MathLib::ELifeState::INVINCIBLE) {
 				auto input{ m_pObject->GetComponent<dae::InputComponent>() };
 				auto tex{ m_pObject->GetComponent<dae::TextureComponent>() };
 
