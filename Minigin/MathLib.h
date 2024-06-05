@@ -126,7 +126,7 @@ namespace MathLib {
 	};
 
 	enum ELifeState {
-		ALIVE, DEAD, RESPAWN, INVINCIBLE
+		ALIVE, DEAD, RESPAWN, INVINCIBLE, INFLATING
 	};
 
 	inline Side GetNonOverlappingSide(const SDL_Rect& rect1, const SDL_Rect& rect2) {

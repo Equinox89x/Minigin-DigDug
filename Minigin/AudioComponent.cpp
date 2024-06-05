@@ -5,13 +5,14 @@ void dae::AudioComponent::Init()
 	m_pAudioService = ServiceLocator::getAudio();
 	if (m_pAudioService == nullptr) return;
 
-	m_BeamSoundId = m_pAudioService->LoadSound("../Data/Sound/TractorBeam.wav");
+	m_PumpSoundId = m_pAudioService->LoadSound("../Data/Sound/Pump.wav");
 	m_ShootSoundId = m_pAudioService->LoadSound("../Data/Sound/ShootSound.wav");
-	m_BeamCapturedSoundId = m_pAudioService->LoadSound("../Data/Sound/TractorBeamCaptured.wav");
-	m_DeathSoundId = m_pAudioService->LoadSound("../Data/Sound/EnemyDeathSound.wav");
-	m_DiveSoundId = m_pAudioService->LoadSound("../Data/Sound/DiveSound.wav");
+	m_FiresoundId = m_pAudioService->LoadSound("../Data/Sound/Fire.wav");
+	m_GhostSoundId = m_pAudioService->LoadSound("../Data/Sound/EnemyMoving.wav");
+	m_PopSoundId = m_pAudioService->LoadSound("../Data/Sound/EnemyPop.wav");
 	m_PlayerDeathSoundId = m_pAudioService->LoadSound("../Data/Sound/PlayerDeathSound.wav");
-	m_MenuSoundId = m_pAudioService->LoadSound("../Data/Sound/Music.wav");
+	m_RockSoundId = m_pAudioService->LoadSound("../Data/Sound/RockSound.mp3");
+	m_pAudioService->LoadMusic(std::string("../Data/Sound/GameMusic.mp3").c_str());
 }
 
 void dae::AudioComponent::Update()
@@ -20,14 +21,15 @@ void dae::AudioComponent::Update()
 		m_pAudioService = ServiceLocator::getAudio();
 		if (m_pAudioService == nullptr) return;
 
-		m_BeamSoundId = m_pAudioService->LoadSound("../Data/Sound/TractorBeam.wav");
+		m_PumpSoundId = m_pAudioService->LoadSound("../Data/Sound/Pump.wav");
 		m_ShootSoundId = m_pAudioService->LoadSound("../Data/Sound/ShootSound.wav");
-		m_BeamCapturedSoundId = m_pAudioService->LoadSound("../Data/Sound/TractorBeamCaptured.wav");
-		m_DeathSoundId = m_pAudioService->LoadSound("../Data/Sound/EnemyDeathSound.wav");
-		m_DiveSoundId = m_pAudioService->LoadSound("../Data/Sound/DiveSound.wav");
+		m_FiresoundId = m_pAudioService->LoadSound("../Data/Sound/Fire.wav");
+		m_GhostSoundId = m_pAudioService->LoadSound("../Data/Sound/EnemyMoving.wav");
+		m_PopSoundId = m_pAudioService->LoadSound("../Data/Sound/EnemyPop.wav");
 		m_PlayerDeathSoundId = m_pAudioService->LoadSound("../Data/Sound/PlayerDeathSound.wav");
-		m_MenuSoundId = m_pAudioService->LoadSound("../Data/Sound/Music.wav");
-		PlayMenuSound();
+		m_RockSoundId = m_pAudioService->LoadSound("../Data/Sound/RockSound.mp3");
+		m_pAudioService->LoadMusic(std::string("../Data/Sound/GameMusic.mp3").c_str());
+		PlayGameMusicSound();
 	}
 }
 
@@ -38,11 +40,11 @@ void dae::AudioComponent::PlayPlayerDeathSound(bool shouldStopPreviousSound)
 	m_pAudioService->PlaySound(m_PlayerDeathSoundId);
 }
 
-void dae::AudioComponent::PlayDeathSound(bool shouldStopPreviousSound)
+void dae::AudioComponent::PlayPumpSound(bool shouldStopPreviousSound)
 {
 	if (shouldStopPreviousSound) m_pAudioService->StopSound();
 	m_pAudioService->SetEffectVolume(60);
-	m_pAudioService->PlaySound(m_DeathSoundId);
+	m_pAudioService->PlaySound(m_PumpSoundId);
 }
 
 void dae::AudioComponent::PlayShootSound(bool shouldStopPreviousSound)
@@ -52,32 +54,38 @@ void dae::AudioComponent::PlayShootSound(bool shouldStopPreviousSound)
 	m_pAudioService->PlaySound(m_ShootSoundId);
 }
 
-void dae::AudioComponent::PlayDiveSound(bool shouldStopPreviousSound)
+void dae::AudioComponent::PlayFireSound(bool shouldStopPreviousSound)
 {
 	if (shouldStopPreviousSound) m_pAudioService->StopSound();
 	m_pAudioService->SetEffectVolume(60);
-	m_pAudioService->PlaySound(m_DiveSoundId);
+	m_pAudioService->PlaySound(m_FiresoundId);
 }
 
-void dae::AudioComponent::PlayTractorBeamSound(bool shouldStopPreviousSound)
+void dae::AudioComponent::PlayGhostSound(bool shouldStopPreviousSound)
 {
 	if (shouldStopPreviousSound) m_pAudioService->StopSound();
 	m_pAudioService->SetEffectVolume(60);
-	m_pAudioService->PlaySound(m_BeamSoundId);
+	m_pAudioService->PlaySound(m_GhostSoundId);
 }
 
-void dae::AudioComponent::PlayCapturedTractorBeamSound(bool shouldStopPreviousSound)
+void dae::AudioComponent::PlayPopSound(bool shouldStopPreviousSound)
 {
 	if (shouldStopPreviousSound) m_pAudioService->StopSound();
 	m_pAudioService->SetEffectVolume(60);
-	m_pAudioService->PlaySound(m_BeamCapturedSoundId);
+	m_pAudioService->PlaySound(m_PopSoundId);
 }
 
-void dae::AudioComponent::PlayMenuSound(bool shouldStopPreviousSound)
+void dae::AudioComponent::PlayGameMusicSound()
+{
+	m_pAudioService->PlayMusic();
+	m_pAudioService->SetEffectVolume(60);
+}
+
+void dae::AudioComponent::PlayRockSound(bool shouldStopPreviousSound)
 {
 	if (shouldStopPreviousSound) m_pAudioService->StopSound();
-	m_pAudioService->PlaySound(m_MenuSoundId);
 	m_pAudioService->SetEffectVolume(60);
+	m_pAudioService->PlaySound(m_RockSoundId);
 }
 
 void dae::AudioComponent::StopSound()

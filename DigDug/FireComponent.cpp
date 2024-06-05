@@ -5,6 +5,10 @@
 
 void dae::FireComponent::Update()
 {
+	if (m_EnemyGameObject->IsMarkedForDestroy() && !GetGameObject()->IsMarkedForDestroy()) {
+		GetGameObject()->MarkForDestroy();
+	}
+
 	m_Timer -= Timer::GetInstance().GetDeltaTime();
 	if (m_Timer <= 0.f) {
 		m_FireFinished = true;

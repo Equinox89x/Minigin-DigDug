@@ -9,6 +9,8 @@
 #include "ResourceManager.h"
 #include "Renderer.h"
 #include "GameObject.h"
+#include <AudioComponent.h>
+#include "PlayerComponent.h"
 
 dae::EnemyComponent::~EnemyComponent()
 {
@@ -21,6 +23,16 @@ dae::EnemyComponent::~EnemyComponent()
 void dae::EnemyComponent::Update()
 {
 	m_State->Update();
+
+	//if (m_Scene) {
+	//	auto players{ m_Scene->GetGameObjects(EnumStrings[Names::PlayerGeneral], false) };
+	//	for (const auto& player : players) {
+	//		if (MathLib::IsOverlapping(GetGameObject()->GetComponent<TextureComponent>()->GetRect(), player->GetComponent<TextureComponent>()->GetRect())) {
+	//			auto comp{ player->GetComponent<PlayerComponent>() };
+	//			comp->Respawn();
+	//		}
+	//	}
+	//}
 }
 
 void dae::EnemyComponent::Render() const
@@ -43,6 +55,7 @@ void dae::EnemyComponent::Init()
 
 bool dae::EnemyComponent::PumpUp()
 {
+	m_PlayerState = MathLib::INFLATING;
 	currentPumpStage++;
 	GetGameObject()->GetComponent<TextureComponent>()->SetFrame(currentPumpStage);
 	if (currentPumpStage >= maxPumpStage) {
@@ -55,6 +68,8 @@ bool dae::EnemyComponent::PumpUp()
 
 void dae::DeathState::Init()
 {
+	gameObject->GetComponent<dae::AudioComponent>()->PlayPopSound();
+
 	gameObject->GetComponent<EnemyComponent>()->SetLifeState(MathLib::ELifeState::DEAD);
 	auto font{ ResourceManager::GetInstance().LoadFont("Emulogic.ttf", 10) };
 	auto pos{ gameObject->GetTransform()->GetFullPosition() };
@@ -132,6 +147,8 @@ void dae::InflatingState::Update()
 
 void dae::GhostState::Init()
 {
+	gameObject->GetComponent<dae::AudioComponent>()->PlayGhostSound();
+
 	auto players{ m_Scene->GetGameObjects(EnumStrings[Names::PlayerGeneral], false) };
 	int randNr{ MathLib::CalculateChance(static_cast<int>(players.size()) - 1) };
 
@@ -149,16 +166,17 @@ void dae::GhostState::Update()
 	float dy = m_CachedLocation.y - gameObject->GetCenter().y;
 	float distanceToTarget = std::sqrt(dx * dx + dy * dy);
 	if (distanceToTarget <= 1) {
+		//gameObject->GetComponent<dae::AudioComponent>()->StopSound();
 		gameObject->GetComponent<EnemyComponent>()->SetState(new MovingState());
 	}
 }
 
 void dae::BreatheFireState::Init()
 {
+	gameObject->GetComponent<dae::AudioComponent>()->PlayFireSound();
 	gameObject->GetComponent<EntityMovementComponent>()->DisableMovement(true);
 	gameObject->GetComponent<TextureComponent>()->SetTexture("Enemies/FygarPrepare.png", 0.2f, 3);	
 	gameObject->GetComponent<EnemyComponent>()->SetLifeState(MathLib::ELifeState::ALIVE);
-
 }
 
 void dae::BreatheFireState::Update()
@@ -181,6 +199,15 @@ void dae::BreatheFireState::Update()
 		if (fireObject->GetComponent<FireComponent>()->GetIsFireFinished()) {
 			fireObject->MarkForDestroy();
 			gameObject->GetComponent<EnemyComponent>()->SetState(new MovingState());
+		}
+		else {
+			auto players{ m_Scene->GetGameObjects(EnumStrings[Names::PlayerGeneral], false) };
+			for (const auto& player : players) {
+				if (MathLib::IsOverlapping(fireObject->GetComponent<TextureComponent>()->GetRect(), player->GetComponent<TextureComponent>()->GetRect())) {
+					auto comp{ player->GetComponent<PlayerComponent>() };
+					comp->Respawn();
+				}
+			}
 		}
 	}
 }

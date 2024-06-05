@@ -9,7 +9,7 @@ namespace dae {
     class PlayerComponent final : public Component
     {
     public:
-        PlayerComponent(Scene* scene) : m_Scene{ scene } { };
+        PlayerComponent(Scene* scene, glm::vec2 startPos) : m_Scene{ scene }, m_OriginalPosition{ startPos } { };
         ~PlayerComponent() = default;
         PlayerComponent(const PlayerComponent&) = delete;
         PlayerComponent(PlayerComponent&&) noexcept = delete;
@@ -19,11 +19,14 @@ namespace dae {
         virtual void Render() const override;
         virtual void Init() override;
         MathLib::ELifeState GetState() { return m_PlayerState; };
+        void Respawn();
 
     private:
         Scene* m_Scene{ nullptr };
 
         MathLib::ELifeState m_PlayerState{ MathLib::ELifeState::ALIVE };
+        glm::vec2 m_OriginalPosition;
+        float m_InvincibilityTimer{ 3 };
     };
 }
 

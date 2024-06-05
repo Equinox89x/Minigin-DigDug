@@ -56,6 +56,7 @@ void dae::GameObject::Update() {
 
 	for (auto& comp : m_pComponents)
 	{
+		if (m_pComponents.size() <= 0) break;
 		if(!comp->IsMarkedForDestroy()) comp->Update();
 	}
 
@@ -64,13 +65,17 @@ void dae::GameObject::Update() {
 		child->Update();
 	}
 
-	m_pComponents.erase(std::remove_if(m_pComponents.begin(), m_pComponents.end(),
-		[](const std::unique_ptr<Component>& comp) { return comp->IsMarkedForDestroy(); }),
-		m_pComponents.end());
+	if (m_pComponents.size() > 0) {
+		m_pComponents.erase(std::remove_if(m_pComponents.begin(), m_pComponents.end(),
+			[](const std::unique_ptr<Component>& comp) { return comp->IsMarkedForDestroy(); }),
+			m_pComponents.end());
+	}
 
-	m_pChildren.erase(std::remove_if(m_pChildren.begin(), m_pChildren.end(),
-		[](GameObject* child) { return child->IsMarkedForDestroy(); }),
-		m_pChildren.end());
+	if (m_pChildren.size() > 0) {
+		m_pChildren.erase(std::remove_if(m_pChildren.begin(), m_pChildren.end(),
+			[](GameObject* child) { return child->IsMarkedForDestroy(); }),
+			m_pChildren.end());
+	}
 }
 
 void dae::GameObject::LateUpdate()

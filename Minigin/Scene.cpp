@@ -71,12 +71,15 @@ void Scene::Update()
 {
 	for (auto& object : m_objects)
     {
-        object->Update();
+		if (m_objects.size() <= 0) break;
+		object->Update();
     }
 
-	m_objects.erase(std::remove_if(m_objects.begin(), m_objects.end(),
-		[](const std::shared_ptr<GameObject>& obj) { return obj && obj->IsMarkedForDestroy(); }),
-		m_objects.end());
+	if (m_objects.size() > 0) {
+		m_objects.erase(std::remove_if(m_objects.begin(), m_objects.end(),
+			[](const std::shared_ptr<GameObject>& obj) { return obj && obj->IsMarkedForDestroy(); }),
+			m_objects.end());
+	}
 }
 
 void Scene::Render() const

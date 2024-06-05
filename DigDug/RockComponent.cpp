@@ -5,6 +5,8 @@
 #include <TextObjectComponent.h>
 #include "FloatingScoreComponent.h"
 #include "ResourceManager.h"
+#include <AudioComponent.h>
+#include "PlayerComponent.h"
 
 void dae::RockComponent::Update()
 {
@@ -15,15 +17,18 @@ void dae::RockComponent::Update()
 	rect.y += rect.h;
 
 	bool isOverlapping{ false };
-	for (const auto& player : players) {
-		if (MathLib::IsOverlapping(rect, player->GetComponent<TextureComponent>()->GetRect())) {
-			m_PlayerHasPassed = true;
-			isOverlapping = true;
+	if (!m_Skipcheck) {
+		for (const auto& player : players) {
+			if (MathLib::IsOverlapping(rect, player->GetComponent<TextureComponent>()->GetRect())) {
+				m_PlayerHasPassed = true;
+				isOverlapping = true;
+			}
 		}
 	}
 
 	if (m_PlayerHasPassed && !isOverlapping) {
 		m_Skipcheck = true;
+		GetGameObject()->GetComponent<AudioComponent>()->PlayRockSound();
 	}
 
 	if (m_Skipcheck) {
@@ -49,6 +54,13 @@ void dae::RockComponent::Update()
 				}
 			}
 
+			for (const auto& player : players) {
+				if (MathLib::IsOverlapping(rect, player->GetComponent<TextureComponent>()->GetRect())) {
+					auto comp{ player->GetComponent<PlayerComponent>() };
+					comp->Respawn();
+				}
+			}
+
 
 			if (m_MoveTimer > 0) {
 				m_MoveTimer -= dt;
@@ -71,12 +83,7 @@ void dae::RockComponent::Update()
 					Event scoreEvent{ EventType::RockDeath };
 					Notify(GetGameObject(), scoreEvent);
 					//GetGameObject()->MarkForDestroy();
-					if (auto object{ GetGameObject() }) {
-						if (auto comp{ object->GetComponent<TextureComponent>() }) {
-							if (comp->IsMarkedForDestroy()) return;
-							comp->SetIsVisible(false);
-						}
-					}
+					
 				}
 			}
 		}

@@ -57,3 +57,12 @@ void dae::MenuComponent::SkipLevel()
 
 	manager.DeleteScene(scene);
 }
+
+void dae::MenuComponent::GameOver()
+{
+	auto& manager = SceneManager::GetInstance();
+	auto scene = manager.GetActiveScene();
+	Input::GetInstance().ClearKeys();
+	CreateHighscoreMenu();
+	manager.DeleteScene(scene);
+}

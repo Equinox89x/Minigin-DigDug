@@ -19,10 +19,9 @@ namespace dae {
         MenuComponent& operator=(MenuComponent&&) noexcept = delete;
 
         void CycleGameMode(bool isMoveUp);
-
         void StartGame(GameObject* pMenu);
-
         void SkipLevel();
+        void GameOver();
 
     private:
         Scene* m_Scene{ nullptr };

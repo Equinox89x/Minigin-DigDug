@@ -16,25 +16,26 @@ namespace dae {
 		virtual void Init() override;
 		virtual void Update() override;
 
-		void PlayPlayerDeathSound(bool shouldStopPreviousSound = true);
-		void PlayDeathSound(bool shouldStopPreviousSound = true);
-		void PlayShootSound(bool shouldStopPreviousSound = true);
-		void PlayDiveSound(bool shouldStopPreviousSound = true);
-		void PlayTractorBeamSound(bool shouldStopPreviousSound = true);
-		void PlayCapturedTractorBeamSound(bool shouldStopPreviousSound = true);
-		void PlayMenuSound(bool shouldStopPreviousSound = true);
+		void PlayPlayerDeathSound(bool shouldStopPreviousSound = false);
+		void PlayPumpSound(bool shouldStopPreviousSound = false);
+		void PlayShootSound(bool shouldStopPreviousSound = false);
+		void PlayFireSound(bool shouldStopPreviousSound = false);
+		void PlayGhostSound(bool shouldStopPreviousSound = false);
+		void PlayPopSound(bool shouldStopPreviousSound = false);
+		void PlayGameMusicSound();
+		void PlayRockSound(bool shouldStopPreviousSound = false);
 		void StopSound();
 
 	private:
 		Audio* m_pAudioService{ nullptr };
 
-		int m_BeamSoundId{ 0 };
+		int m_PumpSoundId{ 0 };
 		int m_ShootSoundId{ 0 };
-		int m_DiveSoundId{ 0 };
-		int m_BeamCapturedSoundId{ 0 };
-		int m_DeathSoundId{ 0 };
+		int m_FiresoundId{ 0 };
+		int m_GhostSoundId{ 0 };
+		int m_PopSoundId{ 0 };
 		int m_PlayerDeathSoundId{ 0 };
-		int m_MenuSoundId{ 0 };
+		int m_RockSoundId{ 0 };
 
 	};
 }

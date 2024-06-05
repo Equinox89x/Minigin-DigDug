@@ -24,14 +24,14 @@ namespace dae {
 		{
 			if (!m_Scene->GetIsActive()) return;
 			auto player{ m_pObject->GetComponent<dae::EntityMovementComponent>() };
-			if (player->GetState() == MathLib::ELifeState::DEAD) return;
+			if (player->GetState() == MathLib::ELifeState::ALIVE || player->GetState() != MathLib::ELifeState::INVINCIBLE) {
+				auto input{ m_pObject->GetComponent<dae::InputComponent>() };
+				auto tex{ m_pObject->GetComponent<dae::TextureComponent>() };
 
-			auto input{ m_pObject->GetComponent<dae::InputComponent>() };
-			auto tex{ m_pObject->GetComponent<dae::TextureComponent>() };
-
-			player->SetMovement(m_Movement);
-			input->SetMoveSpeed(m_MoveSpeed, m_Movement);
-			tex->SetTexture(m_Movement, m_TextureName + (player->GetShouldDig() ? "Dig.png" : ".png"), 0.1f, 2);
+				player->SetMovement(m_Movement);
+				input->SetMoveSpeed(m_MoveSpeed, m_Movement);
+				tex->SetTexture(m_Movement, m_TextureName + (player->GetShouldDig() ? "Dig.png" : ".png"), 0.1f, 2);
+			}
 		}
 
 	private:
@@ -88,7 +88,7 @@ namespace dae {
 			if (!m_Scene->GetIsActive()) return;
 
 			if (!m_pObject && !m_pPumpObject) return;
-			m_pObject->GetComponent<dae::AudioComponent>()->PlayShootSound();
+			m_pObject->GetComponent<dae::AudioComponent>()->PlayPumpSound();
 			m_pObject->GetComponent<dae::EntityMovementComponent>()->DisableMovement(true);
 			m_pObject->GetComponent<dae::InputComponent>()->DisableMovement(true);
 			m_pPumpObject->GetComponent<dae::PumpComponent>()->Pump(m_pObject->GetTransform()->GetWorldPosition());
