@@ -53,12 +53,17 @@ void dae::PlayerComponent::Respawn()
 {
 	if (!GetGameObject()) return;
 	if (GetGameObject()->IsMarkedForDestroy()) return;
-	if (m_PlayerState == MathLib::ALIVE && m_PlayerState != MathLib::INVINCIBLE) {
-		m_PlayerState = MathLib::RESPAWN;
+	if (GetGameObject()->GetComponent<ValuesComponent>()->GetLives() > 0) {
+		if (m_PlayerState == MathLib::ALIVE && m_PlayerState != MathLib::INVINCIBLE) {
+			m_PlayerState = MathLib::RESPAWN;
+			GetGameObject()->GetComponent<ValuesComponent>()->Damage();
+			GetGameObject()->GetTransform()->Translate(m_OriginalPosition);
+			GetGameObject()->GetComponent<TextureComponent>()->SetIsVisible(false);
+			GetGameObject()->GetComponent<InputComponent>()->DisableMovement(true);
+			GetGameObject()->GetComponent<EntityMovementComponent>()->DisableMovement(true);
+		}
+	}
+	else {
 		GetGameObject()->GetComponent<ValuesComponent>()->Damage();
-		GetGameObject()->GetTransform()->Translate(m_OriginalPosition);
-		GetGameObject()->GetComponent<TextureComponent>()->SetIsVisible(false);
-		GetGameObject()->GetComponent<InputComponent>()->DisableMovement(true);
-		GetGameObject()->GetComponent<EntityMovementComponent>()->DisableMovement(true);
 	}
 }
