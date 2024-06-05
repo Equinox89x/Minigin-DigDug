@@ -15,6 +15,9 @@ void dae::RockComponent::Update()
 	auto players{ m_Scene->GetGameObjects(EnumStrings[Names::PlayerGeneral], false) };
 	auto rect{ GetGameObject()->GetComponent<TextureComponent>()->GetRect() };
 	rect.y += rect.h;
+	rect.w /= 2;
+	rect.x+= rect.w;
+	rect.h /= 2;
 
 	bool isOverlapping{ false };
 	if (!m_Skipcheck) {

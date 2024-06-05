@@ -53,6 +53,7 @@ namespace dae {
         void DisableMovement(bool isDisabled) { m_CanMove = !isDisabled; };
         MathLib::Movement GetDirection() { return m_Movement; };
         std::string GetLastDirection() { return m_LastDir; }
+        void SetLastDirection(std::string dir) { m_LastDir = dir; }
 
         void SetEnemyName(std::string enemyName) {
             m_EnemyName = enemyName;

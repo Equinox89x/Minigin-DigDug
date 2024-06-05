@@ -43,6 +43,12 @@ namespace dae {
 				auto input{ m_pObject->GetComponent<dae::InputComponent>() };
 				auto tex{ m_pObject->GetComponent<dae::TextureComponent>() };
 
+				if (m_Movement == MathLib::Movement::LEFT) {
+					player->SetLastDirection("Left");
+				}
+				else if (m_Movement == MathLib::Movement::RIGHT) {
+					player->SetLastDirection("Right");
+				}
 				player->SetMovement(m_Movement);
 				input->SetMoveSpeed(m_MoveSpeed, m_Movement);
 				tex->SetTexture(m_Movement, m_TextureName + ".png", 0.1f, 2);

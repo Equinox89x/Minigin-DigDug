@@ -59,14 +59,14 @@
                 "index": 0,
                 "tiles": [
                     "undug|undug|undug|undug|undug|undug|undug|undug|rock|undug|undug|undug|undug|undug",
-                    "undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug",
-                    "undug|undug|undug|undug|undug|rock|undug|undug|undug|undug|undug|undug|undug|undug",
-                    "undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug",
-                    "undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug",
-                    "undug|undug|rock|undug|undug|undug|undug|undug|undug|rock|undug|undug|undug|undug",
-                    "undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug",
-                    "undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug",
-                    "undug|dug|spawn|dug|undug|undug|undug|undug|undug|undug|dug|spawn|dug|undug",
+                    "undug|undug|undug|undug|rock|undug|undug|undug|undug|undug|undug|undug|undug|undug",
+                    "undug|undug|dug|dug|dug|dug|dug|dug|dug|dug|dug|dug|undug|undug",
+                    "undug|undug|dug|dug|dug|dug|dug|dug|dug|dug|dug|dug|undug|undug",
+                    "undug|undug|dug|undug|undug|undug|undug|rock|undug|undug|undug|dug|undug|undug",
+                    "undug|undug|dug|dug|dug|dug|dug|dug|dug|dug|dug|dug|undug|undug",
+                    "undug|undug|dug|dug|dug|dug|dug|dug|dug|dug|dug|dug|undug|undug",
+                    "undug|undug|dug|undug|undug|undug|undug|undug|undug|undug|undug|dug|undug|undug",
+                    "undug|dug|spawn|dug|dug|dug|dug|dug|dug|dug|dug|spawn|dug|undug",
                     "undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug|undug"
                 ]
             }

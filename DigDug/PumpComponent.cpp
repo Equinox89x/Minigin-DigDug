@@ -58,7 +58,9 @@ void dae::PumpComponent::AttachPump(GameObject* enemy)
 	m_SelectedEnemy = enemy;
 	m_SelectedEnemy->GetComponent<EnemyComponent>()->SetPlayer(m_Player);
 	auto comp{ m_SelectedEnemy->GetComponent<dae::EntityMovementComponent>() };
-	m_SelectedEnemy->GetComponent<TextureComponent>()->SetTexture("Enemies/"+ comp->GetEnemyName() + "Inflate.png", 0.f, 4, true, false);
+
+	auto dir{ m_SelectedEnemy->GetComponent<EntityMovementComponent>()->GetLastDirection() };
+	m_SelectedEnemy->GetComponent<TextureComponent>()->SetTexture("Enemies/"+ comp->GetEnemyName() + "Inflate"+ dir +".png", 0.f, 4, true, false);
 	comp->DisableMovement(true);
 	m_CanMove = false;
 	m_Player->GetComponent<dae::EntityMovementComponent>()->DisableMovement(true);

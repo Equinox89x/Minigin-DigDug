@@ -177,7 +177,8 @@ void dae::BreatheFireState::Init()
 {
 	gameObject->GetComponent<dae::AudioComponent>()->PlayFireSound();
 	gameObject->GetComponent<EntityMovementComponent>()->DisableMovement(true);
-	gameObject->GetComponent<TextureComponent>()->SetTexture("Enemies/FygarPrepare.png", 0.2f, 3);	
+	auto dir{ gameObject->GetComponent<EntityMovementComponent>()->GetLastDirection() };
+	gameObject->GetComponent<TextureComponent>()->SetTexture("Enemies/FygarPrepare"+dir+".png", 0.2f, 3);	
 	gameObject->GetComponent<EnemyComponent>()->SetLifeState(MathLib::ELifeState::ALIVE);
 }
 

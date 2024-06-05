@@ -75,7 +75,12 @@ void dae::EntityMovementComponent::Update()
 			CheckMovement(comp->GetPathways());
 		}
 
-
+		if (dx < 0) {
+			m_LastDir = "Left";
+		}
+		else if (dx > 0) {
+			m_LastDir = "Right";
+		}
 
 		//m_Movement == MathLib::LEFT ? m_LastDir = "Left" : m_LastDir = "Right";
 		//dx < 0 ? m_Movement = MathLib::LEFT : m_Movement = MathLib::RIGHT;

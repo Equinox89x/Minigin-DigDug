@@ -16,13 +16,22 @@ void dae::FireComponent::Update()
 	else if (m_Timer <= 0.2f) {
 		//GetGameObject()->GetComponent<TextureComponent>()->SetTexture("Enemies/Flame3.png", 0.1f, 1);
 		GetGameObject()->GetComponent<TextureComponent>()->SetTexture("Enemies/Flame3"+m_Direction+".png", 0.1f, 1);
+		if(m_Direction == "Left"){
+			GetGameObject()->GetTransform()->TranslateWorld(m_OriginLocation.x - GetGameObject()->GetComponent<TextureComponent>()->GetRect().w, m_OriginLocation.y);
+		}
 	}
 	else if (m_Timer <= 0.4f) {
 		//GetGameObject()->GetComponent<TextureComponent>()->SetTexture("Enemies/Flame2.png", 0.1f, 1);
-		GetGameObject()->GetComponent<TextureComponent>()->SetTexture("Enemies/Flame2"+m_Direction+".png", 0.1f, 1);
+		GetGameObject()->GetComponent<TextureComponent>()->SetTexture("Enemies/Flame2" + m_Direction + ".png", 0.1f, 1);
+		if (m_Direction == "Left") {
+			GetGameObject()->GetTransform()->TranslateWorld(m_OriginLocation.x - GetGameObject()->GetComponent<TextureComponent>()->GetRect().w, m_OriginLocation.y);
+		}
 	}
 	else if (m_Timer <= 0.6f) {
-		GetGameObject()->GetComponent<TextureComponent>()->SetTexture("Enemies/Flame1"+m_Direction+".png", 0.1f, 1);
+		GetGameObject()->GetComponent<TextureComponent>()->SetTexture("Enemies/Flame1" + m_Direction + ".png", 0.1f, 1);
+		if (m_Direction == "Left") {
+			GetGameObject()->GetTransform()->TranslateWorld(m_OriginLocation.x - GetGameObject()->GetComponent<TextureComponent>()->GetRect().w, m_OriginLocation.y);
+		}
 		//GetGameObject()->GetComponent<TextureComponent>()->SetTexture("Enemies/Flame1.png", 0.1f, 1);
 	}
 }
@@ -34,7 +43,7 @@ void dae::FireComponent::Init()
 		auto direction{ m_EnemyGameObject->GetComponent<EntityMovementComponent>()->GetDirection() };
 
 		GetGameObject()->GetTransform()->TranslateWorld(m_OriginLocation);
-			GetGameObject()->GetTransform()->SetScale(glm::vec2{ 2.4f, 2.4f });
+		GetGameObject()->GetTransform()->SetScale(glm::vec2{ 2.4f, 2.4f });
 		if(direction == MathLib::Movement::LEFT){
 			//GetGameObject()->GetTransform()->SetScale(glm::vec2{ -2.4f, 2.4f });
 			m_Direction = "Left";
