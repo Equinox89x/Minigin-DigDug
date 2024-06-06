@@ -140,10 +140,10 @@ void dae::HighscoreComponent::MapControllerInput(int id, Input::InputKey& upCanc
 	blow = std::make_tuple(ButtonStates::BUTTON_PRESSED, ControllerButton::ButtonA, id);
 }
 void dae::HighscoreComponent::MapKeyboardInput(int id, Input::InputKey& upCancel, Input::InputKey& downCancel, Input::InputKey& leftCancel, Input::InputKey& rightCancel, Input::InputKey& blow) {
-	upCancel = std::make_tuple(ButtonStates::BUTTON_PRESSED, SDLK_UP, id);
-	downCancel = std::make_tuple(ButtonStates::BUTTON_PRESSED, SDLK_DOWN, id);
-	leftCancel = std::make_tuple(ButtonStates::BUTTON_PRESSED, SDLK_LEFT, id);
-	rightCancel = std::make_tuple(ButtonStates::BUTTON_PRESSED, SDLK_RIGHT, id);
+	upCancel = std::make_tuple(ButtonStates::BUTTON_PRESSED, SDLK_w, id);
+	downCancel = std::make_tuple(ButtonStates::BUTTON_PRESSED, SDLK_s, id);
+	leftCancel = std::make_tuple(ButtonStates::BUTTON_PRESSED, SDLK_a, id);
+	rightCancel = std::make_tuple(ButtonStates::BUTTON_PRESSED, SDLK_d, id);
 
 	blow = std::make_tuple(ButtonStates::BUTTON_PRESSED, SDLK_SPACE, id);
 }
