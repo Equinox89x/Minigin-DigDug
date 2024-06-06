@@ -130,11 +130,12 @@ void dae::HighscoreComponent::MakePlayerInput(Input::InputKey& upCancel, Input::
 	Input::GetInstance().BindKey(rightCancel, std::make_unique<MoveKeyboardCursor>(m_Scene, GetGameObject(), glm::vec2{1,0}));
 }
 
-void dae::HighscoreComponent::MapControllerInput(int id, Input::InputKey& upCancel, Input::InputKey& downCancel, Input::InputKey& leftCancel, Input::InputKey& rightCancel, Input::InputKey& blow){
-	upCancel = std::make_tuple(ButtonStates::BUTTON_PRESSED, ControllerButton::DpadUp, id);
-	downCancel = std::make_tuple(ButtonStates::BUTTON_PRESSED, ControllerButton::DpadDown, id);
-	leftCancel = std::make_tuple(ButtonStates::BUTTON_PRESSED, ControllerButton::DpadLeft, id);
-	rightCancel = std::make_tuple(ButtonStates::BUTTON_PRESSED, ControllerButton::DpadRight, id);
+void dae::HighscoreComponent::MapControllerInput(int id, Input::InputKey& upCancel, Input::InputKey& /*downCancel*/, Input::InputKey& /*leftCancel*/, Input::InputKey& /*rightCancel*/, Input::InputKey& blow){
+	upCancel = std::make_tuple(ButtonStates::BUTTON_PRESSED, ControllerButton::JoystickLeft, id);
+	//upCancel = std::make_tuple(ButtonStates::BUTTON_PRESSED, ControllerButton::DpadUp, id);
+	//downCancel = std::make_tuple(ButtonStates::BUTTON_PRESSED, ControllerButton::DpadDown, id);
+	//leftCancel = std::make_tuple(ButtonStates::BUTTON_PRESSED, ControllerButton::DpadLeft, id);
+	//rightCancel = std::make_tuple(ButtonStates::BUTTON_PRESSED, ControllerButton::DpadRight, id);
 
 	blow = std::make_tuple(ButtonStates::BUTTON_PRESSED, ControllerButton::ButtonA, id);
 }
