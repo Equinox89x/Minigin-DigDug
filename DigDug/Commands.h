@@ -27,7 +27,6 @@ namespace dae {
 			if (!m_Scene->GetIsActive()) return;
 			auto player{ m_pObject->GetComponent<dae::EntityMovementComponent>() };
 
-
 			if (auto playerComp{ m_pObject->GetComponent<PlayerComponent>() }) {
 				auto state{ playerComp->GetState() };
 				if (state == MathLib::ELifeState::ALIVE || state == MathLib::ELifeState::INVINCIBLE) {
@@ -35,7 +34,7 @@ namespace dae {
 					auto tex{ m_pObject->GetComponent<dae::TextureComponent>() };
 
 					player->SetMovement(m_Movement);
-					input->SetMoveSpeed(m_MoveSpeed, m_Movement);
+					input->SetMoveSpeed(m_MoveSpeed, m_Movement, false);
 					tex->SetTexture(m_Movement, m_TextureName + (player->GetShouldDig() ? "Dig.png" : ".png"), 0.1f, 2);
 				}
 			}
@@ -50,11 +49,60 @@ namespace dae {
 					player->SetLastDirection("Right");
 				}
 				player->SetMovement(m_Movement);
-				input->SetMoveSpeed(m_MoveSpeed, m_Movement);
+				input->SetMoveSpeed(m_MoveSpeed, m_Movement, false);
 				tex->SetTexture(m_Movement, m_TextureName + ".png", 0.1f, 2);
 			}
 			
 		}
+		void Execute(glm::vec2 pos) override {
+			if (!m_Scene->GetIsActive()) return;
+
+			m_MoveSpeed = glm::vec3{ pos.x * 100,pos.y * -100, 0 };
+			if (pos.x > 0) {
+				m_Movement = MathLib::RIGHT;
+				m_TextureName = "Character/moveRight";
+			}
+			else if (pos.x < 0) {
+				m_Movement = MathLib::LEFT;
+				m_TextureName = "Character/moveLeft";
+			}
+			else if (pos.y > 0) {
+				m_Movement = MathLib::UP;
+				m_TextureName = "Character/moveUp";
+			}
+			else if (pos.y < 0) {
+				m_Movement = MathLib::DOWN;
+				m_TextureName = "Character/moveDown";
+			}
+
+			auto player{ m_pObject->GetComponent<dae::EntityMovementComponent>() };
+
+			if (auto playerComp{ m_pObject->GetComponent<PlayerComponent>() }) {
+				auto state{ playerComp->GetState() };
+				if (state == MathLib::ELifeState::ALIVE || state == MathLib::ELifeState::INVINCIBLE) {
+					auto input{ m_pObject->GetComponent<dae::InputComponent>() };
+					auto tex{ m_pObject->GetComponent<dae::TextureComponent>() };
+
+					player->SetMovement(m_Movement);
+					input->SetMoveSpeed(m_MoveSpeed, m_Movement, true);
+					tex->SetTexture(m_Movement, m_TextureName + (player->GetShouldDig() ? "Dig.png" : ".png"), 0.1f, 2);
+				}
+			}
+			else {
+				auto input{ m_pObject->GetComponent<dae::InputComponent>() };
+				auto tex{ m_pObject->GetComponent<dae::TextureComponent>() };
+
+				if (m_Movement == MathLib::Movement::LEFT) {
+					player->SetLastDirection("Left");
+				}
+				else if (m_Movement == MathLib::Movement::RIGHT) {
+					player->SetLastDirection("Right");
+				}
+				player->SetMovement(m_Movement);
+				input->SetMoveSpeed(m_MoveSpeed, m_Movement, true);
+				tex->SetTexture(m_Movement, m_TextureName + ".png", 0.1f, 2);
+			}
+		};
 
 	private:
 		Scene* m_Scene{ nullptr };
@@ -76,6 +124,8 @@ namespace dae {
 			m_pObject->GetComponent<dae::InputComponent>()->StopMovement(m_Movement);
 			m_pObject->GetComponent<dae::TextureComponent>()->RemoveTexture(m_Movement);
 		}
+		void Execute(glm::vec2) override {};
+
 	private:
 		Scene* m_Scene{ nullptr };
 		dae::GameObject* m_pObject;
@@ -94,6 +144,8 @@ namespace dae {
 
 			m_pObject->GetComponent<ValuesComponent>()->IncreaseScore(100);
 		}
+		void Execute(glm::vec2) override {};
+
 	private:
 		Scene* m_Scene{ nullptr };
 
@@ -115,6 +167,8 @@ namespace dae {
 			m_pObject->GetComponent<dae::InputComponent>()->DisableMovement(true);
 			m_pPumpObject->GetComponent<dae::PumpComponent>()->Pump(m_pObject->GetTransform()->GetWorldPosition());
 		}
+		void Execute(glm::vec2) override {};
+
 	private:
 		Scene* m_Scene{ nullptr };
 
@@ -133,6 +187,8 @@ namespace dae {
 			if (!m_pObject) return;
 			m_pObject->GetComponent<EnemyComponent>()->SetState(new BreatheFireState());
 		}
+		void Execute(glm::vec2) override {};
+
 	private:
 		Scene* m_Scene{ nullptr };
 
@@ -151,6 +207,17 @@ namespace dae {
 
 			m_pObject->GetComponent<MenuComponent>()->CycleGameMode(m_IsMoveUp);
 		}
+		void Execute(glm::vec2 pos) override {
+			if (!m_Scene->GetIsActive()) return;
+
+			if (pos.y > 0) {
+				m_pObject->GetComponent<MenuComponent>()->CycleGameMode(true);
+			}
+			else if(pos.y < 0) {
+				m_pObject->GetComponent<MenuComponent>()->CycleGameMode(false);
+			}
+		};
+
 	private:
 		Scene* m_Scene{ nullptr };
 
@@ -168,6 +235,8 @@ namespace dae {
 
 			m_pObject->GetComponent<MenuComponent>()->StartGame(m_pObject->GetParent());
 		}
+		void Execute(glm::vec2) override {};
+
 	private:
 		Scene* m_Scene{ nullptr };
 
@@ -186,6 +255,8 @@ namespace dae {
 
 			m_pObject->GetComponent<MenuComponent>()->SkipLevel();
 		}
+		void Execute(glm::vec2) override {};
+
 	private:
 		Scene* m_Scene;
 		GameObject* m_pObject;
@@ -203,6 +274,8 @@ namespace dae {
 			if (!m_Scene->GetIsActive()) return;
 			m_pObject->GetComponent<HighscoreComponent>()->MoveCursor(m_Key);
 		}
+		void Execute(glm::vec2) override {};
+
 	private:
 		Scene* m_Scene;
 		GameObject* m_pObject;
@@ -219,6 +292,8 @@ namespace dae {
 			if (!m_Scene->GetIsActive()) return;
 			m_pObject->GetComponent<HighscoreComponent>()->Select();
 		}
+		void Execute(glm::vec2) override {};
+
 	private:
 		Scene* m_Scene;
 		GameObject* m_pObject;
@@ -237,6 +312,8 @@ namespace dae {
 			m_MakeMenuFn();
 			SceneManager::GetInstance().DeleteScene(scene);
 		}
+		void Execute(glm::vec2) override {};
+
 	private:
 		Scene* m_Scene;
 		std::function<void()> m_MakeMenuFn;

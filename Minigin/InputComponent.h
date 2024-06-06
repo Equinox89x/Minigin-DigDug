@@ -13,7 +13,7 @@ namespace dae
 	{
 	public:
 
-		InputComponent(Scene* scene, glm::vec3 startPos) : m_Scene{scene}, m_StartPos { startPos }, m_Movespeed{ 0,0,0 } {}
+		InputComponent(Scene* scene, glm::vec3 startPos, bool isController) : m_Scene{ scene }, m_StartPos{ startPos }, m_Movespeed{ 0,0,0 }, m_IsController{ isController } {}
 		~InputComponent() {};
 		InputComponent(const InputComponent& other) = delete;
 		InputComponent(InputComponent&& other) = delete;
@@ -25,7 +25,7 @@ namespace dae
 		void Render() const override {};
 
 		void SetMoveSpeed(const glm::vec3& movespeed);
-		void SetMoveSpeed(const glm::vec3& movespeed, MathLib::Movement direction);
+		void SetMoveSpeed(const glm::vec3& movespeed, MathLib::Movement direction, bool isController);
 		void StopMovement(MathLib::Movement direction);
 		void SetCanMove(MathLib::Side side, bool canMove) {
 			m_Movement[side] = canMove;
@@ -38,7 +38,7 @@ namespace dae
 		glm::vec3 m_StartPos;
 		glm::vec3 m_Movespeed;
 
-		bool m_CanMove{ true };
+		bool m_CanMove{ true }, m_IsController{false};
 
 		std::map<MathLib::Movement, const glm::vec3> m_MoveSpeedList{};
 

@@ -23,6 +23,8 @@ namespace dae {
         void SkipLevel();
         void GameOver();
 
+        void Update() override;
+
     private:
         Scene* m_Scene{ nullptr };
 
@@ -34,5 +36,6 @@ namespace dae {
 
         std::function<void(MathLib::GameMode gm, int levelIndex)> CreateLevel;
         std::function<void()> CreateHighscoreMenu;
+        float m_ControlTimer{ 0.2f };
     };
 }

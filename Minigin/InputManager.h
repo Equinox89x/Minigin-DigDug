@@ -7,7 +7,8 @@
 #include <Windows.h>
 #include <Xinput.h>
 #include <variant>
-
+#include <glm/ext/vector_float2.hpp>
+#include <glm/ext/vector_float3.hpp>
 #define MAX_PLAYERS 2
 
 namespace dae
@@ -28,7 +29,9 @@ namespace dae
 		LeftShoulder = 0x0100,
 		RightShoulder = 0x0200,
 		Start = 0x0010,
-		Back = 0x0020
+		Back = 0x0020,
+		JoystickLeft = 99999999,
+		JoystickRight = 88888888,
 	};
 
 	enum class ButtonStates
@@ -58,7 +61,6 @@ namespace dae
 		bool GetClear() const { return m_Clear; };
 		void SetClear(bool clear) { m_Clear = clear; };
 		void Cleanup();
-
 		void BindKey(InputKey key, std::unique_ptr<Command> c) {
 			if (std::holds_alternative<std::tuple<ButtonStates, SDL_KeyCode, int>>(key)) {
 				m_KeyboardCommands[key] = std::move(c);
@@ -77,6 +79,9 @@ namespace dae
 		{
 			return m_KeyboardCommands;
 		};
+
+	private:
+
 	};
 
 	class InputManager
@@ -98,8 +103,8 @@ namespace dae
 		bool IsUpThisFrame(ControllerButton button) const;
 		bool HandleInput();
 		void Cleanup();
-
-	private:
+		glm::vec2 GetLeftThumbstick() const;
+		glm::vec2 GetRightThumbstick() const;
 
 	};
 

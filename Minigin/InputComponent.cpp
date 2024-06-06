@@ -73,6 +73,13 @@ void dae::InputComponent::Update()
 	}*/
 
 	UpdatePos(dt);
+
+	if (m_IsController) {
+		StopMovement(MathLib::LEFT);
+		StopMovement(MathLib::RIGHT);
+		StopMovement(MathLib::UP);
+		StopMovement(MathLib::DOWN);
+	}
 }
 
 void dae::InputComponent::SetMoveSpeed(const glm::vec3& movespeed)
@@ -80,10 +87,11 @@ void dae::InputComponent::SetMoveSpeed(const glm::vec3& movespeed)
 	m_Movespeed = movespeed;
 }
 
-void dae::InputComponent::SetMoveSpeed(const glm::vec3& movespeed, MathLib::Movement direction)
+void dae::InputComponent::SetMoveSpeed(const glm::vec3& movespeed, MathLib::Movement direction, bool isController)
 {
 	m_MoveSpeedList.insert(std::pair<MathLib::Movement, const glm::vec3>{ direction, movespeed });
 	m_Movespeed = movespeed;
+	m_IsController = isController;
 }
 
 void dae::InputComponent::StopMovement(MathLib::Movement direction)

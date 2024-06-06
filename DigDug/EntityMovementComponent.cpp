@@ -82,9 +82,6 @@ void dae::EntityMovementComponent::Update()
 			m_LastDir = "Right";
 		}
 
-		//m_Movement == MathLib::LEFT ? m_LastDir = "Left" : m_LastDir = "Right";
-		//dx < 0 ? m_Movement = MathLib::LEFT : m_Movement = MathLib::RIGHT;
-
 		GetGameObject()->GetTransform()->AddTranslate(dx * 2.f, dy * 2.f);
 		GetGameObject()->GetComponent<TextureComponent>()->SetTexture("Enemies/" + m_EnemyName + (m_IsGhostMode ? "Ghost" : m_LastDir) + ".png", 0.2f, 2);
 	}

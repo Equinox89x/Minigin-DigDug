@@ -6,6 +6,7 @@
 #include <Xinput.h>
 #include <iostream>
 
+
 using namespace dae;
 
 class dae::InputManager::InputManagerImpl
@@ -65,6 +66,31 @@ public:
 	{
 		return currentState.Gamepad.wButtons & button;
 	}
+	float NormalizeAxis(SHORT value, int deadZone) const
+	{
+		if (abs(value) < deadZone)
+			return 0.0f;
+
+		// Normalize to range -1.0f to 1.0f
+		return (value < 0 ? -1.0f : 1.0f) * ((float)(abs(value) - deadZone) / (32767.0f - deadZone));
+	}
+	glm::vec2 GetLeftThumbstick() const
+	{
+		return glm::vec2(
+			NormalizeAxis(currentState.Gamepad.sThumbLX, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE),
+			NormalizeAxis(currentState.Gamepad.sThumbLY, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
+		);
+	}
+
+	glm::vec2 GetRightThumbstick() const
+	{
+		return glm::vec2(
+			NormalizeAxis(currentState.Gamepad.sThumbRX, XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE),
+			NormalizeAxis(currentState.Gamepad.sThumbRY, XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)
+		);
+	}
+
+
 };
 
 
@@ -85,6 +111,16 @@ void dae::InputManager::Cleanup()
 	}
 	pImpl = nullptr;
 }
+
+glm::vec2 dae::InputManager::GetLeftThumbstick() const
+{
+	return pImpl->GetLeftThumbstick();
+}
+glm::vec2 dae::InputManager::GetRightThumbstick() const
+{ 
+	return pImpl->GetRightThumbstick(); 
+}
+
 
 
 
@@ -109,23 +145,54 @@ bool dae::InputManager::HandleInput()
 
 		auto [state, button, id] = std::get<std::tuple<ButtonStates, ControllerButton, int>>(controllerKey);
 
-		switch (state)
-		{
-		case ButtonStates::BUTTON_DOWN:
-			if (IsDownThisFrame(button))
-				action->Execute();
-			break;
+		//if (button == ControllerButton::JoystickLeft || button == ControllerButton::JoystickRight) {
+		//	auto pos{ GetLeftThumbstick() };
+		//	action->Execute(pos);
 
-		case ButtonStates::BUTTON_PRESSED:
-			if (IsPressed(button))
-				action->Execute();
-			break;
-
-		case ButtonStates::BUTTON_UP:
-			if (IsUpThisFrame(button))
-				action->Execute();
-			break;
+		//}
+		if (button == ControllerButton::JoystickLeft)	{
+			auto pos{ GetLeftThumbstick() };
+			if (pos.x > 0 || pos.x < 0) {
+				action->Execute(pos);
+			}
+			if(pos.y > 0 || pos.y < 0 ){
+				action->Execute(pos);
+			}
+			//if (pos.x != 0 && pos.y != 0) {
+			//}
+		}	
+		else if (button == ControllerButton::JoystickRight) {
+			auto pos{ GetRightThumbstick() };
+			//if (pos.x != 0 && pos.y != 0) {
+			//	action->Execute();
+			//}
+			if (pos.x > 0 || pos.x < 0) {
+				action->Execute(pos);
+			}
+			if (pos.y > 0 || pos.y < 0) {
+				action->Execute(pos);
+			}
 		}
+		else {
+			switch (state)
+			{
+			case ButtonStates::BUTTON_DOWN:
+				if (IsDownThisFrame(button))
+					action->Execute();
+				break;
+
+			case ButtonStates::BUTTON_PRESSED:
+				if (IsPressed(button))
+					action->Execute();
+				break;
+
+			case ButtonStates::BUTTON_UP:
+				if (IsUpThisFrame(button))
+					action->Execute();
+				break;
+			}
+		}
+
 
 		if (Input::GetInstance().GetClear() == true)
 		{

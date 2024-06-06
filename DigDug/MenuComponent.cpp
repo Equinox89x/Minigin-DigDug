@@ -4,6 +4,7 @@
 
 void dae::MenuComponent::CycleGameMode(bool isMoveUp)
 {
+	if (m_ControlTimer > 0) return;
 	if (!isMoveUp) {
 		if (m_SelectedGameMode != MathLib::GameMode::VERSUS) {
 			m_SelectedGameMode = MathLib::GameMode(static_cast<int>(m_SelectedGameMode) + 1);
@@ -14,7 +15,7 @@ void dae::MenuComponent::CycleGameMode(bool isMoveUp)
 			m_SelectedGameMode = MathLib::GameMode(static_cast<int>(m_SelectedGameMode) - 1);
 		}
 	}
-
+	m_ControlTimer = 0.2f;
 	GetGameObject()->GetTransform()->TranslateWorld(m_CursorLocations[static_cast<int>(m_SelectedGameMode)]);
 
 }
@@ -65,4 +66,9 @@ void dae::MenuComponent::GameOver()
 	Input::GetInstance().ClearKeys();
 	CreateHighscoreMenu();
 	manager.DeleteScene(scene);
+}
+
+void dae::MenuComponent::Update()
+{
+	m_ControlTimer -= Timer::GetInstance().GetDeltaTime();
 }

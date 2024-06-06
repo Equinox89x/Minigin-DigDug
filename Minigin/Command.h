@@ -1,5 +1,6 @@
 #pragma once
 #include "Minigin.h"
+#include <glm/ext/vector_float2.hpp>
 
 namespace dae
 {
@@ -13,7 +14,8 @@ namespace dae
 		Command& operator=(Command&& other) noexcept = delete;
 		explicit Command() = default;
 
-		virtual void Execute() = 0; //you can add deltatime here
+		virtual void Execute() = 0;
+		virtual void Execute(glm::vec2 pos) = 0;
 	};
 }
 
