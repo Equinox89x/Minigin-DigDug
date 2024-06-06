@@ -274,7 +274,10 @@ namespace dae {
 			if (!m_Scene->GetIsActive()) return;
 			m_pObject->GetComponent<HighscoreComponent>()->MoveCursor(m_Key);
 		}
-		void Execute(glm::vec2) override {};
+		void Execute(glm::vec2) override {
+			if (!m_Scene->GetIsActive()) return;
+			m_pObject->GetComponent<HighscoreComponent>()->MoveCursor(m_Key);
+		};
 
 	private:
 		Scene* m_Scene;

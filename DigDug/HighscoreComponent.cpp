@@ -48,6 +48,7 @@ void dae::HighscoreComponent::Init()
 
 void dae::HighscoreComponent::MoveCursor(glm::vec2 key)
 {
+	if (m_ControlTimer > 0) return;
 	auto ykey{ static_cast<int>(key.y) };
 	auto xkey{ static_cast<int>(key.x) };
 	if (ykey == 0) {
@@ -66,7 +67,7 @@ void dae::HighscoreComponent::MoveCursor(glm::vec2 key)
 			m_SelectedKey -= 10;
 		}
 	}
-
+	m_ControlTimer = 0.2f;
 }
 
 void dae::HighscoreComponent::Select()

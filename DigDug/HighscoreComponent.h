@@ -18,7 +18,7 @@ namespace dae {
         HighscoreComponent(HighscoreComponent&&) noexcept = delete;
         HighscoreComponent& operator=(const HighscoreComponent&) = delete;
         HighscoreComponent& operator=(HighscoreComponent&&) noexcept = delete;
-        virtual void Update() override {};
+        virtual void Update() override { m_ControlTimer -= Timer::GetInstance().GetDeltaTime(); };
         virtual void Render() const override;
         virtual void Init() override;
 
@@ -38,5 +38,6 @@ namespace dae {
         std::string m_Name{ "Enter Name" };
         std::function<void()> m_CreateHighscoreScreen;
         int m_Score{ 0 };
+        float m_ControlTimer{ 0.2f };
     };
 }
