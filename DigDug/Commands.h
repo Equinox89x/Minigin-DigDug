@@ -56,28 +56,27 @@ namespace dae {
 		}
 		void Execute(glm::vec2 pos) override {
 			if (!m_Scene->GetIsActive()) return;
-
-			m_MoveSpeed = glm::vec3{ pos.x * 100,pos.y * -100, 0 };
-			if (pos.x > 0) {
-				m_Movement = MathLib::RIGHT;
-				m_TextureName = "Character/moveRight";
-			}
-			else if (pos.x < 0) {
-				m_Movement = MathLib::LEFT;
-				m_TextureName = "Character/moveLeft";
-			}
-			else if (pos.y > 0) {
-				m_Movement = MathLib::UP;
-				m_TextureName = "Character/moveUp";
-			}
-			else if (pos.y < 0) {
-				m_Movement = MathLib::DOWN;
-				m_TextureName = "Character/moveDown";
-			}
-
 			auto player{ m_pObject->GetComponent<dae::EntityMovementComponent>() };
 
+			m_MoveSpeed = glm::vec3{ pos.x * 100,pos.y * -100, 0 };
 			if (auto playerComp{ m_pObject->GetComponent<PlayerComponent>() }) {
+				if (pos.x > 0) {
+					m_Movement = MathLib::RIGHT;
+					m_TextureName = "Character/moveRight";
+				}
+				else if (pos.x < 0) {
+					m_Movement = MathLib::LEFT;
+					m_TextureName = "Character/moveLeft";
+				}
+				else if (pos.y > 0) {
+					m_Movement = MathLib::UP;
+					m_TextureName = "Character/moveUp";
+				}
+				else if (pos.y < 0) {
+					m_Movement = MathLib::DOWN;
+					m_TextureName = "Character/moveDown";
+				}
+
 				auto state{ playerComp->GetState() };
 				if (state == MathLib::ELifeState::ALIVE || state == MathLib::ELifeState::INVINCIBLE) {
 					auto input{ m_pObject->GetComponent<dae::InputComponent>() };
@@ -89,6 +88,22 @@ namespace dae {
 				}
 			}
 			else {
+				if (pos.x > 0) {
+					m_Movement = MathLib::RIGHT;
+					m_TextureName = "Enemies/FygarRight";
+				}
+				else if (pos.x < 0) {
+					m_Movement = MathLib::LEFT;
+					m_TextureName = "Enemies/FygarLeft";
+				}
+				else if (pos.y > 0) {
+					m_Movement = MathLib::UP;
+					m_TextureName = "Enemies/FygarRight";
+				}
+				else if (pos.y < 0) {
+					m_Movement = MathLib::DOWN;
+					m_TextureName = "Enemies/FygarLeft";
+				}
 				auto input{ m_pObject->GetComponent<dae::InputComponent>() };
 				auto tex{ m_pObject->GetComponent<dae::TextureComponent>() };
 
