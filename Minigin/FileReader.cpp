@@ -22,7 +22,7 @@ dae::FileReader::~FileReader()
 	Close();
 }
 
-const Document& dae::FileReader::ReadFile() {
+const rapidjson::Document& dae::FileReader::ReadFile() {
 	Open();
 	std::ifstream inputFile(m_FileName);
 	if (!inputFile) {
@@ -44,9 +44,9 @@ const Document& dae::FileReader::ReadFile() {
 	}
 
 	if (m_Document.IsObject()) {
-		const Value& contents = m_Document.GetObject();
-		StringBuffer buffer;
-		PrettyWriter<StringBuffer> writer(buffer);
+		const rapidjson::Value& contents = m_Document.GetObject();
+		rapidjson::StringBuffer buffer;
+		rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
 		contents.Accept(writer);
 		return m_Document;
 	}

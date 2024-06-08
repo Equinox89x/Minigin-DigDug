@@ -10,7 +10,6 @@
 #include "rapidjson/writer.h"
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/prettywriter.h"
-using namespace rapidjson;
 
 namespace dae {
 	class FileReader final : public Component
@@ -30,7 +29,7 @@ namespace dae {
 
 		void WriteData(std::map<std::string, std::string> dataKeys);
 		void WriteString(std::string text);
-		const Document& GetDocument() { return m_Document; };
+		const rapidjson::Document& GetDocument() { return m_Document; };
 
 		void Open();
 		void Close();
@@ -38,8 +37,8 @@ namespace dae {
 	private:
 		std::ifstream m_File;
 		std::string m_FileName;
-		Document m_Document;
+		rapidjson::Document m_Document;
 
-		const Document& ReadFile();
+		const rapidjson::Document& ReadFile();
 	};
 }
