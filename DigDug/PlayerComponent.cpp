@@ -5,6 +5,12 @@
 #include <InputComponent.h>
 #include "EnemyComponent.h"
 
+dae::PlayerComponent::~PlayerComponent()
+{
+	delete m_PlayerState;
+	m_PlayerState = nullptr;
+}
+
 void dae::PlayerComponent::Update()
 {
 	//float dt{ Timer::GetInstance().GetDeltaTime() };

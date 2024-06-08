@@ -81,6 +81,7 @@ void dae::EnemyDeathObserver::Notify(GameObject* /*go*/, Event& event)
 				if (auto comp{ player->GetComponent<ValuesComponent>() }) {
 					FileReader* file{ new FileReader("../Data/save.json") };
 					file->WriteData({ {"Score", std::to_string(comp->GetScores())} });
+					delete file;
 				}
 			}
 			m_Scene->GetGameObject(EnumStrings[Names::Global])->GetComponent<MenuComponent>()->SkipLevel();
@@ -105,6 +106,7 @@ void dae::RockDeathObserver::Notify(GameObject* go, Event& event)
 				if (auto scoreComp{ playerScore->GetComponent<ValuesComponent>() }) {
 					FileReader* file{ new FileReader("../Data/save.json") };
 					file->WriteData({ {"Score", std::to_string(scoreComp->GetScores())} });
+					delete file;
 				}
 			}
 			m_Scene->GetGameObject(EnumStrings[Names::Global])->GetComponent<MenuComponent>()->SkipLevel();

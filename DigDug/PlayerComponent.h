@@ -67,7 +67,7 @@ namespace dae {
     {
     public:
         PlayerComponent(Scene* scene, glm::vec2 startPos) : m_Scene{ scene }, m_OriginalPosition{ startPos } { };
-        ~PlayerComponent() = default;
+        ~PlayerComponent();
         PlayerComponent(const PlayerComponent&) = delete;
         PlayerComponent(PlayerComponent&&) noexcept = delete;
         PlayerComponent& operator=(const PlayerComponent&) = delete;

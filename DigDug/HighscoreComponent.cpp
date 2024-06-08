@@ -19,10 +19,10 @@ void dae::HighscoreComponent::Init()
 	auto font{ ResourceManager::GetInstance().LoadFont("Emulogic.ttf", 14) };
 	glm::vec2 pos{ Margin * 2, WindowSizeY / 2 };
 	int k{ 0 };
-	for (size_t i = 0; i < 3; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		auto nr{ i == 2 ? 6 : 10 };
-		for (size_t j = 0; j < nr; j++)
+		for (int j = 0; j < nr; j++)
 		{
 			auto go{ std::make_shared<GameObject>() };
 			auto& key{ m_KeyboardKeys[k] };
@@ -52,7 +52,7 @@ void dae::HighscoreComponent::MoveCursor(glm::vec2 key)
 	auto ykey{ static_cast<int>(key.y) };
 	auto xkey{ static_cast<int>(key.x) };
 	if (ykey == 0) {
-		if (m_SelectedKey + key.x < m_KeyboardKeys.size()+1 && xkey == 1) {
+		if (m_SelectedKey + key.x < static_cast<int>(m_KeyboardKeys.size())+1 && xkey == 1) {
 			m_SelectedKey += static_cast<int>(key.x);
 		}
 		if (m_SelectedKey - key.x > 1 && xkey == -1) {
@@ -60,7 +60,7 @@ void dae::HighscoreComponent::MoveCursor(glm::vec2 key)
 		}
 	}
 	else {
-		if (m_SelectedKey + 10 < m_KeyboardKeys.size() && ykey == -1 ) {
+		if (m_SelectedKey + 10 < static_cast<int>(m_KeyboardKeys.size()) && ykey == -1 ) {
 			m_SelectedKey += 10;
 		}
 		if (m_SelectedKey - 10 > -1 && ykey == 1) {
@@ -73,7 +73,7 @@ void dae::HighscoreComponent::MoveCursor(glm::vec2 key)
 void dae::HighscoreComponent::Select()
 {
 	if (m_Name == "Enter Name") m_Name = "";
-	if (m_SelectedKey > m_KeyboardKeys.size()-1) {
+	if (m_SelectedKey > static_cast<int>(m_KeyboardKeys.size())-1) {
 		//TODO send data
 
 		FileReader* file{ new FileReader("../Data/highscore.json") };
@@ -109,7 +109,7 @@ void dae::HighscoreComponent::Select()
 
 void dae::HighscoreComponent::Render() const
 {
-	for (size_t i = 0; i < m_KeyboardKeyRects.size(); i++) {
+	for (int i = 0; i < static_cast<int>(m_KeyboardKeyRects.size()); i++) {
 		if (i == m_SelectedKey) {
 			SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 255, 255, 255);
 		}
