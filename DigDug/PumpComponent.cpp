@@ -4,6 +4,7 @@
 #include "Timer.h"
 #include "PathwayCreatorComponent.h"
 #include "InputComponent.h"
+#include "Renderer.h"
 
 void dae::PumpComponent::Init()
 {
@@ -34,9 +35,42 @@ void dae::PumpComponent::Pump(glm::vec3 loc)
 	}
 }
 
-void dae::PumpComponent::ResetMovement(glm::vec3 loc)
+void dae::PumpComponent::ResetMovement(glm::vec3 /*loc*/)
 {
-	m_StartPos = loc;
+	auto texComp2 = m_Player->GetComponent<TextureComponent>()->GetRect();
+	m_StartPos.x = static_cast<float>(texComp2.x + texComp2.w / 2);
+	m_StartPos.y = static_cast<float>(texComp2.y + texComp2.h / 2);
+	auto dir = m_Player->GetComponent<EntityMovementComponent>()->GetDirection();
+		switch (dir)
+		{
+		case MathLib::UP:
+			m_StartPos.x -= texComp2.w /3;
+				//GetGameObject()->GetTransform()->AddTranslate(0, -speed);
+				GetGameObject()->GetComponent<TextureComponent>()->SetTexture("Character/PumpUp.png", 0.1f, 1);
+
+			break;
+		case MathLib::DOWN:
+			m_StartPos.x -= texComp2.w / 3;
+			//GetGameObject()->GetTransform()->AddTranslate(0, speed);
+			GetGameObject()->GetComponent<TextureComponent>()->SetTexture("Character/PumpDown.png", 0.1f, 1);
+
+			break;
+		case MathLib::LEFT:
+			m_StartPos.y -= texComp2.h / 3;
+			//GetGameObject()->GetTransform()->AddTranslate(-speed, 0);
+			GetGameObject()->GetComponent<TextureComponent>()->SetTexture("Character/PumpLeft.png", 0.1f, 1);
+
+			break;
+		case MathLib::RIGHT:
+			m_StartPos.y -= texComp2.h / 3;
+			//GetGameObject()->GetTransform()->AddTranslate(speed, 0);
+			GetGameObject()->GetComponent<TextureComponent>()->SetTexture("Character/PumpRight.png", 0.1f, 1);
+
+			break;
+		default:
+			break;
+		}
+	//m_StartPos = loc;
 	GetGameObject()->GetTransform()->Translate(m_StartPos);
 }
 
@@ -75,11 +109,8 @@ void dae::PumpComponent::SetPlayer(GameObject* player)
 void dae::PumpComponent::Update()
 {
 	auto texComp = GetGameObject()->GetComponent<TextureComponent>();
+	auto texComp2 = m_Player->GetComponent<TextureComponent>()->GetRect();
 	auto rect = texComp->GetRect();
-	rect.w /= 3;
-	rect.h /= 3;
-	rect.x -= 5;
-	rect.y += 10;
 
 	UpdatePosition();
 
@@ -113,6 +144,20 @@ void dae::PumpComponent::Update()
 	}
 }
 
+void dae::PumpComponent::Render() const
+{
+	//auto texComp = GetGameObject()->GetComponent<TextureComponent>();
+	//auto texComp2 = m_Player->GetComponent<TextureComponent>()->GetRect();
+	//auto rect = texComp->GetRect();
+	//rect.w /= 3;
+	//rect.h /= 3;
+	//rect.x = texComp2.x + texComp2.w / 2;
+	//rect.y = texComp2.y + texComp2.h / 2;
+
+	//SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255); // Set the color to red
+	//SDL_RenderDrawRect(Renderer::GetInstance().GetSDLRenderer(), &rect); // D
+}
+
 
 void dae::PumpComponent::UpdatePosition()
 {
@@ -124,15 +169,23 @@ void dae::PumpComponent::UpdatePosition()
 	{
 	case MathLib::UP:
 		GetGameObject()->GetTransform()->AddTranslate(0, -speed);
+		//GetGameObject()->GetComponent<TextureComponent>()->SetTexture("Character/PumpUp.png", 0.1f, 1);
+
 		break;
 	case MathLib::DOWN:
 		GetGameObject()->GetTransform()->AddTranslate(0, speed);
+		//GetGameObject()->GetComponent<TextureComponent>()->SetTexture("Character/PumpDown.png", 0.1f, 1);
+
 		break;
 	case MathLib::LEFT:
 		GetGameObject()->GetTransform()->AddTranslate(-speed, 0);
+		//GetGameObject()->GetComponent<TextureComponent>()->SetTexture("Character/PumpLeft.png", 0.1f, 1);
+
 		break;
 	case MathLib::RIGHT:
 		GetGameObject()->GetTransform()->AddTranslate(speed, 0);
+		//GetGameObject()->GetComponent<TextureComponent>()->SetTexture("Character/PumpRight.png", 0.1f, 1);
+
 		break;
 	default:
 		break;

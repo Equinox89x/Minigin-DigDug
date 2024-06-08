@@ -17,7 +17,7 @@ namespace dae {
         PumpComponent& operator=(const PumpComponent&) = delete;
         PumpComponent& operator=(PumpComponent&&) noexcept = delete;
         virtual void Update() override;
-        virtual void Render() const override {};
+        virtual void Render() const override;
         virtual void Init() override;
 
         void Pump(glm::vec3 loc);
